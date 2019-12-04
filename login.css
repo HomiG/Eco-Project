@@ -1,0 +1,96 @@
+*{
+    font-family:  'Muli', sans-serif;
+}
+body  {
+    
+    background-color: rgb(90, 197, 230);
+    
+  }
+
+  h1 {
+    font-family: 'Muli', sans-serif;
+    color: white;
+    text-align: center;
+    margin-top: 100px;
+  }
+
+  .form_box {
+      height: 400px;
+      width: 380px;
+      position: sticky;
+      margin: 6% auto;
+      background-color: aliceblue;
+      padding: 5px;
+      border-radius: 35px;
+      overflow: hidden;
+  }
+
+  .button_box{
+    width: 220px;
+    position: sticky;
+    margin: 35px auto;
+    background-color: #ffffff;
+    box-shadow: 0 0 20px 9px rgb(169, 225, 235);
+    border-radius: 45px;
+
+  }
+
+.log_reg_btn{  
+    padding: 10px 30px;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    outline: none;
+    position: sticky;
+}
+
+ #btn{  /*Log In and Register Button*/
+    top: 0;
+    left: 0;
+    position: absolute;
+    width: 110px;
+    height: 100%;
+    background: linear-gradient(to right, #10a7ff, #06eeff);
+    border-radius: 45px;
+}
+
+.input{
+   
+    position: absolute;
+    width: 280px;
+    transition: .5s;
+}
+
+.input_field{ 
+    width: 100%;
+    padding: 10px 0;
+    margin: 5px 0;
+    border-left: 0;
+    border-top: 0;
+    border-right: 0;
+    border-bottom: 1px solid #999;
+    outline: none;
+    background: transparent;
+
+}
+
+.submit_btn{  /* log in button */
+    width: 65%;
+    padding: 10px 30px;
+    display: block;
+    cursor: pointer;
+    margin-top: 10px;
+    background: linear-gradient(to right, #10a7ff, #06eeff);
+    border: 0;
+    outline: none;
+    border-radius: 45px;
+}
+
+#Login{
+    margin: 35px auto;
+    left: 50px;
+}
+
+#Register{
+    left: 450px;
+}

@@ -1,0 +1,63 @@
+<html> 
+    <head>
+        <meta charset="UTF-8">
+
+        <title>Login and Registration</title>
+        <link rel="stylesheet" href="login.css">
+
+        <link href="https://fonts.googleapis.com/css?family=Muli|Raleway&display=swap" rel="stylesheet">
+        
+        <h1>Welcome to ECOPROJECT</h1>
+
+        
+        
+
+    </head>
+
+    <body>
+       <div class="form_box">
+        <div class="button_box">
+            <div id="btn"></div>
+                <button type="button" class="log_reg_btn" onclick="Login()">Log In</button>
+                <button type="button" class="log_reg_btn" onclick="Register()">Register</button>
+
+        </div>
+        <form id="Login" class="input">
+            <input type="text" class="input_field" placeholder="User Email" required> 
+            <input type="password" class="input_field" placeholder="Enter Password" required>
+            <button type="submit" class="submit_btn"> Log In</button>
+        </form>
+        <form id="Register" class="input">
+            <input type="text" class="input_field" placeholder="User Name" required> 
+            <input type="text" class="input_field" placeholder="User Lastname" required> 
+            <input type="text" class="input_field" placeholder="User Email" required> 
+            <input type="password" class="input_field" placeholder="Password" required>
+            <input type="password" class="input_field" placeholder="Confirm Password" required> 
+            <button type="submit" class="submit_btn">Register</button>
+        </form>
+        </div>
+        
+        <script>
+        var x = document.getElementById("Login");
+        var y = document.getElementById("Register");
+        var z = document.getElementById("btn");
+
+        function Login(){
+            x.style.left = "50px"
+            y.style.left = "450px"
+            z.style.left = "0px"
+        }
+
+
+        function Register(){
+            x.style.left = "-400px"
+            y.style.left = "50px"
+            z.style.left = "110px"
+        }
+
+        </script>
+
+
+
+
+    </body>
