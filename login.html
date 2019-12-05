@@ -15,24 +15,24 @@
     </head>
 
     <body>
-       <div class="form_box">
-        <div class="button_box">
+       <div id = "box" class="form_box">
+        <div  class="button_box">
             <div id="btn"></div>
                 <button type="button" class="log_reg_btn" onclick="Login()">Log In</button>
                 <button type="button" class="log_reg_btn" onclick="Register()">Register</button>
 
         </div>
         <form id="Login" class="input">
-            <input type="text" class="input_field" placeholder="User Email" required> 
-            <input type="password" class="input_field" placeholder="Enter Password" required>
+            <input type="email" id="email" class="input_field" placeholder="User Email" required> 
+            <input type="password"  class="input_field" placeholder="Enter Password" required>
             <button type="submit" class="submit_btn"> Log In</button>
         </form>
         <form id="Register" class="input">
-            <input type="text" class="input_field" placeholder="User Name" required> 
-            <input type="text" class="input_field" placeholder="User Lastname" required> 
-            <input type="text" class="input_field" placeholder="User Email" required> 
-            <input type="password" class="input_field" placeholder="Password" required>
-            <input type="password" class="input_field" placeholder="Confirm Password" required> 
+            <input type="text" class="input_field" placeholder="Username" required> 
+            <input type="email" id="email" class="input_field" placeholder="User Email" required> 
+            <input type="password" id="pass" class="input_field" placeholder="Password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required>
+			
+            <input type="password" id="confirm_password" class="input_field" placeholder="Confirm Password" required> 
             <button type="submit" class="submit_btn">Register</button>
         </form>
         </div>
@@ -41,20 +41,40 @@
         var x = document.getElementById("Login");
         var y = document.getElementById("Register");
         var z = document.getElementById("btn");
+		var e = document.getElementById("box");
+		
+		
+		var password = document.getElementById("pass") , confirm_password = document.getElementById("confirm_password");
 
+		function validatePassword(){
+		  if(password.value != confirm_password.value) {
+			confirm_password.setCustomValidity("Passwords Don't Match");
+		  } else {
+			confirm_password.setCustomValidity('');
+		  }
+		}
+		password.onchange = validatePassword;
+		confirm_password.onkeyup = validatePassword;
+		
         function Login(){
+			var data = new FormData();
+			data.append('email', document.getElementById("email").value);
+						
+			e.style.height = "60%"
             x.style.left = "50px"
             y.style.left = "450px"
             z.style.left = "0px"
         }
-
-
         function Register(){
+		var data = new FormData();
+			data.append('email', document.getElementById("email").value);
+			data.append('password', document.getElementById("pass").value);
+			
+			e.style.height = "70%"
             x.style.left = "-400px"
             y.style.left = "50px"
             z.style.left = "110px"
         }
-
         </script>
 
 
