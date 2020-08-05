@@ -8,5 +8,8 @@ Web Project Ceid 2019-2020
 #NodeJS Modules Used:
 
 npm install express -g
-
 npm install ejs -g
+
+Open Github Project in VS Code (Sync):
+
+Click on git icon -> Clone Repository -> Paste to user tou project: https://github.com/HomiG/Eco-Project
