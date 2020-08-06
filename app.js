@@ -5,10 +5,8 @@ var path = require('path');
 
 // import my module "home"
 const home = require('./routes/home')
-
-
-
 var app = express();
+
 app.set('view enigne', 'ejs') 
 app.set('views', './views')
 
