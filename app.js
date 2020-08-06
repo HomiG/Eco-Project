@@ -10,6 +10,7 @@ var app = express();
 app.set('view enigne', 'ejs') 
 app.set('views', './views')
 
+
 app.use('/', home)  // whenever browse into /, use the home module
 
 // listen on port 3000
