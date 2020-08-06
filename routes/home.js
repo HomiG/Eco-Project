@@ -2,6 +2,18 @@ const express = require('express');
 const bodyParser = require('body-parser')
 const bcrypt = require('bcrypt')
 const router = express.Router();
+const connection = require('../config/database')
+const mysql = require('mysql');
+
+con = mysql.createConnection(connection);
+
+con.connect(function(err) {
+  if (err) throw err;
+  con.query("SQL QUERRY", function (err, result, fields) {
+    if (err) throw err;
+    console.log(fields);
+  });
+});
 
 router.use(express.json());
 router.use(bodyParser());
