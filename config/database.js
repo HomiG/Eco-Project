@@ -1,12 +1,16 @@
 var mysql = require('mysql');
 
-var con = mysql.createConnection({
+var connection  = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: ""
+  password: '',
+  database: 'ecoproject',
+  port: 3306
 });
 
-con.connect(function(err) {
+
+connection.connect(function(err) {
   if (err) throw err;
-  console.log("Connected!");
 });
+
+module.exports = connection;
