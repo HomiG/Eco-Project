@@ -7,13 +7,6 @@ const mysql = require('mysql');
 
 con = mysql.createConnection(connection);
 
-con.connect(function(err) {
-  if (err) throw err;
-  con.query("SQL QUERRY", function (err, result, fields) {
-    if (err) throw err;
-    console.log(fields);
-  });
-});
 
 router.use(express.json());
 router.use(bodyParser());
@@ -21,18 +14,37 @@ router.use(bodyParser());
 
 
 router.get('/', function (req, res) {
-    res.render('../views/index.ejs')
-  });
+  res.render('../views/index.ejs')
+});
 
 
-  //accepts the username and the password from the user, with the POST method.
-  //encrypts the password, and sends it back to the user.
-router.post('/', async function(req, res){
-  try{
+//accepts the username and the password from the user, with the POST method.
+//encrypts the password, and sends it back to the user.
+router.post('/signup', async function (req, res) {
+  try {
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(req.body.password, salt)
-  var v = {username: req.body.username, pa: hashedPassword}
-  res.status(201).send(v);
+
+    var user = {
+      username: req.body.username,
+      password: hashedPassword,
+      email: req.body.email,
+      usaerId: req.body.usaerId
+    }
+
+    
+
+    con.connect(function (err) {
+      if (err) throw err;
+      con.query("INSERT INTO user VALUES(" + user.username + "," + user.password + "," + user.usaerId + "," + user.email + ")",
+       function (err, result) {
+        if (err) throw err;
+        console.log("1 record inserted");
+      });
+    });
+
+
+    res.status(201).send("COMPLETE SIGN-UP");
   }
   catch{
     res.status(500)
