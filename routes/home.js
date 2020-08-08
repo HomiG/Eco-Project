@@ -31,7 +31,7 @@ router.post('/signup', async function (req, res) {
     var user = {
       username: req.body.username,
       password: hashedPassword,
-      userId: 1,
+      userId: encrypt(req.body.email, req.body.password),
       email: req.body.email
     }
 
@@ -45,7 +45,7 @@ router.post('/signup', async function (req, res) {
       });
     res.status(201).send("COMPLETE SIGN-UP");
   }
-  
+
   catch{
     res.status(500)
   }
