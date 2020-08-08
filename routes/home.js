@@ -58,15 +58,13 @@ router.post('/login', function(req, res){
   loginData = {
     email: req.body.email,
     password: req.body.password,
-    userId: req.body.userId
+    userId: encrypt(req.body.email, req.body.password)
   }
  
-  userId = encrypt(loginData.email, loginData.password)
-  console.log(userId)
 
 
 
-  connection.query("SELECT userId FROM user WHERE userId= '" + loginData.password + "'", function(err, result){
+  connection.query("SELECT userId FROM user WHERE userId= '" + loginData.userId + "'", function(err, result){
     if(err) throw err;
     if(!result.length){
       res.status(500).send("You can't Procced, no user Found");
