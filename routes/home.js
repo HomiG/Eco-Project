@@ -31,7 +31,7 @@ router.post('/signup', async function (req, res) {
     var user = {
       username: req.body.username,
       password: hashedPassword,
-      userId: encrypt(req.body.email, req.body.password),
+      userId: 1,
       email: req.body.email
     }
 
@@ -45,6 +45,7 @@ router.post('/signup', async function (req, res) {
       });
     res.status(201).send("COMPLETE SIGN-UP");
   }
+  
   catch{
     res.status(500)
   }
@@ -65,12 +66,16 @@ router.post('/login', function(req, res){
 
 
 
-  connection.query("SELECT userId FROM user WHERE userId= '" + loginData.userId + "'", function(err, result){
+  connection.query("SELECT userId FROM user WHERE userId= '" + loginData.password + "'", function(err, result){
     if(err) throw err;
-    if(!result.length)
+    if(!result.length){
       res.status(500).send("You can't Procced, no user Found");
-    else
+      console.log(result);
+    }  
+    else{
       res.status(201).send("Username: " );
+      console.log(result)
+    }
   });
 
 
