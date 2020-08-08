@@ -12,6 +12,8 @@ var app = express();
 app.set('view enigne', 'ejs') 
 app.set('views', './views')
 app.use('/public', express.static(path.join(__dirname, "public")));
+app.use(express.static(__dirname + '/routes'));
+app.use('/login', home)
 
 app.use('/', home)  // whenever browse into /, use the home module
 

@@ -23,10 +23,10 @@
             <button type="button" class="log_reg_btn" onclick="Register()">Register</button>
 
         </div>
-        <form id="Login" class="input" method="POST">
-            <input type="email" id="loginEmail" class="input_field" placeholder="User Email" required>
-            <input type="password" id="loginPass" class="input_field" placeholder="Enter Password" required>
-            <button type="submit" id="loginButton" class="submit_btn"> Log In</button>
+        <form id="Login" action="login" class="input" method="POST">
+            <input type="email" id="loginEmail" class="input_field" placeholder="User Email" name="email" required>
+            <input type="password" id="loginPass" class="input_field" placeholder="Enter Password" name="password" required>
+            <input type="submit" id="loginButton" class="submit_btn" value="Login"></input>
         </form>
         <form id="Register" class="input" method="POST">
             <input type="text" class="input_field" placeholder="Username" required>
@@ -42,59 +42,79 @@
     </div>
 
    
-   <script src="https://code.jquery.com/jquery-3.5.0.js">  </script>
-        <script>
-          $(document).ready(function(){
-            var email,pass;
-            $("#submit").click(function(){
-              email=$("#email").val();
-              pass=$("#password").val();
-              $.post("http://localhost:3000/public/img/welcome.jpg", function(data){
-              });
-            });
-          });
-        </script>
+       <script>
+        // /* attach a submit handler to the form */
+        // $('#Login').submit(function(event){
+        //       /* stop form from submitting normally */
+        //      event.preventDefault();
+            
+        //      /* get the action attribute from the <form action=""> element */
+        //     var $form = $(this),
+        //     url = $form.attr('action');
+        
+        //     /* Send the data using post with element id name and name2*/
+        //     var posting = $.post(url, {
+        //         username: $('#username').val(),
+        //         password: $('#password').val()
+        //     });
+        
+        // })
+        
+        
+        
+        //   $(document).ready(function(){
+        //     $("#submit").click(function(){
+        //         console.log("TOLLLL!")
+        //         $.ajax({
+        //         url: 'http://localhost/login',
+        //         type: 'POST',
+        //         contentType: 'application/json',
+        //         data: JSON.stringify({
+        //         "username": "homi",
+        //         "password": "pass",
+        //         "userId": "sdf",
+        //         "email": "mailll"
+        //     })
+        // });
+        //     });
+        //   });
+       </script>
 
+<script src="https://code.jquery.com/jquery-3.5.0.js">  </script>
 
-    <script>
-                var x = document.getElementById("Login");
-                var y = document.getElementById("Register");
-                var z = document.getElementById("btn");
-                var e = document.getElementById("box");
-
-
-                var password = document.getElementById("pass"), confirm_password = document.getElementById("confirm_password");
-
-                function validatePassword() {
-                    if (password.value != confirm_password.value) {
-                        confirm_password.setCustomValidity("Passwords Don't Match");
-                    } else {
-                        confirm_password.setCustomValidity('');
-                    }
-                }
-                password.onchange = validatePassword;
-                confirm_password.onkeyup = validatePassword;
-
-                function Login() {
-                    var data = new FormData();
-                    data.append('email', document.getElementById("email").value);
-
-                    e.style.height = "60%"
-                    x.style.left = "50px"
-                    y.style.left = "450px"
-                    z.style.left = "0px"
-                }
-                function Register() {
-                    var data = new FormData();
-                    data.append('email', document.getElementById("email").value);
-                    data.append('password', document.getElementById("pass").value);
-
-                    e.style.height = "70%"
-                    x.style.left = "-400px"
-                    y.style.left = "50px"
-                    z.style.left = "110px"
-                }
-    </script>
+<script>
+    var x = document.getElementById("Login");
+    var y = document.getElementById("Register");
+    var z = document.getElementById("btn");
+    var e = document.getElementById("box");
+    var password = document.getElementById("pass"), confirm_password = document.getElementById("confirm_password");
+    function validatePassword() {
+        if (password.value != confirm_password.value) {
+            confirm_password.setCustomValidity("Passwords Don't Match");
+        } else {
+            confirm_password.setCustomValidity('');
+        }
+    }
+    password.onchange = validatePassword;
+    confirm_password.onkeyup = validatePassword;
+    function Login() {
+        var data = new FormData();
+        data.append('email', document.getElementById("email").value);
+        e.style.height = "60%"
+        x.style.left = "50px"
+        y.style.left = "450px"
+        z.style.left = "0px"
+    }
+    function Register() {
+        var data = new FormData();
+        data.append('email', document.getElementById("email").value);
+        data.append('password', document.getElementById("pass").value);
+        e.style.height = "70%"
+        x.style.left = "-400px"
+        y.style.left = "50px"
+        z.style.left = "110px"
+    }
+</script>
 
 
 

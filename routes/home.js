@@ -4,13 +4,15 @@ const bcrypt = require('bcrypt')
 const router = express.Router();
 const connection = require('../config/database.js')
 const mysql = require('mysql');
+const crypto = require('crypto');
+const assert = require('assert');
 
+const {encrypt, decrypt} = require('../encryptDecrypt')
 
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
 router.use(express.json());
 router.use(bodyParser());
-
 
 
 
@@ -29,7 +31,7 @@ router.post('/signup', async function (req, res) {
     var user = {
       username: req.body.username,
       password: hashedPassword,
-      userId: req.body.userId,
+      userId: encrypt(req.body.email, req.body.password),
       email: req.body.email
     }
 
@@ -50,11 +52,18 @@ router.post('/signup', async function (req, res) {
 
 router.post('/login', function(req, res){
 
+
+
   loginData = {
-    username: req.body.username,
+    email: req.body.email,
     password: req.body.password,
     userId: req.body.userId
   }
+ 
+  userId = encrypt(loginData.email, loginData.password)
+  console.log(userId)
+
+
 
   connection.query("SELECT userId FROM user WHERE userId= '" + loginData.userId + "'", function(err, result){
     if(err) throw err;
