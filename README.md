@@ -13,3 +13,13 @@ npm install ejs -g
 Open Github Project in VS Code (Sync):
 
 Click on git icon -> Clone Repository -> Paste to user tou project: https://github.com/HomiG/Eco-Project
+
+
+
+
+
+
+
+
+
+v
