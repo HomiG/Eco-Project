@@ -41,7 +41,6 @@ router.post('/signup', async function (req, res) {
     }
 
 
-
     connection.query("INSERT INTO `user` VALUES(" + "'" + user.username + "'," + "'" + user.password + "'," + "'" + user.userId + "'," 
     + "'" + user.email + "')",
       function (err, result) {
