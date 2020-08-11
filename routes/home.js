@@ -6,8 +6,13 @@ const connection = require('../config/database.js')
 const mysql = require('mysql');
 const crypto = require('crypto');
 const assert = require('assert');
+const doAsync = require('doasync')
+const fs = require('fs')
 
-const {encrypt, decrypt} = require('../encryptDecrypt')
+
+const {encrypt, decrypt} = require('../encryptDecrypt');
+const { json } = require('express');
+
 
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
@@ -40,10 +45,21 @@ router.post('/signup', async function (req, res) {
     connection.query("INSERT INTO `user` VALUES(" + "'" + user.username + "'," + "'" + user.password + "'," + "'" + user.userId + "'," 
     + "'" + user.email + "')",
       function (err, result) {
-        if (err) throw err;
-        console.log("1 record inserted");
+        if(err)
+        {
+  
+          if(err.code == 'ER_DUP_ENTRY' || err.errno == 1062)
+          {
+            res.status(202).send("Dublicate Entry");
+          }
+          else{
+             console.log('Other error in the query')
+          }
+  
+        }else{
+          res.status(201).send("COMPLETE SIGN-UP");
+        }
       });
-    res.status(201).send("COMPLETE SIGN-UP");
   }
 
   catch{
@@ -71,7 +87,7 @@ router.post('/login', function(req, res){
       console.log(result);
     }  
     else{
-      res.status(201).send("Username: " );
+      res.render('../views/JSONparsing.ejs');
       console.log(result)
     }
   });
@@ -82,5 +98,29 @@ router.post('/login', function(req, res){
 
 // //check if given password maches saved password
 // if(await bcrypt.compare(req.body.password, savedPassword));
+
+
+
+router.post('/uploadJSON', function(req, res){
+  //jsonData = req.body;
+  
+
+let jsonData = require('../locationHistory.json');
+
+jsonData = JSON.stringify(jsonData);
+
+  values = []; // array to parse json, for the db
+
+  //console.log(jsonData)
+  for(var i=0; i<jsonData.length; i++){
+    if(!jsonData[i].activity)
+      console.log('no activity');
+    else
+      console.log('activity');
+    
+  }
+})
+
+
 
 module.exports = router;
