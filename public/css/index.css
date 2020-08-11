@@ -1,40 +1,49 @@
 *{
     font-family:  'Muli', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
-body  {
 
-    background-image: url('../img/welcome.jpg');
-    /* background-color: rgb(90, 197, 230); */
-    background-repeat: no-repeat;
-    background-attachment: fixed;
+
+body  {
+     background: url("/public/img/patras6.jpg") no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
     background-size: cover;
+    overflow: scroll;
+    
   }
 
   h1 {
     font-family: 'Muli', sans-serif;
-    color: rgb(255, 255, 255);
+    color: white;
     text-align: center;
-    text-shadow: 2px 2px rgb(0, 0, 0);
     margin-top: 100px;
   }
 
   .form_box {
-      height: 400px;
-      width: 380px;
-      position: sticky;
-      margin: 6% auto;
-      background-color: aliceblue;
-      padding: 5px;
-      border-radius: 35px;
-      overflow: hidden;
+    height: 400px;
+    width: 380px;
+    position: sticky;
+    margin: 6% auto;
+    padding: 5px;
+    border-radius: 35px;
+    background: rgba(0, 0, 0, 0.6);
+    overflow: hidden; 
+    /* overflow-x: hidden;
+    overflow-y: scroll;*/
+
   }
+
+ 
 
   .button_box{
     width: 220px;
     position: sticky;
     margin: 35px auto;
     background-color: #ffffff;
-    box-shadow: 0 0 20px 9px rgb(169, 225, 235);
     border-radius: 45px;
 
   }
@@ -54,7 +63,7 @@ body  {
     position: absolute;
     width: 110px;
     height: 100%;
-    background: linear-gradient(to right, #10a7ff, #06eeff);
+    background: linear-gradient(to right, #dbafe0, #945f90);
     border-radius: 45px;
 }
 
@@ -66,6 +75,7 @@ body  {
 }
 
 .input_field{ 
+    color: white;
     width: 100%;
     padding: 10px 0;
     margin: 5px 0;
@@ -84,7 +94,8 @@ body  {
     display: block;
     cursor: pointer;
     margin-top: 10px;
-    background: linear-gradient(to right, #10a7ff, #06eeff);
+    background: linear-gradient(to right, #dbafe0, #945f90);  
+    /* #dbafe0, #bb5cbe) */
     border: 0;
     outline: none;
     border-radius: 45px;
