@@ -1,0 +1,49 @@
+<html> 
+    <head >
+        <meta charset="UTF-8">
+
+        <title>Login and Registration</title>
+        <link rel="stylesheet" href="login_register.css">
+
+        <link href="https://fonts.googleapis.com/css?family=Muli|Raleway&display=swap" rel="stylesheet">
+        
+        <h1>Welcome to ECOPROJECT</h1>
+             
+
+
+    </head>
+
+    <body>
+
+        <section>
+    
+        <div id = "box" class="form_box" style="border:1px solid black; border-radius: 35px; width:380px;height:400px;overflow:scroll;overflow-y:scroll;overflow-x:hidden;" >
+            <div  class="button_box">
+                <div id="btn"></div>
+                    <button type="button" class="log_reg_btn" onclick="Login_page()">Log In</button>
+                    <button type="button" class="log_reg_btn" onclick="Register_page()">Register</button>
+
+            </div>
+            <form id="Login" class="input">
+                <input type="email" id="email" class="input_field" placeholder="User Email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="For example user@ecoproject.com" required> 
+                <input type="password"  class="input_field" placeholder="Enter Password" required>
+                <button type="submit" class="submit_btn" onclick="Main_page()"> Log In</button>
+            </form>
+            <form id="Register" class="input">
+                <input type="text" class="input_field" placeholder="Username" required> 
+                <input type="email" id="email" class="input_field" placeholder="User Email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="For example user@ecoproject.com" required> 
+                <input type="password" id="pass_id" class="input_field" placeholder="Password" pattern="(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}" 
+                title="Must contain at least one number and one uppercase and lowercase letter, a special character and at least 8 characters " required>
+                
+                <input type="password" id="confirm_password" class="input_field" placeholder="Confirm Password" required> 
+                <button type="submit" class="submit_btn">Register</button>
+            </form>
+            </div>
+    
+        </section>
+
+
+        <script src="login_register_validation.js"></script> 
+        
+
+    </body>

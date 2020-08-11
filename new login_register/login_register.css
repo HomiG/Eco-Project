@@ -1,0 +1,111 @@
+*{
+    font-family:  'Muli', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+body  {
+     background: url("patras6.jpg") no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    overflow: scroll;
+    
+  }
+
+  h1 {
+    font-family: 'Muli', sans-serif;
+    color: white;
+    text-align: center;
+    margin-top: 100px;
+  }
+
+  .form_box {
+    height: 400px;
+    width: 380px;
+    position: sticky;
+    margin: 6% auto;
+    padding: 5px;
+    border-radius: 35px;
+    background: rgba(0, 0, 0, 0.6);
+    overflow: hidden; 
+    /* overflow-x: hidden;
+    overflow-y: scroll;*/
+
+  }
+
+ 
+
+  .button_box{
+    width: 220px;
+    position: sticky;
+    margin: 35px auto;
+    background-color: #ffffff;
+    border-radius: 45px;
+
+  }
+
+.log_reg_btn{  
+    padding: 10px 30px;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    outline: none;
+    position: sticky;
+}
+
+ #btn{  /*Log In and Register Button*/
+    top: 0;
+    left: 0;
+    position: absolute;
+    width: 110px;
+    height: 100%;
+    background: linear-gradient(to right, #dbafe0, #945f90);
+    border-radius: 45px;
+}
+
+.input{
+
+    position: absolute;
+    width: 280px;
+    transition: .5s;
+}
+
+.input_field{ 
+    color: white;
+    width: 100%;
+    padding: 10px 0;
+    margin: 5px 0;
+    border-left: 0;
+    border-top: 0;
+    border-right: 0;
+    border-bottom: 1px solid #999;
+    outline: none;
+    background: transparent;
+
+}
+
+.submit_btn{  /* log in button */
+    width: 65%;
+    padding: 10px 30px;
+    display: block;
+    cursor: pointer;
+    margin-top: 10px;
+    background: linear-gradient(to right, #dbafe0, #945f90);  
+    /* #dbafe0, #bb5cbe) */
+    border: 0;
+    outline: none;
+    border-radius: 45px;
+}
+
+#Login{
+    margin: 35px auto;
+    left: 50px;
+}
+
+#Register{
+    left: 450px;
+} 
