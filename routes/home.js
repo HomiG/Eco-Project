@@ -121,14 +121,10 @@ jsonData = JSON.stringify(jsonData);
 })
 
 
-<<<<<<< HEAD
 router.get('/', function(req, res){
   res.render('../views/leaflet.ejs')
 
 })
 
-
-=======
->>>>>>> d59428c0690e456e82130709af2cf74ca92f68fa
 
 module.exports = router;
