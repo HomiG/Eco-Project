@@ -20,12 +20,11 @@
                 <div id="btn"></div>
                     <button type="button" class="log_reg_btn" onclick="Login_page()">Log In</button>
                     <button type="button" class="log_reg_btn" onclick="Register_page()">Register</button>
-
             </div>
             <form id="Login" class="input" method="POST" action="login">
                 <input type="email" id="email" name="email" class="input_field" placeholder="User Email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="For example user@ecoproject.com" required> 
                 <input type="password"  class="input_field" name='password' placeholder="Enter Password" required>
-                <button type="submit" class="submit_btn" onclick="Main_page()"> Log In</button>
+                <button type="submit" class="submit_btn"> Log In</button>
             </form>
             <form id="Register" class="input" method="POST" action="signup">
                 <input type="text" class="input_field" name="username" placeholder="Username" required> 
@@ -35,13 +34,20 @@
                 
                 <input type="password" id="confirm_password" class="input_field" placeholder="Confirm Password" required> 
                 <button type="submit" class="submit_btn">Register</button>
+
+         
+            
+
             </form>
             </div>
     
         </section>
 
 
-        <script src="/public/js/login_register_validation.js"></script> 
+        <script 
+            src="/public/js/login_register_validation.js">
+
+        </script> 
         
 
     </body>

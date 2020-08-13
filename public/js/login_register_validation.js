@@ -37,9 +37,3 @@ function Register_page()
     y.style.left = "50px"
     z.style.left = "110px"
 }
-
-function Main_page()
-{
-    
-   window.open('main_page.html', "_self");
-}

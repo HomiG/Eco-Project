@@ -21,9 +21,9 @@ router.use(bodyParser());
 
 
 
-// router.get('/', function (req, res) {
-//   res.render('../views/index.ejs')
-// });
+router.get('/', function (req, res) {
+  res.render('../views/index.ejs')
+});
 
 
 //accepts the username and the password from the user, with the POST method.
@@ -86,7 +86,7 @@ router.post('/login', function(req, res){
       console.log(result);
     }  
     else{
-      res.render('../views/JSONparsing.ejs');
+      res.render('../views/leaflet.ejs');
       console.log(result)
     }
   });
@@ -121,7 +121,7 @@ jsonData = JSON.stringify(jsonData);
 })
 
 
-router.get('/', function(req, res){
+router.get('/checkMap', function(req, res){
   res.render('../views/leaflet.ejs')
 
 })

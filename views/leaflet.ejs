@@ -24,13 +24,16 @@
 
         <style>
 
-            #mapid { height: 500px; }
+            #mapid { height: 250px; }
             
         </style>
 </head>
 
 <body>
 
+  <button type="button" id="button1">
+    Add Hit On Riga Fereou
+  </button>
 
 
 
@@ -57,7 +60,7 @@ baseLayer = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}
 //Iniate map 
 var mymap = L.map('mapid', {
   center: patrasLatLng,
-  zoom: 12,
+  zoom: 13,
   layers: [baseLayer, heatmapLayer]
 });
 
@@ -84,9 +87,11 @@ var circle = L.circle([51.508, -0.11], {
     radius: 500
 }).addTo(mymap);
 
+var but = document.getElementById('button1')
 
-
-
+but.addEventListener('click', event => {
+  heatmapLayer.addData({lat:38.249995780478734, lng: 21.73734389646722, count: 5});
+});
 
 </script>
 
