@@ -1,0 +1,37 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+
+    <title>Login and Registration</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Muli|Raleway&display=swap" rel="stylesheet">
+
+    <h1>Welcome to ECOPROJECT</h1>
+
+
+
+
+</head>
+
+<body>
+    
+    <div>
+   	<h1>Send JSON to Node</h1>
+        <button id="sendJSON">Send</button>
+        <p id ="result">
+        </p>
+        <input type="file" id="docpicker"
+        accept=".JSON">
+    </div>
+
+    <script>
+        $("#sendJSON").click(function(){
+        $.post("uploadJSON", function(data, status){
+        });
+    });
+    </script>
+
+
+
+</body>
