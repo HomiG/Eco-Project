@@ -21,9 +21,9 @@ router.use(bodyParser());
 
 
 
-router.get('/', function (req, res) {
-  res.render('../views/index.ejs')
-});
+// router.get('/', function (req, res) {
+//   res.render('../views/index.ejs')
+// });
 
 
 //accepts the username and the password from the user, with the POST method.
@@ -121,5 +121,14 @@ jsonData = JSON.stringify(jsonData);
 })
 
 
+<<<<<<< HEAD
+router.get('/', function(req, res){
+  res.render('../views/leaflet.ejs')
+
+})
+
+
+=======
+>>>>>>> d59428c0690e456e82130709af2cf74ca92f68fa
 
 module.exports = router;
