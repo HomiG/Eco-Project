@@ -100,36 +100,50 @@ router.post('/login', function(req, res){
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 router.get('/', function(req, res){
-  //jsonData = req.body;
   
 
 let jsonData = require('../locationHistory.json');
 
 
 
-;
-
-  cordinates = []
-
-for (i = 0; i < jsonData.locations.length; i++) {
-  cordinates.push([jsonData.locations[i].timestampMs, jsonData.locations[i].latitudeE7, jsonData.locations[i].longitudeE7, jsonData.locations[i].accuracy]); 
-}
+console.log(jsonData.locations[0].activity[3])
 
 
-console.log(cordinates)
-
-connection.query("INSERT INTO `entry`(`timestapMs`, `longtitude`,  `latitude`, `accuracy`) VALUES ?", [cordinates], function(err, result)
-{  
-  if (err) throw err;  
-})
 
 
-})
+// for (i = 0; i < jsonData.locations.length; i++) {
+
+  
+//   cordinates.push([jsonData.locations[i].timestampMs, jsonData.locations[i].latitudeE7, jsonData.locations[i].longitudeE7, jsonData.locations[i].accuracy]); 
+// }
 
 
-router.get('/checkMap', function(req, res){
-  res.render('../views/leaflet.ejs')
+
+// console.log(cordinates)
+
+// connection.query("INSERT INTO `entry`(`timestapMs`, `longtitude`,  `latitude`, `accuracy`) VALUES ?", [cordinates], function(err, result)
+// {  
+//   if (err) throw err;  
+// })
+
+
+// })
+
+
+// router.get('/checkMap', function(req, res){
+//   res.render('../views/leaflet.ejs')
 
 })
 
