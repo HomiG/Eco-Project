@@ -21,9 +21,9 @@ router.use(bodyParser());
 
 
 
-router.get('/', function (req, res) {
-  res.render('../views/index.ejs')
-});
+// router.get('/', function (req, res) {
+//   res.render('../views/index.ejs')
+// });
 
 
 //accepts the username and the password from the user, with the POST method.
@@ -100,24 +100,31 @@ router.post('/login', function(req, res){
 
 
 
-router.post('/uploadJSON', function(req, res){
+router.get('/', function(req, res){
   //jsonData = req.body;
   
 
 let jsonData = require('../locationHistory.json');
 
-jsonData = JSON.stringify(jsonData);
 
-  values = []; // array to parse json, for the db
 
-  //console.log(jsonData)
-  for(var i=0; i<jsonData.length; i++){
-    if(!jsonData[i].activity)
-      console.log('no activity');
-    else
-      console.log('activity');
-    
-  }
+;
+
+  cordinates = []
+
+for (i = 0; i < jsonData.locations.length; i++) {
+  cordinates.push([jsonData.locations[i].timestampMs, jsonData.locations[i].latitudeE7, jsonData.locations[i].longitudeE7, jsonData.locations[i].accuracy]); 
+}
+
+
+console.log(cordinates)
+
+connection.query("INSERT INTO `entry`(`timestapMs`, `longtitude`,  `latitude`, `accuracy`) VALUES ?", [cordinates], function(err, result)
+{  
+  if (err) throw err;  
+})
+
+
 })
 
 
