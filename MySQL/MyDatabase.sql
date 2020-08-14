@@ -14,16 +14,16 @@ CREATE TABLE IF NOT EXISTS `user` (
 
 DROP TABLE IF EXISTS `entry`;
 CREATE TABLE IF NOT EXISTS `entry` (
-  `heading` int(11) NOT NULL,
+  `heading` int(11),
   `entryId` int(11) NOT NULL AUTO_INCREMENT,
-  `verticalAccuracy` int(11) NOT NULL,
-  `velocity` int(11) NOT NULL,
+  `verticalAccuracy` int(11),
+  `velocity` int(11),
   `accuracy` int(11) NOT NULL,
   `longtitude` int(11) NOT NULL,
   `latitude` int(11) NOT NULL,
-  `altitude` int(11) NOT NULL,
+  `altitude` int(11),
   `timestapMs` varchar(100) NOT NULL,
-  `userId` varchar(100) NOT NULL,
+  `userId` varchar(100),
   PRIMARY KEY (`entryId`),
   FOREIGN KEY (`userId`) REFERENCES `user`(`userId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
