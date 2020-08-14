@@ -42,8 +42,8 @@ CREATE TABLE IF NOT EXISTS `entry` (
 
 CREATE TABLE `activity1`(
   `aa1` int(11) NOT NULL AUTO_INCREMENT,
-  'timestamp' int(11) NOT NULL,
-  PRIMARY KEY(`aa1`),
+  `timestamp` int(11) NOT NULL,
+  PRIMARY KEY(`aa1`)
 )  ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -59,8 +59,8 @@ CREATE TABLE `activity2`(
 CREATE TABLE `Activity1ConnectActivity2` (
   `a1` int(11)  ,
   `a2` int(11)  ,
-  FOREIGN KEY (`a1`) REFERENCES `activity1`(`aa1`),
-  FOREIGN KEY (`a2`) REFERENCES `activity1`(`aa2`),
+  FOREIGN KEY (`a1`) REFERENCES `activity1`(`aa1`)  ON DELETE RESTRICT ON UPDATE CASCADE,
+  FOREIGN KEY (`a2`) REFERENCES `activity2`(`aa2`)  ON DELETE RESTRICT ON UPDATE CASCADE,
   PRIMARY KEY(`a1`, `a2`)
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -69,8 +69,8 @@ CREATE TABLE `Activity1ConnectActivity2` (
 CREATE TABLE `LocationConnectActivity` (
   `a1` int(11)  ,
   `entryId` int(11) ,
-  FOREIGN KEY (`a1`) REFERENCES `activity1`(`aa1`),
-  FOREIGN KEY (`entryId`) REFERENCES `activity1`(`entryId`),
+  FOREIGN KEY (`a1`) REFERENCES `activity1`(`aa1`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  FOREIGN KEY (`entryId`) REFERENCES `entry`(`entryId`)  ON DELETE RESTRICT ON UPDATE CASCADE,
   PRIMARY KEY(`a1`, `entryId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
