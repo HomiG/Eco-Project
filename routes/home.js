@@ -117,21 +117,32 @@ router.get('/', function(req, res){
 let jsonData = require('../locationHistory.json');
 
 
-
-console.log(jsonData.locations[0].activity[3])
-
+// console.log(jsonData.locations[0].activity[3])
 
 
 
-// for (i = 0; i < jsonData.locations.length; i++) {
+
+
+for (i = 0; i < jsonData.locations.length; i++) {
 
   
-//   cordinates.push([jsonData.locations[i].timestampMs, jsonData.locations[i].latitudeE7, jsonData.locations[i].longitudeE7, jsonData.locations[i].accuracy]); 
-// }
+  cordinates.push([jsonData.locations[i].timestampMs, jsonData.locations[i].latitudeE7, jsonData.locations[i].longitudeE7, jsonData.locations[i].accuracy]);
+
+  for (j = 0; j < jsonData.locations[i].activity.length; j++)
+  {
+    activity1.push([jsonData.locations[i].activity[j].timestampMs]);
+    for (k = 0; k < jsonData.locations[i].activity[j].object.length; k++) {
+      activity2.push([jsonData.locations[i].activity[j].object[k].type, jsonData.locations[i].activity[j].object[k].confidence])
+    }
+  }
+}
 
 
 
-// console.log(cordinates)
+//console.log(cordinates)
+//console.log(activity1)
+//console.log(activity2)
+
 
 // connection.query("INSERT INTO `entry`(`timestapMs`, `longtitude`,  `latitude`, `accuracy`) VALUES ?", [cordinates], function(err, result)
 // {  
