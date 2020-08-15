@@ -33,3 +33,16 @@ var cfg = {
     // which field name in your data represents the data value - default "value"
     valueField: 'count'
   };
+
+
+
+  function bulkInsert(connection, table, objectArray, callback) {
+    let keys = Object.keys(objectArray[0]);
+    let values = objectArray.map( obj => keys.map( key => obj[key]));
+    let sql = 'INSERT INTO ' + table + ' (' + keys.join(',') + ') VALUES ?';
+    connection.query(sql, [values], function (error, results, fields) {
+      if (error) callback(error);
+      callback(null, results);
+    });
+  }
+  

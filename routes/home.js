@@ -10,8 +10,10 @@ const doAsync = require('doasync')
 const fs = require('fs')
 
 
-const {encrypt, decrypt} = require('../encryptDecrypt');
+const { encrypt, decrypt } = require('../encryptDecrypt');
 const { json } = require('express');
+
+
 
 
 router.use(bodyParser.urlencoded({ extended: false }));
@@ -41,21 +43,19 @@ router.post('/signup', async function (req, res) {
     }
 
 
-    connection.query("INSERT INTO `user` VALUES(" + "'" + user.username + "'," + "'" + user.password + "'," + "'" + user.userId + "'," 
-    + "'" + user.email + "')",
+    connection.query("INSERT INTO `user` VALUES(" + "'" + user.username + "'," + "'" + user.password + "'," + "'" + user.userId + "',"
+      + "'" + user.email + "')",
       function (err, result) {
-        if(err)
-        {
-  
-          if(err.code == 'ER_DUP_ENTRY' || err.errno == 1062)
-          {
+        if (err) {
+
+          if (err.code == 'ER_DUP_ENTRY' || err.errno == 1062) {
             res.status(202).send("Dublicate Entry");
           }
-          else{
-             console.log('Other error in the query')
+          else {
+            console.log('Other error in the query')
           }
-  
-        }else{
+
+        } else {
           res.status(201).send("COMPLETE SIGN-UP");
         }
       });
@@ -66,7 +66,7 @@ router.post('/signup', async function (req, res) {
   }
 });
 
-router.post('/login', function(req, res){
+router.post('/login', function (req, res) {
 
 
 
@@ -75,17 +75,17 @@ router.post('/login', function(req, res){
     password: req.body.password,
     userId: encrypt(req.body.email, req.body.password)
   }
- 
 
 
 
-  connection.query("SELECT userId FROM user WHERE userId= '" + loginData.userId + "'", function(err, result){
-    if(err) throw err;
-    if(!result.length){
+
+  connection.query("SELECT userId FROM user WHERE userId= '" + loginData.userId + "'", function (err, result) {
+    if (err) throw err;
+    if (!result.length) {
       res.status(500).send("You can't Procced, no user Found");
       console.log(result);
-    }  
-    else{
+    }
+    else {
       res.render('../views/leaflet.ejs');
       console.log(result)
     }
@@ -111,64 +111,68 @@ router.post('/login', function(req, res){
 
 
 
-router.get('/', function(req, res){
-  
+router.get('/', function (req, res) {
 
-let jsonData = require('../locationHistory.json');
-
-
-// console.log(jsonData.locations[0].activity[3])
-
-function sizeObj(obj) {
-  return Object.keys(obj).length; //tried this but didn't work
-}
-
-function countProps(obj) {
-  var count = 0;
-  for (var p in obj) {
-    obj.hasOwnProperty(p) && count++;
+  function bulkInsert(connection, table, objectArray, callback) {
+    let keys = Object.keys(objectArray[0]);
+    if (keys.includes("activity")) { // Checking if 
+      keys.pop();
+    }
+    let values = objectArray.map(obj => keys.map(key => obj[key]));
+    let sql = 'INSERT INTO ' + table + ' (' + keys.join(',') + ') VALUES ?';
+    connection.query(sql, [values], function (error, results, fields) {
+      if (error) callback(error);
+      callback(null, results);
+    });
   }
-  return count; 
-} 
 
-let cordinates=[];
-let activity1=[];
-let activity2=[];
+  let jsonData = require('../locationHistory.json');
+
+
+  function bulkInsert(con, table, objectArray, callback) {
+    let keys = Object.keys(objectArray[0]);
+    if (keys.includes("activity")) { // Checking if 
+      keys.pop();
+    }
+    let values = objectArray.map(obj => keys.map(key => obj[key]));
+    let sql = 'INSERT INTO ' + table + ' (' + keys.join(',') + ') VALUES ?';
+    con.query(sql, [values], function (error, results, fields) {
+      if (error) callback(error);
+      callback(null, results);
+    });
+  }
+
+  let cordinates = [];
+  let activity1 = [];
+  let activity2 = [];
+
 
 
 for (i = 0; i < jsonData.locations.length; i++) {
-
-  
-  cordinates.push([jsonData.locations[i].timestampMs, jsonData.locations[i].latitudeE7, jsonData.locations[i].longitudeE7, jsonData.locations[i].accuracy, jsonData.locations[i].activity]);
- 
-
-   for (j = 0; j < countProps(jsonData.locations[i].activity); j++)
-  {
-  activity1.push([jsonData.locations[i].activity.timestaMps])
-  //   for (k = 0; k < jsonData.locations[i].activity[j].length; k++) {
-  //     activity2.push([jsonData.locations[i].activity[j].object[k].type, jsonData.locations[i].activity[j].object[k].confidence])
-  // }
-  }
+    bulkInsert(connection, 'entry', [jsonData.locations[i]], function (err, result) {
+      (error, response) => {
+        if (error) res.send(error);
+        res.json(response);
+      }
+    });
+//  if('activity' in  jsonData.locations[i]) {
+//     for(j=0; j < jsonData.locations[i].activity.length; j++){
+//         // console.log('i= ' + i + ' j= ' + j );
+//         // console.log(jsonData.locations[i])
+//         cordinates.push([jsonData.locations[i].timestampMs, jsonData.locations[i].latitudeE7, 
+//             jsonData.locations[i].longitudeE7, jsonData.locations[i].accuracy])
+//         if('activity' in  jsonData.locations[i].activity[j]) {
+                        
+//             for(k=0; k < jsonData.locations[i].activity[j].length; k++){
+                
+//             }
+//         }
+//     }
+//   }
+//   else
+//     continue;
 }
 
-
-
-// console.log(cordinates)
-console.log(activity1);
-// console.log(activity2)
-
-
-// connection.query("INSERT INTO `entry`(`timestapMs`, `longtitude`,  `latitude`, `accuracy`) VALUES ?", [cordinates], function(err, result)
-// {  
-//   if (err) throw err;  
-// })
-
-
-// })
-
-
-// router.get('/checkMap', function(req, res){
-//   res.render('../views/leaflet.ejs')
 
 })
 
