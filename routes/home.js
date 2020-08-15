@@ -123,6 +123,14 @@ function sizeObj(obj) {
   return Object.keys(obj).length; //tried this but didn't work
 }
 
+function countProps(obj) {
+  var count = 0;
+  for (var p in obj) {
+    obj.hasOwnProperty(p) && count++;
+  }
+  return count; 
+} 
+
 let cordinates=[];
 let activity1=[];
 let activity2=[];
@@ -134,7 +142,7 @@ for (i = 0; i < jsonData.locations.length; i++) {
   cordinates.push([jsonData.locations[i].timestampMs, jsonData.locations[i].latitudeE7, jsonData.locations[i].longitudeE7, jsonData.locations[i].accuracy, jsonData.locations[i].activity]);
  
 
-   for (j = 0; j < /*sizeObj(*/jsonData.locations[i].activity.length/*)*/; j++)
+   for (j = 0; j < countProps(jsonData.locations[i].activity); j++)
   {
   activity1.push([jsonData.locations[i].activity.timestaMps])
   //   for (k = 0; k < jsonData.locations[i].activity[j].length; k++) {
