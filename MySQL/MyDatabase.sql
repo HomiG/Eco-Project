@@ -19,8 +19,8 @@ CREATE TABLE IF NOT EXISTS `entry` (
   `verticalAccuracy` int(11),
   `velocity` int(11),
   `accuracy` int(11) NOT NULL,
-  `longtitude` int(11) NOT NULL,
-  `latitude` int(11) NOT NULL,
+  `longitudeE7` int(11) NOT NULL,
+  `latitudeE7` int(11) NOT NULL,
   `altitude` int(11),
   `timestampMs` varchar(100) NOT NULL,
   `userId` varchar(100),
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS `entry` (
 
 CREATE TABLE `activity1`(
   `aa1` int(11) NOT NULL AUTO_INCREMENT,
-  `timestamp` int(11) NOT NULL,
+  `timestampMs` int(11) NOT NULL,
   PRIMARY KEY(`aa1`)
 )  ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
