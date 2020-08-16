@@ -129,6 +129,7 @@ router.post('/login', function (req, res) {
 //   let jsonData = require('../locationHistory.json');
 
 
+<<<<<<< HEAD
 //   function bulkInsert(con, table, objectArray, callback) {
 //     let keys = Object.keys(objectArray[0]);
 //     if (keys.includes("activity")) { // Checking if 
@@ -172,6 +173,52 @@ router.post('/login', function (req, res) {
 // //   else
 // //     continue;
 // }
+=======
+  let cordinates = [];
+  let activity1 = [];
+  let activity2 = [];
+
+  var entryId;
+  var activity1Id;
+  let activity2Id;
+
+
+  var troll
+
+  function getTheValue(result){
+    console.log("Get The Value: ", result);
+    troll = result
+    return result
+  }
+
+  console.log("Troll:", troll); 
+
+  for (i = 0; i < jsonData.locations.length; i++) {
+    bulkInsert(connection, 'entry', [jsonData.locations[i]], function (err, result) {
+      if (err) throw err;
+
+     entryId = result.insertId // It's the ID (the auto-Incriment from MySql) of the Entry Table
+     getTheValue(entryId)
+     console.log("Inside: " + entryId)
+    });
+    console.log("Outside: " + entryId)
+    console.log("Troll:", troll); 
+
+    if ('activity' in jsonData.locations[i]) {
+      for (j = 0; j < jsonData.locations[i].activity.length; j++) {
+        //console.log('i= ' + i + ' j= ' + j );
+        bulkInsert(connection, "activity1", [jsonData.locations[i].activity[j]], function (err, result) {
+          if (err) throw err;
+         activity1Id = result.insertId
+          //console.log(activity1Id)
+        })
+        //console.log(entryId, "   ", activity1Id);
+        //connection.query('INSERT INTO LocationConnectActivity(entryId, a1) VALUES(' + entryId + ',' + activity1Id + ')')
+      }
+
+    }
+  }
+>>>>>>> ffd5eeb60c4e4ccc3d8be3e72096c2780e2be812
 
 
 // })
