@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS `entry` (
 
 CREATE TABLE `activity1`(
   `aa1` int(11) NOT NULL AUTO_INCREMENT,
-  `timestampMs` int(11) NOT NULL,
+  `timestampMs` varchar(100) NOT NULL,
   PRIMARY KEY(`aa1`)
 )  ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -62,7 +62,6 @@ CREATE TABLE `Activity1ConnectActivity2` (
   FOREIGN KEY (`a1`) REFERENCES `activity1`(`aa1`)  ON DELETE RESTRICT ON UPDATE CASCADE,
   FOREIGN KEY (`a2`) REFERENCES `activity2`(`aa2`)  ON DELETE RESTRICT ON UPDATE CASCADE,
   PRIMARY KEY(`a1`, `a2`)
-
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
