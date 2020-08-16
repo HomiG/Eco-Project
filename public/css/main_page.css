@@ -24,7 +24,7 @@ body  {
     padding: 50px;
     text-align: center;
     /* background: #1abc9c; */
-    background-image:  url("patras6_f.png") ;  
+    background-image:  url("/public/img/patras6_f.png") ;  
     background-size: cover;
     color: white;
     font-size: 30px;
