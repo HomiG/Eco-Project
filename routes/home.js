@@ -107,7 +107,10 @@ router.post('/login', function (req, res) {
 
 
 
-
+function uploadFile(){
+  res.render('../views/upload.ejs');
+      console.log(result)
+}
 
 
 
