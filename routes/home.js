@@ -8,7 +8,7 @@ const crypto = require('crypto');
 const assert = require('assert');
 const doAsync = require('doasync')
 const fs = require('fs')
-
+const upload=require('express-fileupload')
 
 const { encrypt, decrypt } = require('../encryptDecrypt');
 const { json } = require('express');
@@ -20,6 +20,8 @@ router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
 router.use(express.json());
 router.use(bodyParser());
+router.use(upload())
+
 
 
 
@@ -30,6 +32,8 @@ router.get('/', function (req, res) {
 router.get('/upload', function (req, res) {
   res.render('../views/upload.ejs')
 });
+
+
 //accepts the username and the password from the user, with the POST method.
 //encrypts the password, and sends it back to the user.
 router.post('/signup', async function (req, res) {
@@ -94,6 +98,13 @@ router.post('/login', function (req, res) {
   });
 
 
+
+});
+
+router.post('/upload', async function (req,res){
+  if(req.files){
+    console.log(req.files)
+  }
 
 });
 

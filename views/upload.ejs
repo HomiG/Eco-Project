@@ -31,9 +31,10 @@
 
 <body>
 
-  <button type="button" id="button1">
-    Add Hit On Riga Fereou
-  </button>
+    <form method="POST" action="/upload" enctype="multipart/form-data">
+        <input type="file" id="docpicker"  accept=".json"/>
+        <input type="submit" value="Upload"/>
+        </form> 
 
   <script type = "text/javascript" src="../public/js/leafletHeatmap.js"></script>
 
