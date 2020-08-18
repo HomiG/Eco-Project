@@ -101,7 +101,7 @@ router.post('/login', function (req, res) {
 
 });
 
-router.post('/upload', async function (req,res){
+router.post('/upload',  function (req,res){
   if(req.files){
     console.log(req.files)
   }
