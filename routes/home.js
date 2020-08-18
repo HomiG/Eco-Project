@@ -9,7 +9,7 @@ const crypto = require('crypto');
 const assert = require('assert');
 const doAsync = require('doasync')
 const fs = require('fs')
-const upload=require('express-fileupload')
+// const upload=require('express-fileupload')
 
 const { encrypt, decrypt } = require('../encryptDecrypt');
 const { json } = require('express');
@@ -18,7 +18,7 @@ router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
 router.use(express.json());
 router.use(bodyParser());
-router.use(upload())
+// router.use(upload())
 
 router.get('/', function (req, res) {
   res.render('../views/index.ejs')
@@ -145,15 +145,13 @@ router.post('/login', function (req, res) {
 
 });
 
-router.post('/upload', async function (req,res){
-  if(req.files){
-    console.log(req.files)
-  }
+// router.post('/upload', async function (req,res){
+//   if(req.files){
+//     console.log(req.files)
+//   }
 
-});
+// });
 
-<<<<<<< HEAD
-=======
 
 // //check if given password maches saved password
 // if(await bcrypt.compare(req.body.password, savedPassword));
@@ -167,7 +165,6 @@ router.post('/upload', async function (req,res){
 
 
 
->>>>>>> acd884a5576f20c0247d3c48b9380f1e825a350f
 // router.get('/', function (req, res) {
 
 //   function bulkInsert(connection, table, objectArray, callback) {
@@ -183,11 +180,8 @@ router.post('/upload', async function (req,res){
 //     });
 //   }
 
-<<<<<<< HEAD
 //   let jsonData = require('../locationHistory.json');
-=======
 // let jsonData = require('../locationHistory.json');
->>>>>>> acd884a5576f20c0247d3c48b9380f1e825a350f
 
 
 //   let cordinates = [];
@@ -236,11 +230,8 @@ router.post('/upload', async function (req,res){
 //   }
 
 
-<<<<<<< HEAD
 // })
-=======
 // // })
->>>>>>> acd884a5576f20c0247d3c48b9380f1e825a350f
 
 
 module.exports = router;
