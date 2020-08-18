@@ -50,7 +50,8 @@ CREATE TABLE `activity1`(
 
 CREATE TABLE `activity2`(
   `aa2` int(11) NOT NULL AUTO_INCREMENT,
-  `type` enum('"ON_FOOT"','"RUNNING"','"TILTING"','"IN_VEHICLE"','"UNKNOWN"','"ON_BICYCLE", "STILL"') NOT NULL,
+  -- type enum('ON_FOOT','RUNNING','TILTING','IN_VEHICLE','UNKNOWN','ON_BICYCLE', 'STILL', 'WALKING', 'IN_ROAD_VEHICLE', 'IN_RAIL_VEHICLE') NOT NULL,
+  `type` varchar(100) NOT NULL,
   `confidence` int(11) NOT NULL,
     PRIMARY KEY(`aa2`)
 )  ENGINE=InnoDB DEFAULT CHARSET=utf8;
