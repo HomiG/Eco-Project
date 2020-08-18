@@ -8,7 +8,9 @@ const mysql = require('mysql');
 const crypto = require('crypto');
 const assert = require('assert');
 const doAsync = require('doasync')
-const fs = require('fs')
+const fs = require('fs');
+var ejs = require('ejs');
+
 // const upload=require('express-fileupload')
 
 const { encrypt, decrypt } = require('../encryptDecrypt');
@@ -76,6 +78,7 @@ upload(req, res, function(err) {
 });
 
 });
+let hey={x:"SASHA", y:"1"};
 
 
 //accepts the username and the password from the user, with the POST method.
@@ -116,6 +119,22 @@ router.post('/signup', async function (req, res) {
   }
 });
 
+
+var user = {
+  username: "Alex",
+  password: "AsDf123!@#",
+  userId: "encrypt(req.body.email, req.body.password)",
+  email: "req.body.email"
+}
+
+
+// router.get('/',(req, res) => { // root route or home route
+  
+  
+//   res.render("../views/main_page.ejs" );
+//  });
+
+
 router.post('/login', function (req, res) {
 
 
@@ -126,7 +145,7 @@ router.post('/login', function (req, res) {
     userId: encrypt(req.body.email, req.body.password)
   }
 
-
+  
 
 
   connection.query("SELECT userId FROM user WHERE userId= '" + loginData.userId + "'", function (err, result) {
@@ -136,19 +155,20 @@ router.post('/login', function (req, res) {
       console.log(result);
     }
     else {
-      res.render('../views/main_page.ejs');
+      res.render('../views/main_page.ejs',{data:user});
       console.log(result)
     }
   });
-
+  
 
 
 });
 
+
 router.post('/upload',  function (req,res){
   if(req.files){
     console.log(req.files)
-  }
+  }})
 // router.post('/upload', async function (req,res){
 //   if(req.files){
 //     console.log(req.files)
@@ -159,8 +179,6 @@ router.post('/upload',  function (req,res){
 
 // //check if given password maches saved password
 // if(await bcrypt.compare(req.body.password, savedPassword));
-
-
 
 
 
