@@ -1,3 +1,4 @@
+'use strict'
 const express = require('express');
 const bodyParser = require('body-parser')
 const bcrypt = require('bcrypt')
@@ -8,6 +9,7 @@ const crypto = require('crypto');
 const assert = require('assert');
 const doAsync = require('doasync')
 const fs = require('fs')
+const util = require('util');
 
 
 const { encrypt, decrypt } = require('../encryptDecrypt');
@@ -108,22 +110,39 @@ router.post('/login', function (req, res) {
 
 
 
+router.get('/', async function (req, res) {
+
+  //This is for Running the Code Async
+  function makeDb() {
+    var connection = mysql.createConnection({
+      host: "localhost",
+      user: "root",
+      password: '',
+      database: 'ecoproject',
+      port: 3306
+    });
+    return {
+      query(sql, args) {
+        return util.promisify(connection.query)
+          .call(connection, sql, args);
+      },
+      close() {
+        return util.promisify(connection.end).call(connection);
+      }
+    };
+  }
+  const db = makeDb();
 
 
 
-router.get('/', function (req, res) {
-
-  function bulkInsert(connection, table, objectArray, callback) {
+  function bulkInsert(db, table, objectArray) {
     let keys = Object.keys(objectArray[0]);
     if (keys.includes("activity")) { // Checking if 
       keys.pop();
     }
     let values = objectArray.map(obj => keys.map(key => obj[key]));
     let sql = 'INSERT INTO ' + table + ' (' + keys.join(',') + ') VALUES ?';
-    connection.query(sql, [values], function (error, results, fields) {
-      if (error) callback(error);
-      callback(null, results);
-    });
+    return db.query(sql, [values]);
   }
 
   let jsonData = require('../locationHistory.json');
@@ -133,45 +152,40 @@ router.get('/', function (req, res) {
   let activity1 = [];
   let activity2 = [];
 
-  var entryId;
-  var activity1Id;
+  let entryId;
+  let activity1Id;
   let activity2Id;
 
+  let i, j, k;
 
-  var troll
-
-  function getTheValue(result){
-    console.log("Get The Value: ", result);
-    troll = result
-    return result
-  }
-
-  console.log("Troll:", troll); 
 
   for (i = 0; i < jsonData.locations.length; i++) {
-    bulkInsert(connection, 'entry', [jsonData.locations[i]], function (err, result) {
-      if (err) throw err;
 
-     entryId = result.insertId // It's the ID (the auto-Incriment from MySql) of the Entry Table
-     getTheValue(entryId)
-     console.log("Inside: " + entryId)
-    });
-    console.log("Outside: " + entryId)
-    console.log("Troll:", troll); 
+
+    entryId = await bulkInsert(db, 'entry', [jsonData.locations[i]])
+
+
+    console.log("Entry ID: ", entryId.insertId);
+
 
     if ('activity' in jsonData.locations[i]) {
       for (j = 0; j < jsonData.locations[i].activity.length; j++) {
-        //console.log('i= ' + i + ' j= ' + j );
-        bulkInsert(connection, "activity1", [jsonData.locations[i].activity[j]], function (err, result) {
-          if (err) throw err;
-         activity1Id = result.insertId
-          //console.log(activity1Id)
-        })
-        //console.log(entryId, "   ", activity1Id);
-        //connection.query('INSERT INTO LocationConnectActivity(entryId, a1) VALUES(' + entryId + ',' + activity1Id + ')')
-      }
+        activity1Id = await bulkInsert(db, 'activity1', [jsonData.locations[i].activity[j]])
+        //console.log("\tActivity1 ID: ", activity1Id.insertId)
+        let insertActivity1ConnectAcitivity2 = db.query('INSERT INTO LocationConnectActivity(`entryId`, `a1`) VALUES(' + entryId.insertId + ',' + activity1Id.insertId + ')')
 
+
+        if ('activity' in jsonData.locations[i].activity[j]) {
+          for (k = 0; k < jsonData.locations[i].activity[j].activity.length; k++) {
+            activity2Id = await bulkInsert(db, 'activity2', [jsonData.locations[i].activity[j].activity[k]])
+            //console.log("\t\tActivity2 ID: ", activity2Id.insertId)
+            let insertActivity1ConnectAcitivity2 = db.query('INSERT INTO Activity1ConnectActivity2(`a1`, `a2`) VALUES(' + activity1Id.insertId + ',' + activity2Id.insertId + ')')
+
+          }
+        }
+      }
     }
+
   }
 
 
