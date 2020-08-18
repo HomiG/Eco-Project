@@ -9,16 +9,12 @@ const mysql = require('mysql');
 const crypto = require('crypto');
 const assert = require('assert');
 const doAsync = require('doasync')
-<<<<<<< HEAD
 const fs = require('fs');
 var ejs = require('ejs');
-
-// const upload=require('express-fileupload')
-=======
-const fs = require('fs')
 const util = require('util');
+// const upload=require('express-fileupload')
 
->>>>>>> 851aa91abeb908cb282ba311964643be075837ac
+
 
 const { encrypt, decrypt } = require('../encryptDecrypt');
 const { json } = require('express');
@@ -29,9 +25,9 @@ router.use(express.json());
 router.use(bodyParser());
 // router.use(upload())
 
-// router.get('/', function (req, res) {
-//   res.render('../views/index.ejs')
-// });
+router.get('/', function (req, res) {
+  res.render('../views/index.ejs')
+});
 
 
 var Storage = multer.diskStorage({
@@ -79,14 +75,10 @@ upload(req, res, function(err) {
 
     return res.end("File uploaded sucessfully!.");
 
-<<<<<<< HEAD
 });
 
 });
-let hey={x:"SASHA", y:"1"};
-=======
-});});
->>>>>>> 851aa91abeb908cb282ba311964643be075837ac
+
 
 
 //accepts the username and the password from the user, with the POST method.
@@ -147,7 +139,7 @@ router.post('/login', function (req, res) {
 
 
 
-  loginData = {
+  var loginData = {
     email: req.body.email,
     password: req.body.password,
     userId: encrypt(req.body.email, req.body.password)
@@ -172,7 +164,6 @@ router.post('/login', function (req, res) {
 
 });
 
-<<<<<<< HEAD
 
 router.post('/upload',  function (req,res){
   if(req.files){
@@ -182,10 +173,8 @@ router.post('/upload',  function (req,res){
 //   if(req.files){
 //     console.log(req.files)
 //   }
-=======
 // //check if given password maches saved password
 // if(await bcrypt.compare(req.body.password, savedPassword));
->>>>>>> 851aa91abeb908cb282ba311964643be075837ac
 
 
 
@@ -197,9 +186,6 @@ router.post('/upload',  function (req,res){
 
 
 
-<<<<<<< HEAD
-// router.get('/', function (req, res) {
-=======
 router.get('/', async function (req, res) {
 
 
@@ -224,9 +210,8 @@ router.get('/', async function (req, res) {
     };
   }
   const db = makeDb();
->>>>>>> 851aa91abeb908cb282ba311964643be075837ac
 
- // });
+ });
 
 
   function bulkInsert(db, table, objectArray) {
@@ -242,40 +227,40 @@ router.get('/', async function (req, res) {
   
 
 
-  let entryId;
-  let activity1Id;
-  let activity2Id;
+//   let entryId;
+//   let activity1Id;
+//   let activity2Id;
 
-  let i, j, k;
-
-
-  for (i = 0; i < jsonData.locations.length; i++) {
+//   let i, j, k;
 
 
-    entryId = await bulkInsert(db, 'entry', [jsonData.locations[i]])
+//   for (i = 0; i < jsonData.locations.length; i++) {
 
 
-    console.log("Entry ID: ", entryId.insertId);
+//     entryId = await bulkInsert(db, 'entry', [jsonData.locations[i]])
 
 
-    if ('activity' in jsonData.locations[i]) {
-      for (j = 0; j < jsonData.locations[i].activity.length; j++) {
-        activity1Id = await bulkInsert(db, 'activity1', [jsonData.locations[i].activity[j]])
-        //console.log("\tActivity1 ID: ", activity1Id.insertId)
-        let insertActivity1ConnectAcitivity2 = db.query('INSERT INTO LocationConnectActivity(`entryId`, `a1`) VALUES(' + entryId.insertId + ',' + activity1Id.insertId + ')')
+//     console.log("Entry ID: ", entryId.insertId);
 
 
-        if ('activity' in jsonData.locations[i].activity[j]) {
-          for (k = 0; k < jsonData.locations[i].activity[j].activity.length; k++) {
-            activity2Id = await bulkInsert(db, 'activity2', [jsonData.locations[i].activity[j].activity[k]])
-            //console.log("\t\tActivity2 ID: ", activity2Id.insertId)
-            let insertActivity1ConnectAcitivity2 = db.query('INSERT INTO Activity1ConnectActivity2(`a1`, `a2`) VALUES(' + activity1Id.insertId + ',' + activity2Id.insertId + ')')
+//     if ('activity' in jsonData.locations[i]) {
+//       for (j = 0; j < jsonData.locations[i].activity.length; j++) {
+//         activity1Id = await bulkInsert(db, 'activity1', [jsonData.locations[i].activity[j]])
+//         //console.log("\tActivity1 ID: ", activity1Id.insertId)
+//         let insertActivity1ConnectAcitivity2 = db.query('INSERT INTO LocationConnectActivity(`entryId`, `a1`) VALUES(' + entryId.insertId + ',' + activity1Id.insertId + ')')
 
-          }
-        }
-      }
-    }
 
-  }
-})
+//         if ('activity' in jsonData.locations[i].activity[j]) {
+//           for (k = 0; k < jsonData.locations[i].activity[j].activity.length; k++) {
+//             activity2Id = await bulkInsert(db, 'activity2', [jsonData.locations[i].activity[j].activity[k]])
+//             //console.log("\t\tActivity2 ID: ", activity2Id.insertId)
+//             let insertActivity1ConnectAcitivity2 = db.query('INSERT INTO Activity1ConnectActivity2(`a1`, `a2`) VALUES(' + activity1Id.insertId + ',' + activity2Id.insertId + ')')
+
+//           }
+//         }
+//       }
+//     }
+
+//   }
+// })
 module.exports = router;
