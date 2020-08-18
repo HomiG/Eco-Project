@@ -8,7 +8,6 @@ var router = require('./routes/home')
 // import my module "home"
 const home = require('./routes/home')
 var app = express();
-
 app.set('view enigne', 'ejs') 
 app.set('views', './views')
 app.use('/public', express.static(path.join(__dirname, "public")));
@@ -21,3 +20,6 @@ app.use('/', home)  // whenever browse into /, use the home module
 app.listen(3000, function () {
     console.log('Express app listening on port 3000');
   });
+
+
+

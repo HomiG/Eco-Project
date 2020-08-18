@@ -1,4 +1,5 @@
 const express = require('express');
+var multer = require('multer');
 const bodyParser = require('body-parser')
 const bcrypt = require('bcrypt')
 const router = express.Router();
@@ -8,22 +9,49 @@ const crypto = require('crypto');
 const assert = require('assert');
 const doAsync = require('doasync')
 const fs = require('fs')
-const upload=require('express-fileupload')
+// const upload=require('express-fileupload')
 
 const { encrypt, decrypt } = require('../encryptDecrypt');
 const { json } = require('express');
-
-
-
 
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
 router.use(express.json());
 router.use(bodyParser());
-router.use(upload())
+// router.use(upload())
+
+router.get('/', function (req, res) {
+  res.render('../views/index.ejs')
+});
 
 
+var Storage = multer.diskStorage({
 
+  destination: function(req, file, callback) {
+
+      callback(null, "./uploads");
+
+  },
+
+  filename: function(req, file, callback) {
+
+      callback(null, file.fieldname + "_" + Date.now() + "_" + file.originalname);
+
+  }
+
+});
+
+var upload = multer({
+
+storage: Storage
+
+}).array("Uploader", 1); //Field name and max count
+
+// app.get("/", function(req, res) {
+
+// res.sendFile(__dirname + "/index.ejs");
+
+// });
 
 router.get('/', function (req, res) {
   res.render('../views/index.ejs')
@@ -31,6 +59,22 @@ router.get('/', function (req, res) {
 
 router.get('/upload', function (req, res) {
   res.render('../views/upload.ejs')
+});
+
+router.post("/api/Upload", function(req, res) {
+
+upload(req, res, function(err) {
+
+    if (err) {
+
+        return res.end("Something went wrong!");
+
+    }
+
+    return res.end("File uploaded sucessfully!.");
+
+});
+
 });
 
 
@@ -105,8 +149,12 @@ router.post('/upload',  function (req,res){
   if(req.files){
     console.log(req.files)
   }
+// router.post('/upload', async function (req,res){
+//   if(req.files){
+//     console.log(req.files)
+//   }
 
-});
+// });
 
 
 // //check if given password maches saved password
@@ -136,6 +184,7 @@ router.post('/upload',  function (req,res){
 //     });
 //   }
 
+//   let jsonData = require('../locationHistory.json');
 // let jsonData = require('../locationHistory.json');
 
 
@@ -185,6 +234,7 @@ router.post('/upload',  function (req,res){
 //   }
 
 
+// })
 // // })
 
 

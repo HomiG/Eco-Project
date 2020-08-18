@@ -120,6 +120,7 @@ body  {
   }
   
   @media screen and (max-width: 700px) {
+    *{font-size: 15px; }
     /* .sidebar {
       width: 100%;
       height: auto;
@@ -134,7 +135,7 @@ body  {
     .sidebar {
       margin: 0;
       padding: 0;
-      width: 180px;
+      /* width: 0px; */
       background-color: #2863CA;
       position: fixed;
       height: 100%;
@@ -144,24 +145,28 @@ body  {
     .sidebar a {
       display: block;
       color: white;
-      font-size: 23px;
+      font-size: 15px;
       padding: 16px;
       text-decoration: none;
     }
      
+  
    
     .sidebar a:hover {
       color: #000000;
     }
     
-    div.main {
+    .main {
       margin-left: 200px;
       padding: 1px 16px;
       height: 1000px;
     }
 
-    h1{font-size: 25px;     text-align: auto;   }
+    h1{font-size: 20px;     text-align: auto;   }
 
+    h2{font-size: 20px;     text-align: auto;   }
+
+  
   }
   
   @media screen and (max-width: 400px) {
@@ -197,6 +202,29 @@ body  {
     background-color: #2863CA;
 }
 
-
+.custom-file-input::-webkit-file-upload-button {
+  visibility: hidden;
+}
+.custom-file-input::before {
+  content: 'Select some files';
+  display: inline-block;
+  background: linear-gradient(top, #f9f9f9, #e3e3e3);
+  border: 1px solid #999;
+  border-radius: 3px;
+  padding: 5px 8px;
+  outline: none;
+  white-space: nowrap;
+  -webkit-user-select: none;
+  cursor: pointer;
+  text-shadow: 1px 1px #fff;
+  font-weight: 700;
+  font-size: 10pt;
+}
+.custom-file-input:hover::before {
+  border-color: black;
+}
+.custom-file-input:active::before {
+  background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+}
 
  
