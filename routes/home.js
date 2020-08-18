@@ -22,9 +22,9 @@ router.use(express.json());
 router.use(bodyParser());
 // router.use(upload())
 
-router.get('/', function (req, res) {
-  res.render('../views/index.ejs')
-});
+// router.get('/', function (req, res) {
+//   res.render('../views/index.ejs')
+// });
 
 
 var Storage = multer.diskStorage({
@@ -55,9 +55,6 @@ storage: Storage
 
 // });
 
-router.get('/', function (req, res) {
-  res.render('../views/index.ejs')
-});
 
 router.get('/upload', function (req, res) {
   res.render('../views/upload.ejs')
@@ -75,9 +72,7 @@ upload(req, res, function(err) {
 
     return res.end("File uploaded sucessfully!.");
 
-});
-
-});
+});});
 
 
 //accepts the username and the password from the user, with the POST method.
@@ -162,6 +157,8 @@ router.post('/login', function (req, res) {
 
 router.get('/', async function (req, res) {
 
+
+  let jsonData = require('../locationHistory.json')
   //This is for Running the Code Async
   function makeDb() {
     var connection = mysql.createConnection({
@@ -183,7 +180,7 @@ router.get('/', async function (req, res) {
   }
   const db = makeDb();
 
-// });
+ // });
 
 
   function bulkInsert(db, table, objectArray) {
@@ -196,7 +193,7 @@ router.get('/', async function (req, res) {
     return db.query(sql, [values]);
   }
 
-
+  
 
 
   let entryId;
@@ -234,74 +231,5 @@ router.get('/', async function (req, res) {
     }
 
   }
-
-// router.get('/', function (req, res) {
-
-//   function bulkInsert(connection, table, objectArray, callback) {
-//     let keys = Object.keys(objectArray[0]);
-//     if (keys.includes("activity")) { // Checking if 
-//       keys.pop();
-//     }
-//     let values = objectArray.map(obj => keys.map(key => obj[key]));
-//     let sql = 'INSERT INTO ' + table + ' (' + keys.join(',') + ') VALUES ?';
-//     connection.query(sql, [values], function (error, results, fields) {
-//       if (error) callback(error);
-//       callback(null, results);
-//     });
-//   }
-
-//   let jsonData = require('../locationHistory.json');
-// let jsonData = require('../locationHistory.json');
-
-
-//   let cordinates = [];
-//   let activity1 = [];
-//   let activity2 = [];
-
-//   var entryId;
-//   var activity1Id;
-//   let activity2Id;
-
-
-//   var troll
-
-//   function getTheValue(result){
-//     console.log("Get The Value: ", result);
-//     troll = result
-//     return result
-//   }
-
-//   console.log("Troll:", troll); 
-
-//   for (i = 0; i < jsonData.locations.length; i++) {
-//     bulkInsert(connection, 'entry', [jsonData.locations[i]], function (err, result) {
-//       if (err) throw err;
-
-//      entryId = result.insertId // It's the ID (the auto-Incriment from MySql) of the Entry Table
-//      getTheValue(entryId)
-//      console.log("Inside: " + entryId)
-//     });
-//     console.log("Outside: " + entryId)
-//     console.log("Troll:", troll); 
-
-//     if ('activity' in jsonData.locations[i]) {
-//       for (j = 0; j < jsonData.locations[i].activity.length; j++) {
-//         //console.log('i= ' + i + ' j= ' + j );
-//         bulkInsert(connection, "activity1", [jsonData.locations[i].activity[j]], function (err, result) {
-//           if (err) throw err;
-//          activity1Id = result.insertId
-//           //console.log(activity1Id)
-//         })
-//         //console.log(entryId, "   ", activity1Id);
-//         //connection.query('INSERT INTO LocationConnectActivity(entryId, a1) VALUES(' + entryId + ',' + activity1Id + ')')
-//       }
-
-//     }
-//   }
-
-
-// })
-// // })
-
-
+})
 module.exports = router;
