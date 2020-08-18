@@ -9,6 +9,7 @@ Web Project Ceid 2019-2020
 
 npm install express -g
 npm install ejs -g
+npm i formidable
 
 Open Github Project in VS Code (Sync):
 
