@@ -33,12 +33,15 @@
                      
         
         <div class="main">
-            
+
+
             <div id="score" style="margin-top: 0px">
                 <h2>Score οικολογικής μετακίνησης.</h2>
                 <hr style="width:50px; border:5px solid #945f90; margin-top:35px; border-radius: 100px;" >
                 <p style="margin-top:35px">ΚΑΤΑΠΛΗΚΤΙΚΑ!</p>
-                <p>Το γραφημα θα μπει εδω</p>
+               
+                
+                    <p>Το γραφημα θα μπει εδω</p>
                 Πρώτη σου φορά μου λες πως σου συμβαίνει αυτό
                 Πως τρελαίνεσαι και δεν μπορείς ούτε λεπτό
                 Μακριά από τη δική μου αγκαλιά
@@ -172,6 +175,52 @@
                 κι αυτά που λέει μην τα τρως!
                 Από τις έντεκα και μπρος
                 κυκλοφοράει για γαμπρός.
+
+                 <form id="frmUploader" enctype="multipart/form-data" action="api/Upload/" method="post"> 
+
+                    <input type="file" class="custom-file-input" name="Uploader" multiple />
+            
+                    <input type="submit" name="submit" id="btnSubmit" value="Upload" /> 
+                
+                </form>
+                
+                <script>
+
+    //                 src = "//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js";
+
+
+    //                 //find the document, and when everything is ready:
+    //                 $(document).ready(function () {
+    //                 $('#btn').click(function () {    //when the submit button is clicked, execute this function.
+
+    //                 var username = $('#textBoxUsernameID').val();
+    //                 var password = $('#textBoxPasswordID').val();
+    //                 var email = $('#textBoxEmailID').val();
+
+    //                 $.ajax({
+    //                     url: 'http://localhost/login',
+    //                     type: 'POST',
+    //                     contentType: 'application/json',
+    //                     data: JSON.stringify({
+    //                         "username": "homi",
+    //                         "password": "pass",
+    //                         "userId": "sdf",
+    //                         "email": "mailll"
+    //                     })
+    //                 });
+
+    // })})
+                        // $(document).ready(function() {
+                        // var options = {                    
+                        // beforeSubmit: showRequest, // pre-submit callback 
+                        // success: showResponse // post-submit callback 
+                        // }; // bind to the form's submit event 
+                        // $('#frmUploader').submit(function () { $(this).ajaxSubmit(options); // always return false to prevent standard browser submit and page navigation 
+                        // return false; }); }); // pre-submit callback 
+                        // function showRequest(formData, jqForm, options) { alert('Uploading is starting.'); return true; } // post-submit callback 
+                        // function showResponse(responseText, statusText, xhr, $form) { alert('status: ' + statusText + '\n\nresponseText: \n' + responseText ); }
+                    
+                </script>
 
             </div>
 

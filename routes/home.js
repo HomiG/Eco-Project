@@ -1,4 +1,5 @@
 const express = require('express');
+var multer = require('multer');
 const bodyParser = require('body-parser')
 const bcrypt = require('bcrypt')
 const router = express.Router();
@@ -13,19 +14,59 @@ const fs = require('fs')
 const { encrypt, decrypt } = require('../encryptDecrypt');
 const { json } = require('express');
 
-
-
-
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
 router.use(express.json());
 router.use(bodyParser());
 
+router.get('/', function (req, res) {
+  res.render('../views/index.ejs')
+});
 
 
-// router.get('/', function (req, res) {
-//   res.render('../views/index.ejs')
+var Storage = multer.diskStorage({
+
+  destination: function(req, file, callback) {
+
+      callback(null, "./uploads");
+
+  },
+
+  filename: function(req, file, callback) {
+
+      callback(null, file.fieldname + "_" + Date.now() + "_" + file.originalname);
+
+  }
+
+});
+
+var upload = multer({
+
+storage: Storage
+
+}).array("Uploader", 1); //Field name and max count
+
+// app.get("/", function(req, res) {
+
+// res.sendFile(__dirname + "/index.ejs");
+
 // });
+
+router.post("/api/Upload", function(req, res) {
+
+upload(req, res, function(err) {
+
+    if (err) {
+
+        return res.end("Something went wrong!");
+
+    }
+
+    return res.end("File uploaded sucessfully!.");
+
+});
+
+});
 
 
 //accepts the username and the password from the user, with the POST method.
@@ -86,7 +127,7 @@ router.post('/login', function (req, res) {
       console.log(result);
     }
     else {
-      res.render('../views/leaflet.ejs');
+      res.render('../views/main_page.ejs');
       console.log(result)
     }
   });
@@ -111,71 +152,71 @@ router.post('/login', function (req, res) {
 
 
 
-router.get('/', function (req, res) {
+// router.get('/', function (req, res) {
 
-  function bulkInsert(connection, table, objectArray, callback) {
-    let keys = Object.keys(objectArray[0]);
-    if (keys.includes("activity")) { // Checking if 
-      keys.pop();
-    }
-    let values = objectArray.map(obj => keys.map(key => obj[key]));
-    let sql = 'INSERT INTO ' + table + ' (' + keys.join(',') + ') VALUES ?';
-    connection.query(sql, [values], function (error, results, fields) {
-      if (error) callback(error);
-      callback(null, results);
-    });
-  }
+//   function bulkInsert(connection, table, objectArray, callback) {
+//     let keys = Object.keys(objectArray[0]);
+//     if (keys.includes("activity")) { // Checking if 
+//       keys.pop();
+//     }
+//     let values = objectArray.map(obj => keys.map(key => obj[key]));
+//     let sql = 'INSERT INTO ' + table + ' (' + keys.join(',') + ') VALUES ?';
+//     connection.query(sql, [values], function (error, results, fields) {
+//       if (error) callback(error);
+//       callback(null, results);
+//     });
+//   }
 
-  let jsonData = require('../locationHistory.json');
-
-
-  let cordinates = [];
-  let activity1 = [];
-  let activity2 = [];
-
-  var entryId;
-  var activity1Id;
-  let activity2Id;
+//   let jsonData = require('../locationHistory.json');
 
 
-  var troll
+//   let cordinates = [];
+//   let activity1 = [];
+//   let activity2 = [];
 
-  function getTheValue(result){
-    console.log("Get The Value: ", result);
-    troll = result
-    return result
-  }
-
-  console.log("Troll:", troll); 
-
-  for (i = 0; i < jsonData.locations.length; i++) {
-    bulkInsert(connection, 'entry', [jsonData.locations[i]], function (err, result) {
-      if (err) throw err;
-
-     entryId = result.insertId // It's the ID (the auto-Incriment from MySql) of the Entry Table
-     getTheValue(entryId)
-     console.log("Inside: " + entryId)
-    });
-    console.log("Outside: " + entryId)
-    console.log("Troll:", troll); 
-
-    if ('activity' in jsonData.locations[i]) {
-      for (j = 0; j < jsonData.locations[i].activity.length; j++) {
-        //console.log('i= ' + i + ' j= ' + j );
-        bulkInsert(connection, "activity1", [jsonData.locations[i].activity[j]], function (err, result) {
-          if (err) throw err;
-         activity1Id = result.insertId
-          //console.log(activity1Id)
-        })
-        //console.log(entryId, "   ", activity1Id);
-        //connection.query('INSERT INTO LocationConnectActivity(entryId, a1) VALUES(' + entryId + ',' + activity1Id + ')')
-      }
-
-    }
-  }
+//   var entryId;
+//   var activity1Id;
+//   let activity2Id;
 
 
-})
+//   var troll
+
+//   function getTheValue(result){
+//     console.log("Get The Value: ", result);
+//     troll = result
+//     return result
+//   }
+
+//   console.log("Troll:", troll); 
+
+//   for (i = 0; i < jsonData.locations.length; i++) {
+//     bulkInsert(connection, 'entry', [jsonData.locations[i]], function (err, result) {
+//       if (err) throw err;
+
+//      entryId = result.insertId // It's the ID (the auto-Incriment from MySql) of the Entry Table
+//      getTheValue(entryId)
+//      console.log("Inside: " + entryId)
+//     });
+//     console.log("Outside: " + entryId)
+//     console.log("Troll:", troll); 
+
+//     if ('activity' in jsonData.locations[i]) {
+//       for (j = 0; j < jsonData.locations[i].activity.length; j++) {
+//         //console.log('i= ' + i + ' j= ' + j );
+//         bulkInsert(connection, "activity1", [jsonData.locations[i].activity[j]], function (err, result) {
+//           if (err) throw err;
+//          activity1Id = result.insertId
+//           //console.log(activity1Id)
+//         })
+//         //console.log(entryId, "   ", activity1Id);
+//         //connection.query('INSERT INTO LocationConnectActivity(entryId, a1) VALUES(' + entryId + ',' + activity1Id + ')')
+//       }
+
+//     }
+//   }
+
+
+// })
 
 
 module.exports = router;
