@@ -9,6 +9,8 @@ $(document).ready(function () {
         var password = $('#textBoxPasswordID').val();
         var email = $('#textBoxEmailID').val();
 
+
+
         $.ajax({
             url: 'http://localhost/login',
             type: 'POST',
@@ -21,4 +23,4 @@ $(document).ready(function () {
             })
         });
 
-    })
+    })})

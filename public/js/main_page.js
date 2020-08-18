@@ -25,3 +25,12 @@ function openNav() {
   function closeNav() {
     document.getElementById("mySidenav").style.width = "0";
   }
+
+// var uplodBtn=document.getElementById("uploadBtn");
+// uplodBtn.addEventListener("click",uploadFile());
+
+function uploadFile(){
+  
+  window.location.href="/upload"
+
+}

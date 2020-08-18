@@ -27,7 +27,9 @@ router.get('/', function (req, res) {
   res.render('../views/index.ejs')
 });
 
-
+router.get('/upload', function (req, res) {
+  res.render('../views/upload.ejs')
+});
 //accepts the username and the password from the user, with the POST method.
 //encrypts the password, and sends it back to the user.
 router.post('/signup', async function (req, res) {
@@ -95,6 +97,7 @@ router.post('/login', function (req, res) {
 
 });
 
+
 // //check if given password maches saved password
 // if(await bcrypt.compare(req.body.password, savedPassword));
 
@@ -104,13 +107,6 @@ router.post('/login', function (req, res) {
 
 
 
-
-
-
-function uploadFile(){
-  res.render('../views/upload.ejs');
-      console.log(result)
-}
 
 
 
@@ -129,56 +125,56 @@ function uploadFile(){
 //     });
 //   }
 
-//   let jsonData = require('../locationHistory.json');
+// let jsonData = require('../locationHistory.json');
 
 
-  let cordinates = [];
-  let activity1 = [];
-  let activity2 = [];
+//   let cordinates = [];
+//   let activity1 = [];
+//   let activity2 = [];
 
-  var entryId;
-  var activity1Id;
-  let activity2Id;
-
-
-  var troll
-
-  function getTheValue(result){
-    console.log("Get The Value: ", result);
-    troll = result
-    return result
-  }
-
-  console.log("Troll:", troll); 
-
-  for (i = 0; i < jsonData.locations.length; i++) {
-    bulkInsert(connection, 'entry', [jsonData.locations[i]], function (err, result) {
-      if (err) throw err;
-
-     entryId = result.insertId // It's the ID (the auto-Incriment from MySql) of the Entry Table
-     getTheValue(entryId)
-     console.log("Inside: " + entryId)
-    });
-    console.log("Outside: " + entryId)
-    console.log("Troll:", troll); 
-
-    if ('activity' in jsonData.locations[i]) {
-      for (j = 0; j < jsonData.locations[i].activity.length; j++) {
-        //console.log('i= ' + i + ' j= ' + j );
-        bulkInsert(connection, "activity1", [jsonData.locations[i].activity[j]], function (err, result) {
-          if (err) throw err;
-         activity1Id = result.insertId
-          //console.log(activity1Id)
-        })
-        //console.log(entryId, "   ", activity1Id);
-        //connection.query('INSERT INTO LocationConnectActivity(entryId, a1) VALUES(' + entryId + ',' + activity1Id + ')')
-      }
-
-    }
-  }
+//   var entryId;
+//   var activity1Id;
+//   let activity2Id;
 
 
-// })
+//   var troll
+
+//   function getTheValue(result){
+//     console.log("Get The Value: ", result);
+//     troll = result
+//     return result
+//   }
+
+//   console.log("Troll:", troll); 
+
+//   for (i = 0; i < jsonData.locations.length; i++) {
+//     bulkInsert(connection, 'entry', [jsonData.locations[i]], function (err, result) {
+//       if (err) throw err;
+
+//      entryId = result.insertId // It's the ID (the auto-Incriment from MySql) of the Entry Table
+//      getTheValue(entryId)
+//      console.log("Inside: " + entryId)
+//     });
+//     console.log("Outside: " + entryId)
+//     console.log("Troll:", troll); 
+
+//     if ('activity' in jsonData.locations[i]) {
+//       for (j = 0; j < jsonData.locations[i].activity.length; j++) {
+//         //console.log('i= ' + i + ' j= ' + j );
+//         bulkInsert(connection, "activity1", [jsonData.locations[i].activity[j]], function (err, result) {
+//           if (err) throw err;
+//          activity1Id = result.insertId
+//           //console.log(activity1Id)
+//         })
+//         //console.log(entryId, "   ", activity1Id);
+//         //connection.query('INSERT INTO LocationConnectActivity(entryId, a1) VALUES(' + entryId + ',' + activity1Id + ')')
+//       }
+
+//     }
+//   }
+
+
+// // })
 
 
 module.exports = router;
