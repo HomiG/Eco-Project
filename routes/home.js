@@ -1,3 +1,4 @@
+'use strict'
 const express = require('express');
 var multer = require('multer');
 const bodyParser = require('body-parser')
@@ -8,10 +9,16 @@ const mysql = require('mysql');
 const crypto = require('crypto');
 const assert = require('assert');
 const doAsync = require('doasync')
+<<<<<<< HEAD
 const fs = require('fs');
 var ejs = require('ejs');
 
 // const upload=require('express-fileupload')
+=======
+const fs = require('fs')
+const util = require('util');
+
+>>>>>>> 851aa91abeb908cb282ba311964643be075837ac
 
 const { encrypt, decrypt } = require('../encryptDecrypt');
 const { json } = require('express');
@@ -22,9 +29,9 @@ router.use(express.json());
 router.use(bodyParser());
 // router.use(upload())
 
-router.get('/', function (req, res) {
-  res.render('../views/index.ejs')
-});
+// router.get('/', function (req, res) {
+//   res.render('../views/index.ejs')
+// });
 
 
 var Storage = multer.diskStorage({
@@ -55,9 +62,6 @@ storage: Storage
 
 // });
 
-router.get('/', function (req, res) {
-  res.render('../views/index.ejs')
-});
 
 router.get('/upload', function (req, res) {
   res.render('../views/upload.ejs')
@@ -75,10 +79,14 @@ upload(req, res, function(err) {
 
     return res.end("File uploaded sucessfully!.");
 
+<<<<<<< HEAD
 });
 
 });
 let hey={x:"SASHA", y:"1"};
+=======
+});});
+>>>>>>> 851aa91abeb908cb282ba311964643be075837ac
 
 
 //accepts the username and the password from the user, with the POST method.
@@ -164,6 +172,7 @@ router.post('/login', function (req, res) {
 
 });
 
+<<<<<<< HEAD
 
 router.post('/upload',  function (req,res){
   if(req.files){
@@ -173,12 +182,10 @@ router.post('/upload',  function (req,res){
 //   if(req.files){
 //     console.log(req.files)
 //   }
-
-// });
-
-
+=======
 // //check if given password maches saved password
 // if(await bcrypt.compare(req.body.password, savedPassword));
+>>>>>>> 851aa91abeb908cb282ba311964643be075837ac
 
 
 
@@ -187,73 +194,88 @@ router.post('/upload',  function (req,res){
 
 
 
+
+
+
+<<<<<<< HEAD
 // router.get('/', function (req, res) {
-
-//   function bulkInsert(connection, table, objectArray, callback) {
-//     let keys = Object.keys(objectArray[0]);
-//     if (keys.includes("activity")) { // Checking if 
-//       keys.pop();
-//     }
-//     let values = objectArray.map(obj => keys.map(key => obj[key]));
-//     let sql = 'INSERT INTO ' + table + ' (' + keys.join(',') + ') VALUES ?';
-//     connection.query(sql, [values], function (error, results, fields) {
-//       if (error) callback(error);
-//       callback(null, results);
-//     });
-//   }
-
-//   let jsonData = require('../locationHistory.json');
-// let jsonData = require('../locationHistory.json');
+=======
+router.get('/', async function (req, res) {
 
 
-//   let cordinates = [];
-//   let activity1 = [];
-//   let activity2 = [];
+  let jsonData = require('../locationHistory.json')
+  //This is for Running the Code Async
+  function makeDb() {
+    var connection = mysql.createConnection({
+      host: "localhost",
+      user: "root",
+      password: '',
+      database: 'ecoproject',
+      port: 3306
+    });
+    return {
+      query(sql, args) {
+        return util.promisify(connection.query)
+          .call(connection, sql, args);
+      },
+      close() {
+        return util.promisify(connection.end).call(connection);
+      }
+    };
+  }
+  const db = makeDb();
+>>>>>>> 851aa91abeb908cb282ba311964643be075837ac
 
-//   var entryId;
-//   var activity1Id;
-//   let activity2Id;
-
-
-//   var troll
-
-//   function getTheValue(result){
-//     console.log("Get The Value: ", result);
-//     troll = result
-//     return result
-//   }
-
-//   console.log("Troll:", troll); 
-
-//   for (i = 0; i < jsonData.locations.length; i++) {
-//     bulkInsert(connection, 'entry', [jsonData.locations[i]], function (err, result) {
-//       if (err) throw err;
-
-//      entryId = result.insertId // It's the ID (the auto-Incriment from MySql) of the Entry Table
-//      getTheValue(entryId)
-//      console.log("Inside: " + entryId)
-//     });
-//     console.log("Outside: " + entryId)
-//     console.log("Troll:", troll); 
-
-//     if ('activity' in jsonData.locations[i]) {
-//       for (j = 0; j < jsonData.locations[i].activity.length; j++) {
-//         //console.log('i= ' + i + ' j= ' + j );
-//         bulkInsert(connection, "activity1", [jsonData.locations[i].activity[j]], function (err, result) {
-//           if (err) throw err;
-//          activity1Id = result.insertId
-//           //console.log(activity1Id)
-//         })
-//         //console.log(entryId, "   ", activity1Id);
-//         //connection.query('INSERT INTO LocationConnectActivity(entryId, a1) VALUES(' + entryId + ',' + activity1Id + ')')
-//       }
-
-//     }
-//   }
+ // });
 
 
-// })
-// // })
+  function bulkInsert(db, table, objectArray) {
+    let keys = Object.keys(objectArray[0]);
+    if (keys.includes("activity")) { // Checking if 
+      keys.pop();
+    }
+    let values = objectArray.map(obj => keys.map(key => obj[key]));
+    let sql = 'INSERT INTO ' + table + ' (' + keys.join(',') + ') VALUES ?';
+    return db.query(sql, [values]);
+  }
+
+  
 
 
+  let entryId;
+  let activity1Id;
+  let activity2Id;
+
+  let i, j, k;
+
+
+  for (i = 0; i < jsonData.locations.length; i++) {
+
+
+    entryId = await bulkInsert(db, 'entry', [jsonData.locations[i]])
+
+
+    console.log("Entry ID: ", entryId.insertId);
+
+
+    if ('activity' in jsonData.locations[i]) {
+      for (j = 0; j < jsonData.locations[i].activity.length; j++) {
+        activity1Id = await bulkInsert(db, 'activity1', [jsonData.locations[i].activity[j]])
+        //console.log("\tActivity1 ID: ", activity1Id.insertId)
+        let insertActivity1ConnectAcitivity2 = db.query('INSERT INTO LocationConnectActivity(`entryId`, `a1`) VALUES(' + entryId.insertId + ',' + activity1Id.insertId + ')')
+
+
+        if ('activity' in jsonData.locations[i].activity[j]) {
+          for (k = 0; k < jsonData.locations[i].activity[j].activity.length; k++) {
+            activity2Id = await bulkInsert(db, 'activity2', [jsonData.locations[i].activity[j].activity[k]])
+            //console.log("\t\tActivity2 ID: ", activity2Id.insertId)
+            let insertActivity1ConnectAcitivity2 = db.query('INSERT INTO Activity1ConnectActivity2(`a1`, `a2`) VALUES(' + activity1Id.insertId + ',' + activity2Id.insertId + ')')
+
+          }
+        }
+      }
+    }
+
+  }
+})
 module.exports = router;
