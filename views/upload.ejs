@@ -1,12 +1,12 @@
-
-
 <!DOCTYPE html>
 <html>
 <head>
 
+  <link rel="stylesheet" href="/public/css/upload.css">
+
+
   <div id="mapid"></div>
-
-
+  
 <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
   integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
   crossorigin="">
@@ -24,19 +24,136 @@
 
         <style>
 
-            #mapid { height:500px; }
+            #mapid { height: 600px; }
             
         </style>
 </head>
 
 <body>
 
-    <form method="POST" action="/upload" enctype="multipart/form-data">
+     <!-- <form method="POST" action="/upload" enctype="multipart/form-data">
         <input type="file" id="docpicker"  accept=".json"/>
         <input type="submit" value="Upload"/>
-        </form> 
+        </form>  -->
 
-  <script type = "text/javascript" src="../public/js/upload.js"></script>
+  <script type = "text/javascript" src="../public/js/leafletHeatmap.js"></script> 
+
+  <form id="frmUploader" enctype="multipart/form-data" action="api/Upload/" method="post"> 
+
+    <input type="file" class="custom-file-input" name="Uploader" accept=".json" multiple />
+
+    <input type="submit" name="submit" id="btnSubmit" value="Upload" /> 
+
+</form>
+
+<!-- 1 -->
+
+<!-- <input type="file" id="selectFiles" value="Import" /><br />
+<button id="import">Import</button>
+<textarea id="result"></textarea> -->
+
+<!-- 2  <input id="file" type="file" />
+
+<p>Select a file with the following format.</p>
+<pre>
+{
+  "name": "testName",
+  "family": "testFamily"
+}    
+</pre> -->
+
+
+<script>
+
+ // 1
+
+//   document.getElementById('import').onclick = function() {
+//     var files = document.getElementById('selectFiles').files;
+//   console.log(files);
+//   if (files.length <= 0) {
+//     return false;
+//   }
+
+//   var fr = new FileReader();
+
+//   fr.onload = function(e) { 
+//   console.log(e);
+//     var result = JSON.parse(e.target.result);
+//     var formatted = JSON.stringify(result, null, 2);
+//         document.getElementById('result').value = formatted;
+//   }
+
+//   fr.readAsText(files.item(0));
+// };
+
+// 2  (function(){
+    
+//     function onChange(event) {
+//         var reader = new FileReader();
+//         reader.onload = onReaderLoad;
+//         reader.readAsText(event.target.files[0]);
+//     }
+
+//     function onReaderLoad(event){
+//         console.log(event.target.result);
+//         var obj = JSON.parse(event.target.result);
+//         alert_data(obj.name, obj.family);
+//     }
+    
+//     function alert_data(name, family){
+//         alert('Name : ' + name + ', Family : ' + family);
+//     }
+ 
+//     document.getElementById('file').addEventListener('change', onChange);
+
+// }());
+</script>
+
+<!-- <form id="jsonFile" name="jsonFile" enctype="multipart/form-data" method="post">
+
+  <fieldset>
+    <h2>Json File</h2>
+     <input type='file' id='fileinput'>
+     <input type='button' id='btnLoad' value='Load' onclick='loadFile();'>
+  </fieldset>
+</form>
+
+
+<script type="text/javascript">
+
+  function loadFile() {
+    var input, file, fr;
+
+    if (typeof window.FileReader !== 'function') {
+      alert("The file API isn't supported on this browser yet.");
+      return;
+    }
+
+    input = document.getElementById('fileinput');
+    if (!input) {
+      alert("Um, couldn't find the fileinput element.");
+    }
+    else if (!input.files) {
+      alert("This browser doesn't seem to support the `files` property of file inputs.");
+    }
+    else if (!input.files[0]) {
+      alert("Please select a file before clicking 'Load'");
+    }
+    else {
+      file = input.files[0];
+      fr = new FileReader();
+      fr.onload = receivedText;
+      fr.readAsText(file);
+    }
+
+    function receivedText(e) {
+      let lines = e.target.result;
+      var newArr = JSON.parse(lines); 
+    }
+  }
+</script> -->
+
+
 
 
 </body>

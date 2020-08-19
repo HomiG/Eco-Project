@@ -1,8 +1,4 @@
-
-<html>  
-    
-
-
+<html> 
     <head>
         <meta charset="UTF-8">
 
@@ -34,24 +30,18 @@
                 <a href="#about">About</a>
             </div>
 
-            
+                     
+        
         <div class="main">
 
 
             <div id="score" style="margin-top: 0px">
-                <p>Hello, my name is <%=data.username%> and i am <%=data.password%> </p>
-                
-              
-               
                 <h2>Score οικολογικής μετακίνησης.</h2>
                 <hr style="width:50px; border:5px solid #945f90; margin-top:35px; border-radius: 100px;" >
                 <p style="margin-top:35px">ΚΑΤΑΠΛΗΚΤΙΚΑ!</p>
-                
-                
-
-                  
                
-                <p>Το γραφημα θα μπει εδω</p>
+                
+                    <p>Το γραφημα θα μπει εδω</p>
                 Πρώτη σου φορά μου λες πως σου συμβαίνει αυτό
                 Πως τρελαίνεσαι και δεν μπορείς ούτε λεπτό
                 Μακριά από τη δική μου αγκαλιά
@@ -161,14 +151,14 @@
                 <h2>Upload.</h2>
                 <hr style="width:50px; border:5px solid #945f90; margin-top:35px; border-radius: 100px; " >
                 <p style="margin-top:35px">Κανε κι εσυ upload!</p>
-                <button onclick="uploadFile()" id="UploadButton" title="Upload your files">Upload</button>
-
                 
+                <!-- <button onclick="uploadFile()" id="UploadButton" title="Upload your files">Upload</button>
+              
                 <script>
                     document.getElementById("")
                     var myfile
                     
-                </script>
+                </script> -->
 
                 <p>Μονο σβησε τις περιοχες που δεν θες να φανουν ;) πονηρουλη  </p>
                 Κυρα Γιώργαινα, ο Γιώργος σου που πάει;
@@ -194,14 +184,18 @@
                 κι αυτά που λέει μην τα τρως!
                 Από τις έντεκα και μπρος
                 κυκλοφοράει για γαμπρός.
-
-                 <form id="frmUploader" enctype="multipart/form-data" action="api/Upload/" method="post"> 
-
-                    <input type="file" class="custom-file-input" name="Uploader" multiple />
-            
-                    <input type="submit" name="submit" id="btnSubmit" value="Upload" /> 
+                <p></p>
+                <button class="upload_btn" onclick="uploadFile()" id="UploadButton" title="Upload your files">Upload</button>
                 
-                </form>
+                <script>
+                function uploadFile(){
+
+                window.location.href="/upload" }
+                res.render('../views/main_page.ejs');
+               
+               </script>
+
+                
                 
                 <script>
 

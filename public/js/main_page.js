@@ -30,10 +30,10 @@ function openNav() {
 // var uplodBtn=document.getElementById("uploadBtn");
 // uplodBtn.addEventListener("click",uploadFile());
 
-function uploadFile(){
+// function uploadFile(){
   
-  window.location.href="/upload"
+//   window.location.href="/upload"
 
-}
+// }
 
 //document.getElementById("iWantToDie").innerHTML ="Hello my name is",+ data.x ,+ data.y ;

@@ -1,230 +1,268 @@
 *{
-    font-family: 'Roboto', sans-serif;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-size: 25px;
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-size: 25px;
 
 }
 
 
 body  {
-     background-color: #ffffff21;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-    overflow: scroll;
-    /* padding-top: 60px;
-    padding-bottom: 40px; */
-    /* padding-left: 80px; */
-  }
+   background-color: #ffffff21;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  overflow: scroll;
+  /* padding-top: 60px;
+  padding-bottom: 40px; */
+  /* padding-left: 80px; */
+}
 
-  .header {
-    padding: 50px;
-    text-align: center;
-    /* background: #1abc9c; */
-    background-image:  url("/public/img/patras6_f.png") ;  
-    background-size: cover;
-    color: white;
-    font-size: 30px;
-    padding-left: 0px;
-
-  }
-  
-
-  .main{
-    width: 80%;
-    margin: 0 auto; /* Center the DIV horizontally */
-    padding-left: 80px;
+.header {
+  padding: 50px;
+  text-align: center;
+  /* background: #1abc9c; */
+  background-image:  url("/public/img/patras6_f.png") ;  
+  background-size: cover;
+  color: white;
+  font-size: 30px;
+  padding-left: 0px;
 
 }
- 
 
-  h1 {
-    font-size: 45px;
-    color: rgb(255, 255, 255);
-    text-align: center;
-    margin-top: 30px;
-  }
 
-  h2 {
-    /* text-align: center; */
-    color: black;
-    font-size: 35px;
-    margin-top: 100px;
-    font-weight: bold;
-    /* 2863CA */
-  }
+.main{
+  width: 80%;
+  margin: 0 auto; /* Center the DIV horizontally */
+  padding-left: 80px;
 
-  h3{
-     text-align: center;
-     color: rgb(187, 49, 49);
-     font-size: 100px;
-     margin-top: 100px;
-     font-weight: bold;
-     /* 2863CA */
+}
+
+
+h1 {
+  font-size: 45px;
+  color: rgb(255, 255, 255);
+  text-align: center;
+  margin-top: 30px;
+}
+
+h2 {
+  /* text-align: center; */
+  color: black;
+  font-size: 35px;
+  margin-top: 100px;
+  font-weight: bold;
+  /* 2863CA */
+}
+
+h3{
+   text-align: center;
+   color: rgb(187, 49, 49);
+   font-size: 100px;
+   margin-top: 100px;
+   font-weight: bold;
+   /* 2863CA */
+}
+
+.sidebar {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #2863CA;
+  /* background-color: #7f5c88c2; */
+  /* background-color: rgba(0, 0, 0, 0.8); */
+  overflow-x: hidden;
+  padding-top: 20px;
+  transition: 0.5s;
+}
+
+.sidebar a {
+  margin-top: 50px;
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 25px;
+  color: white;
+  /* color: #945f90; */
+  display: block;
+  transition: 0.3s;
+}
+
+.sidebar a:hover {
+  color: #000000;
+}
+
+.sidebar .closebtn {
+  margin-top: 10px;
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+.main {
+  margin-left: 180px; /* Same as the width of the sidenav */
+  font-size: 28px; /* Increased text to enable scrolling */
+  /* padding: 0px 10px; */
+}
+
+.colapsed_menu{
+  font-size:30px;
+  cursor:pointer; 
+  position: fixed; 
+  margin-top: 0px; 
+  margin-left: 50px;
+}
+
+@media screen and (max-width: 700px) {
+  *{font-size: 15px; }
+  /* .sidebar {
+    width: 100%;
+    height: auto;
+    position: fixed;
+    margin-top: 0px;
   }
+  .sidebar a {float: left; margin-top: 0px;  width: 100%;}
+  div.main {margin-left: 0;}
+  .sidebar .closebtn { position: relative;    }
+  .colapsed_menu {    position: relative;    } */
 
   .sidebar {
-    height: 100%;
-    width: 0;
-    position: fixed;
-    z-index: 1;
-    top: 0;
-    left: 0;
+    margin: 0;
+    padding: 0;
+    /* width: 0px; */
     background-color: #2863CA;
-    /* background-color: #7f5c88c2; */
-    /* background-color: rgba(0, 0, 0, 0.8); */
-    overflow-x: hidden;
-    padding-top: 20px;
-    transition: 0.5s;
+    position: fixed;
+    height: 100%;
+    overflow: auto;
   }
 
   .sidebar a {
-    margin-top: 50px;
-    padding: 6px 8px 6px 16px;
-    text-decoration: none;
-    font-size: 25px;
-    color: white;
-    /* color: #945f90; */
     display: block;
-    transition: 0.3s;
+    color: white;
+    font-size: 15px;
+    padding: 16px;
+    text-decoration: none;
   }
-  
+   
+
+ 
   .sidebar a:hover {
     color: #000000;
   }
-
-  .sidebar .closebtn {
-    margin-top: 10px;
-    position: absolute;
-    top: 0;
-    right: 25px;
-    font-size: 36px;
-    margin-left: 50px;
-  }
-
+  
   .main {
-    margin-left: 180px; /* Same as the width of the sidenav */
-    font-size: 28px; /* Increased text to enable scrolling */
-    /* padding: 0px 10px; */
+    margin-left: 200px;
+    padding: 1px 16px;
+    height: 1000px;
   }
 
-  .colapsed_menu{
-    font-size:30px;
-    cursor:pointer; 
-    position: fixed; 
-    margin-top: 0px; 
-    margin-left: 50px;
+  h1{font-size: 20px;     text-align: auto;   }
+
+  h2{font-size: 20px;     text-align: auto;   }
+
+
+  .upload_btn{
+  width: 90px;
+  font-size: 15px;
+  background-color: #945f90;
   }
   
-  @media screen and (max-width: 700px) {
-    *{font-size: 15px; }
-    /* .sidebar {
-      width: 100%;
-      height: auto;
-      position: fixed;
-      margin-top: 0px;
-    }
-    .sidebar a {float: left; margin-top: 0px;  width: 100%;}
-    div.main {margin-left: 0;}
-    .sidebar .closebtn { position: relative;    }
-    .colapsed_menu {    position: relative;    } */
 
-    .sidebar {
-      margin: 0;
-      padding: 0;
-      /* width: 0px; */
-      background-color: #2863CA;
-      position: fixed;
-      height: 100%;
-      overflow: auto;
-    }
+}
 
-    .sidebar a {
-      display: block;
-      color: white;
-      font-size: 15px;
-      padding: 16px;
-      text-decoration: none;
-    }
-     
-  
-   
-    .sidebar a:hover {
-      color: #000000;
-    }
-    
-    .main {
-      margin-left: 200px;
-      padding: 1px 16px;
-      height: 1000px;
-    }
+@media screen and (max-width: 400px) {
+  .sidebar a {
+    text-align: center;
+    float: none;
+    width: 100%;
 
-    h1{font-size: 20px;     text-align: auto;   }
-
-    h2{font-size: 20px;     text-align: auto;   }
-
-  
   }
-  
-  @media screen and (max-width: 400px) {
-    .sidebar a {
-      text-align: center;
-      float: none;
-      width: 100%;
+}
 
-    }
-  }
-
-  #myBtn {
-    /* background-color: teal; */
-    background-color:  rgba(0, 0, 0, 0.6);
-    border: medium none;
-    border-radius: 10px;
-    bottom: 20px;
-    color:white;
-    cursor: pointer;
-    display: none;
-    outline: medium none;
-    padding: 10px 15px 7px;
-    position: fixed;
-    right: 20px;
-    z-index: 99;
-    font-size: 35px;
-    /* width: 40px;
-    height: 40px; */
+#myBtn {
+  /* background-color: teal; */
+  background-color:  rgba(0, 0, 0, 0.6);
+  border: medium none;
+  border-radius: 10px;
+  bottom: 20px;
+  color:white;
+  cursor: pointer;
+  display: none;
+  outline: medium none;
+  padding: 10px 15px 7px;
+  position: fixed;
+  right: 20px;
+  z-index: 99;
+  font-size: 35px;
+  /* width: 40px;
+  height: 40px; */
 
 }
 /*On Hover Color Change*/
 #myBtn:hover {
-    background-color: #2863CA;
+  background-color: #2863CA;
 }
 
 .custom-file-input::-webkit-file-upload-button {
-  visibility: hidden;
+visibility: hidden;
 }
 .custom-file-input::before {
-  content: 'Select some files';
-  display: inline-block;
-  background: linear-gradient(top, #f9f9f9, #e3e3e3);
-  border: 1px solid #999;
-  border-radius: 3px;
-  padding: 5px 8px;
-  outline: none;
-  white-space: nowrap;
-  -webkit-user-select: none;
-  cursor: pointer;
-  text-shadow: 1px 1px #fff;
-  font-weight: 700;
-  font-size: 10pt;
+content: 'Select some files';
+display: inline-block;
+background: linear-gradient(top, #f9f9f9, #e3e3e3);
+border: 1px solid #999;
+border-radius: 3px;
+padding: 5px 8px;
+outline: none;
+white-space: nowrap;
+-webkit-user-select: none;
+cursor: pointer;
+text-shadow: 1px 1px #fff;
+font-weight: 700;
+font-size: 10pt;
 }
 .custom-file-input:hover::before {
-  border-color: black;
+border-color: black;
 }
 .custom-file-input:active::before {
-  background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
 }
 
- 
+.upload_btn{
+ width: 150px;
+background-color:  #945f90;
+border-radius: 10px;
+bottom: 20px;
+/* padding: 10px 15px 7px; */
+margin-top: 20px;
+margin-bottom: 20px;
+color:white;
+cursor: pointer;
+outline: medium none;
+/* font-size: 20px;  */
+
+
+/* border: medium none;
+border-radius: 10px;
+bottom: 20px;
+color:white;
+cursor: pointer;
+outline: medium none;
+padding: 10px 15px 7px;
+margin-top: 30px;
+font-size: 25px; 
+/* width: 40px;
+height: 40px; */ */
+
+} 
+
+.upload_btn:hover {
+background-color:  rgba(0, 0, 0, 0.6);
+color: white;
+}
