@@ -1,5 +1,7 @@
 'use strict'
 const GeoPoint = require('geopoint')
+const {inRangeOfRect} = require('../public/js/inRangeOfRect')
+
 const express = require('express');
 const multer = require('multer');
 const bodyParser = require('body-parser')
@@ -236,7 +238,10 @@ router.get('/test', async function (req, res) {
   // Checking Sensitive Rectangular
   let upperleftBound;
   let lowerDownBound;
+  let insertedPoint
 
+  //This is my funciton, if point within Range returns true. Else false.
+  if (inRangeOfRect(upperleftBound, lowerDownBound, insertedPoint))
 
   for (i = 0; i < jsonData.locations.length; i++) {
 
