@@ -134,6 +134,7 @@ router.post('/login', function (req, res) {
   }
 
   
+  
 
 
   connection.query("SELECT userId FROM user WHERE userId= '" + loginData.userId + "'", function (err, result) {
@@ -143,7 +144,7 @@ router.post('/login', function (req, res) {
       console.log(result);
     }
     else {
-      res.render('../views/main_page.ejs',{data:user});
+      res.render('../views/main_page.ejs');
       console.log(result)
     }
   });
