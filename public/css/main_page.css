@@ -3,7 +3,6 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-size: 25px;
 
 }
 
@@ -27,7 +26,6 @@ body  {
   background-image:  url("/public/img/patras6_f.png") ;  
   background-size: cover;
   color: white;
-  font-size: 30px;
   padding-left: 0px;
 
 }
@@ -42,7 +40,6 @@ body  {
 
 
 h1 {
-  font-size: 45px;
   color: rgb(255, 255, 255);
   text-align: center;
   margin-top: 30px;
@@ -51,7 +48,6 @@ h1 {
 h2 {
   /* text-align: center; */
   color: black;
-  font-size: 35px;
   margin-top: 100px;
   font-weight: bold;
   /* 2863CA */
@@ -60,7 +56,6 @@ h2 {
 h3{
    text-align: center;
    color: rgb(187, 49, 49);
-   font-size: 100px;
    margin-top: 100px;
    font-weight: bold;
    /* 2863CA */
@@ -85,7 +80,6 @@ h3{
   margin-top: 50px;
   padding: 6px 8px 6px 16px;
   text-decoration: none;
-  font-size: 25px;
   color: white;
   /* color: #945f90; */
   display: block;
@@ -101,18 +95,15 @@ h3{
   position: absolute;
   top: 0;
   right: 25px;
-  font-size: 36px;
   margin-left: 50px;
 }
 
 .main {
   margin-left: 180px; /* Same as the width of the sidenav */
-  font-size: 28px; /* Increased text to enable scrolling */
   /* padding: 0px 10px; */
 }
 
 .colapsed_menu{
-  font-size:30px;
   cursor:pointer; 
   position: fixed; 
   margin-top: 0px; 
@@ -258,7 +249,7 @@ padding: 10px 15px 7px;
 margin-top: 30px;
 font-size: 25px; 
 /* width: 40px;
-height: 40px; */ */
+height: 40px; */ 
 
 } 
 
