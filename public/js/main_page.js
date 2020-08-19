@@ -10,7 +10,7 @@ else
 document.getElementById("myBtn").style.display = "none";
 }
 };
-
+ 
 
 function scrollToTop()
 {
@@ -30,8 +30,8 @@ function openNav() {
 // var uplodBtn=document.getElementById("uploadBtn");
 // uplodBtn.addEventListener("click",uploadFile());
 
-function uploadFile(){
+// function uploadFile(){
   
-  window.location.href="/upload"
+//   window.location.href="/upload"
 
 }

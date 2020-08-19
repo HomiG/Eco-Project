@@ -9,8 +9,11 @@ const mysql = require('mysql');
 const crypto = require('crypto');
 const assert = require('assert');
 const doAsync = require('doasync')
-const fs = require('fs')
+const fs = require('fs');
+var ejs = require('ejs');
 const util = require('util');
+// const upload=require('express-fileupload')
+
 
 
 const { encrypt, decrypt } = require('../encryptDecrypt');
@@ -72,7 +75,10 @@ upload(req, res, function(err) {
 
     return res.end("File uploaded sucessfully!.");
 
-});});
+});
+
+});
+
 
 
 //accepts the username and the password from the user, with the POST method.
@@ -113,6 +119,22 @@ router.post('/signup', async function (req, res) {
   }
 });
 
+
+var user = {
+  username: "Alex",
+  password: "AsDf123!@#",
+  userId: "encrypt(req.body.email, req.body.password)",
+  email: "req.body.email"
+}
+
+
+// router.get('/',(req, res) => { // root route or home route
+  
+  
+//   res.render("../views/main_page.ejs" );
+//  });
+
+
 router.post('/login', function (req, res) {
 
 
@@ -123,7 +145,7 @@ router.post('/login', function (req, res) {
     userId: encrypt(req.body.email, req.body.password)
   }
 
-
+  
 
 
   connection.query("SELECT userId FROM user WHERE userId= '" + loginData.userId + "'", function (err, result) {
@@ -133,15 +155,24 @@ router.post('/login', function (req, res) {
       console.log(result);
     }
     else {
-      res.render('../views/main_page.ejs');
+      res.render('../views/main_page.ejs',{data:user});
       console.log(result)
     }
   });
-
+  
 
 
 });
 
+
+router.post('/upload',  function (req,res){
+  if(req.files){
+    console.log(req.files)
+  }})
+// router.post('/upload', async function (req,res){
+//   if(req.files){
+//     console.log(req.files)
+//   }
 // //check if given password maches saved password
 // if(await bcrypt.compare(req.body.password, savedPassword));
 
@@ -180,7 +211,7 @@ router.get('/test', async function (req, res) {
   }
   const db = makeDb();
 
- // });
+ });
 
 
   function bulkInsert(db, table, objectArray) {
@@ -196,40 +227,40 @@ router.get('/test', async function (req, res) {
   
 
 
-  let entryId;
-  let activity1Id;
-  let activity2Id;
+//   let entryId;
+//   let activity1Id;
+//   let activity2Id;
 
-  let i, j, k;
-
-
-  for (i = 0; i < jsonData.locations.length; i++) {
+//   let i, j, k;
 
 
-    entryId = await bulkInsert(db, 'entry', [jsonData.locations[i]])
+//   for (i = 0; i < jsonData.locations.length; i++) {
 
 
-    console.log("Entry ID: ", entryId.insertId);
+//     entryId = await bulkInsert(db, 'entry', [jsonData.locations[i]])
 
 
-    if ('activity' in jsonData.locations[i]) {
-      for (j = 0; j < jsonData.locations[i].activity.length; j++) {
-        activity1Id = await bulkInsert(db, 'activity1', [jsonData.locations[i].activity[j]])
-        //console.log("\tActivity1 ID: ", activity1Id.insertId)
-        let insertActivity1ConnectAcitivity2 = db.query('INSERT INTO LocationConnectActivity(`entryId`, `a1`) VALUES(' + entryId.insertId + ',' + activity1Id.insertId + ')')
+//     console.log("Entry ID: ", entryId.insertId);
 
 
-        if ('activity' in jsonData.locations[i].activity[j]) {
-          for (k = 0; k < jsonData.locations[i].activity[j].activity.length; k++) {
-            activity2Id = await bulkInsert(db, 'activity2', [jsonData.locations[i].activity[j].activity[k]])
-            //console.log("\t\tActivity2 ID: ", activity2Id.insertId)
-            let insertActivity1ConnectAcitivity2 = db.query('INSERT INTO Activity1ConnectActivity2(`a1`, `a2`) VALUES(' + activity1Id.insertId + ',' + activity2Id.insertId + ')')
+//     if ('activity' in jsonData.locations[i]) {
+//       for (j = 0; j < jsonData.locations[i].activity.length; j++) {
+//         activity1Id = await bulkInsert(db, 'activity1', [jsonData.locations[i].activity[j]])
+//         //console.log("\tActivity1 ID: ", activity1Id.insertId)
+//         let insertActivity1ConnectAcitivity2 = db.query('INSERT INTO LocationConnectActivity(`entryId`, `a1`) VALUES(' + entryId.insertId + ',' + activity1Id.insertId + ')')
 
-          }
-        }
-      }
-    }
 
-  }
-})
+//         if ('activity' in jsonData.locations[i].activity[j]) {
+//           for (k = 0; k < jsonData.locations[i].activity[j].activity.length; k++) {
+//             activity2Id = await bulkInsert(db, 'activity2', [jsonData.locations[i].activity[j].activity[k]])
+//             //console.log("\t\tActivity2 ID: ", activity2Id.insertId)
+//             let insertActivity1ConnectAcitivity2 = db.query('INSERT INTO Activity1ConnectActivity2(`a1`, `a2`) VALUES(' + activity1Id.insertId + ',' + activity2Id.insertId + ')')
+
+//           }
+//         }
+//       }
+//     }
+
+//   }
+// })
 module.exports = router;
