@@ -27,11 +27,11 @@ function openNav() {
   }
 
   
-// var uplodBtn=document.getElementById("uploadBtn");
-// uplodBtn.addEventListener("click",uploadFile());
+var uplodBtn=document.getElementById("uploadBtn");
+uplodBtn.addEventListener("click",uploadFile());
 
-// function uploadFile(){
+function uploadFile(){
   
-//   window.location.href="/upload"
+  window.location.href="/upload"
 
 }

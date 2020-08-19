@@ -3,7 +3,7 @@
 
 // Create Heatmap Instance
 var heatmapLayer = new HeatmapOverlay(cfg);
-
+var div = document.getElementById('areaSelected')
 
 // Declaer the baseLayer
 baseLayer = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoicmFuZG9tbmFtZWdyIiwiYSI6ImNrZHJwaWdkbDBiNXYyeW83NmQ1aDU2bDkifQ.TAMboxLmOiUsmRbljrplEQ',
@@ -46,5 +46,6 @@ var circle = L.circle(patrasLatLng, {
 
 map.selectArea.enable();
 map.on('areaselected', (e) => {
+  div.innerHTML = "Area Selected: " + e.bounds.toBBoxString()
   console.log(e.bounds.toBBoxString()); // lon, lat, lon, lat
 });
