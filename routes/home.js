@@ -26,38 +26,43 @@ router.use(express.json());
 router.use(bodyParser());
 // router.use(upload())
 
-router.get('/', function (req, res) {
-  res.render('../views/index.ejs')
-});
 
+// var Storage = multer.diskStorage({
 
-var Storage = multer.diskStorage({
+//   destination: function(req, file, callback) {
 
-  destination: function(req, file, callback) {
+//       callback(null, "./uploads");
 
-      callback(null, "./uploads");
+//   },
 
-  },
+//   filename: function(req, file, callback) {
 
-  filename: function(req, file, callback) {
+//       callback(null, file.fieldname + "_" + Date.now() + "_" + file.originalname);
 
-      callback(null, file.fieldname + "_" + Date.now() + "_" + file.originalname);
+//   }
 
-  }
+// });
 
-});
+// var upload = multer({
 
-var upload = multer({
+// storage: Storage
 
-storage: Storage
-
-}).array("Uploader", 1); //Field name and max count
+// }).array("Uploader", 1); //Field name and max count
 
 // app.get("/", function(req, res) {
 
 // res.sendFile(__dirname + "/index.ejs");
 
 // });
+
+
+
+
+
+
+router.get('/', function (req, res) {
+  res.render('../views/index.ejs')
+});
 
 
 router.get('/upload', function (req, res) {
@@ -144,7 +149,7 @@ router.post('/login', function (req, res) {
       console.log(result);
     }
     else {
-      res.render('../views/main_page.ejs');
+      res.redirect('/mainpage');
       console.log(result)
     }
   });
@@ -153,6 +158,10 @@ router.post('/login', function (req, res) {
 
 });
 
+
+router.get('/mainPage', function (req, res) {
+    res.render('../views/main_page.ejs')
+  });
 
 router.post('/upload',  function (req,res){
   if(req.files){
@@ -223,6 +232,11 @@ router.get('/test', async function (req, res) {
 
   let patrasCenter = new GeoPoint(38.230462, 21.753150);
   let pointToMesureFromPatrasCenter;
+  
+  // Checking Sensitive Rectangular
+  let upperleftBound;
+  let lowerDownBound;
+
 
   for (i = 0; i < jsonData.locations.length; i++) {
 
