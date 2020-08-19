@@ -1,6 +1,7 @@
 'use strict'
+const GeoPoint = require('geopoint')
 const express = require('express');
-var multer = require('multer');
+const multer = require('multer');
 const bodyParser = require('body-parser')
 const bcrypt = require('bcrypt')
 const router = express.Router();
@@ -10,7 +11,7 @@ const crypto = require('crypto');
 const assert = require('assert');
 const doAsync = require('doasync')
 const fs = require('fs');
-var ejs = require('ejs');
+const ejs = require('ejs');
 const util = require('util');
 // const upload=require('express-fileupload')
 
@@ -120,19 +121,6 @@ router.post('/signup', async function (req, res) {
 });
 
 
-var user = {
-  username: "Alex",
-  password: "AsDf123!@#",
-  userId: "encrypt(req.body.email, req.body.password)",
-  email: "req.body.email"
-}
-
-
-// router.get('/',(req, res) => { // root route or home route
-  
-  
-//   res.render("../views/main_page.ejs" );
-//  });
 
 
 router.post('/login', function (req, res) {
@@ -169,6 +157,7 @@ router.post('/upload',  function (req,res){
   if(req.files){
     console.log(req.files)
   }})
+
 // router.post('/upload', async function (req,res){
 //   if(req.files){
 //     console.log(req.files)
@@ -211,8 +200,6 @@ router.get('/test', async function (req, res) {
   }
   const db = makeDb();
 
- });
-
 
   function bulkInsert(db, table, objectArray) {
     let keys = Object.keys(objectArray[0]);
@@ -227,40 +214,52 @@ router.get('/test', async function (req, res) {
   
 
 
-//   let entryId;
-//   let activity1Id;
-//   let activity2Id;
+  let entryId;
+  let activity1Id;
+  let activity2Id;
 
-//   let i, j, k;
+  let i, j, k;
 
+  let patrasCenter = new GeoPoint(38.230462, 21.753150);
+  let pointToMesureFromPatrasCenter;
 
-//   for (i = 0; i < jsonData.locations.length; i++) {
-
-
-//     entryId = await bulkInsert(db, 'entry', [jsonData.locations[i]])
-
-
-//     console.log("Entry ID: ", entryId.insertId);
+  for (i = 0; i < jsonData.locations.length; i++) {
 
 
-//     if ('activity' in jsonData.locations[i]) {
-//       for (j = 0; j < jsonData.locations[i].activity.length; j++) {
-//         activity1Id = await bulkInsert(db, 'activity1', [jsonData.locations[i].activity[j]])
-//         //console.log("\tActivity1 ID: ", activity1Id.insertId)
-//         let insertActivity1ConnectAcitivity2 = db.query('INSERT INTO LocationConnectActivity(`entryId`, `a1`) VALUES(' + entryId.insertId + ',' + activity1Id.insertId + ')')
+    pointToMesureFromPatrasCenter = new GeoPoint(jsonData.locations[i].latitudeE7 * (Math.pow(10, -7)),
+      jsonData.locations[i].longitudeE7 * (Math.pow(10, -7)));
+
+    // If the point to be inserted out of 10Km Patras Cetner Skip this Spot
+    if(patrasCenter.distanceTo(pointToMesureFromPatrasCenter, true) > 10){
+      console.log("Out Of Patras")
+      continue;
+    }
+    entryId = await bulkInsert(db, 'entry', [jsonData.locations[i]])
 
 
-//         if ('activity' in jsonData.locations[i].activity[j]) {
-//           for (k = 0; k < jsonData.locations[i].activity[j].activity.length; k++) {
-//             activity2Id = await bulkInsert(db, 'activity2', [jsonData.locations[i].activity[j].activity[k]])
-//             //console.log("\t\tActivity2 ID: ", activity2Id.insertId)
-//             let insertActivity1ConnectAcitivity2 = db.query('INSERT INTO Activity1ConnectActivity2(`a1`, `a2`) VALUES(' + activity1Id.insertId + ',' + activity2Id.insertId + ')')
+    console.log("Entry ID: ", entryId.insertId);
 
-//           }
-//         }
-//       }
-//     }
 
-//   }
-// })
+    if ('activity' in jsonData.locations[i]) {
+      for (j = 0; j < jsonData.locations[i].activity.length; j++) {
+        activity1Id = await bulkInsert(db, 'activity1', [jsonData.locations[i].activity[j]])
+        //console.log("\tActivity1 ID: ", activity1Id.insertId)
+        let insertActivity1ConnectAcitivity2 = db.query('INSERT INTO LocationConnectActivity(`entryId`, `a1`) VALUES(' + entryId.insertId + ',' + activity1Id.insertId + ')')
+
+
+        if ('activity' in jsonData.locations[i].activity[j]) {
+          for (k = 0; k < jsonData.locations[i].activity[j].activity.length; k++) {
+            activity2Id = await bulkInsert(db, 'activity2', [jsonData.locations[i].activity[j].activity[k]])
+            //console.log("\t\tActivity2 ID: ", activity2Id.insertId)
+            let insertActivity1ConnectAcitivity2 = db.query('INSERT INTO Activity1ConnectActivity2(`a1`, `a2`) VALUES(' + activity1Id.insertId + ',' + activity2Id.insertId + ')')
+
+          }
+        }
+      }
+    }
+
+  }
+})
+
+
 module.exports = router;

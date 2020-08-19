@@ -4,7 +4,6 @@
 <head>
 
   <div id="mapid"></div>
-  <p>Select Area by pressing Ctrl key and drag on the map the sensitive places</p>
 
 
   <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
@@ -16,7 +15,6 @@
     crossorigin="" />
 
 
-  <div id="mapid"></div>
   
 <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
   integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
@@ -35,88 +33,20 @@
 
   <style>
     #mapid {
-      height: 325px;
+      height: 350px;
     }
   </style>
 </head>
 
 <body>
-
-  <script>
-  
-
-
-// Create Heatmap Instance
-var heatmapLayer = new HeatmapOverlay(cfg);
-
-
-// Declaer the baseLayer
-baseLayer = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoicmFuZG9tbmFtZWdyIiwiYSI6ImNrZHJwaWdkbDBiNXYyeW83NmQ1aDU2bDkifQ.TAMboxLmOiUsmRbljrplEQ',
- {
-    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-    maxZoom: 18,
-    id: 'mapbox/streets-v11',
-    tileSize: 512,
-    zoomOffset: -1,
-    accessToken: 'your.mapbox.access.token'
-})
-
-
-
-//Iniate map 
-var map = L.map('mapid', {
-  selectArea: true, // will enable it by default
-  center: patrasLatLng,
-  zoom: 13,
-  layers: [baseLayer, heatmapLayer]
-});
-
-
-heatmapLayer.setData(testData);
-
-
-// Add ta marker in Given Cetner Of Patras 
-var marker = L.marker(patrasLatLng).addTo(map); 
-
-//Patras Circle Range
-var circle = L.circle(patrasLatLng, {
-    color: 'green',
-    fillColor: '#3388ff',
-    fillOpacity: 0.01   ,
-    radius: 10000 //10KM
-}).addTo(map);
-
-
-
-
-map.selectArea.enable();
-
-
-map.on('areaselected', (e) => {
-  console.log(e.bounds.toBBoxString()); // lon, lat, lon, lat
-});
-
-// You can restrict selection area like this:
-const bounds = map.getBounds().pad(-0.25); // save current map bounds as restriction area
-// check restricted area on start and move
-map.selectArea.setValidate((layerPoint) => {
-  return bounds.contains(
-    this._map.layerPointToLatLng(layerPoint)
-  );
-});
-
-// now switch it off
-map.selectArea.setValidate();
-  </script>
+  <p>Select Area by pressing Ctrl key and drag on the map the sensitive places</p>
 
   <input type="file" id="docpicker" accept=".json" value="Import" />
 
   <button type="button" onclick="run()" id="button"> button </button>
   <button type="button" onclick="crop" id="cropButton"> Hide Areas </button>
 
-
-
-
+  <script type="text/javascript" src="../public/js/upload.js"></script>
 
 
 </body>
