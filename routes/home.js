@@ -22,9 +22,9 @@ router.use(express.json());
 router.use(bodyParser());
 // router.use(upload())
 
-// router.get('/', function (req, res) {
-//   res.render('../views/index.ejs')
-// });
+router.get('/', function (req, res) {
+  res.render('../views/index.ejs')
+});
 
 
 var Storage = multer.diskStorage({
@@ -117,7 +117,7 @@ router.post('/login', function (req, res) {
 
 
 
-  loginData = {
+  let loginData = {
     email: req.body.email,
     password: req.body.password,
     userId: encrypt(req.body.email, req.body.password)
@@ -155,7 +155,7 @@ router.post('/login', function (req, res) {
 
 
 
-router.get('/', async function (req, res) {
+router.get('/test', async function (req, res) {
 
 
   let jsonData = require('../locationHistory.json')

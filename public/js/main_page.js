@@ -26,9 +26,7 @@ function openNav() {
     document.getElementById("mySidenav").style.width = "0";
   }
 
-<<<<<<< HEAD
   
-=======
 // var uplodBtn=document.getElementById("uploadBtn");
 // uplodBtn.addEventListener("click",uploadFile());
 
@@ -37,4 +35,3 @@ function uploadFile(){
   window.location.href="/upload"
 
 }
->>>>>>> acd884a5576f20c0247d3c48b9380f1e825a350f
