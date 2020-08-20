@@ -1,6 +1,6 @@
 'use strict'
 const GeoPoint = require('geopoint')
-const {inRangeOfRect} = require('../public/js/inRangeOfRect')
+const { inRangeOfRect, geopointToMyPoint } = require('../public/js/myGeographicalModules')
 
 const express = require('express');
 const multer = require('multer');
@@ -19,8 +19,9 @@ const util = require('util');
 
 
 
-const { encrypt, decrypt } = require('../encryptDecrypt');
+const { encrypt, decrypt } = require('../public/js/encryptDecrypt');
 const { json } = require('express');
+const { Console } = require('console');
 
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
@@ -71,19 +72,19 @@ router.get('/upload', function (req, res) {
   res.render('../views/upload.ejs')
 });
 
-router.post("/api/Upload", function(req, res) {
+router.post("/api/Upload", function (req, res) {
 
-upload(req, res, function(err) {
+  upload(req, res, function (err) {
 
     if (err) {
 
-        return res.end("Something went wrong!");
+      return res.end("Something went wrong!");
 
     }
 
     return res.end("File uploaded sucessfully!.");
 
-});
+  });
 
 });
 
@@ -140,8 +141,8 @@ router.post('/login', function (req, res) {
     userId: encrypt(req.body.email, req.body.password)
   }
 
-  
-  
+
+
 
 
   connection.query("SELECT userId FROM user WHERE userId= '" + loginData.userId + "'", function (err, result) {
@@ -155,20 +156,21 @@ router.post('/login', function (req, res) {
       console.log(result)
     }
   });
-  
+
 
 
 });
 
 
 router.get('/mainPage', function (req, res) {
-    res.render('../views/main_page.ejs')
-  });
+  res.render('../views/main_page.ejs')
+});
 
-router.post('/upload',  function (req,res){
-  if(req.files){
+router.post('/upload', function (req, res) {
+  if (req.files) {
     console.log(req.files)
-  }})
+  }
+})
 
 // router.post('/upload', async function (req,res){
 //   if(req.files){
@@ -184,7 +186,31 @@ router.post('/upload',  function (req,res){
 
 
 
+router.post('/troll', function (req, res) {
 
+
+
+  var sensitiveRect = {
+    _northEastLat: req.body._northEastLat,
+    _northEastLng: req.body._northEastLng,
+    _southWestLat: req.body._southWestLat,
+    _southWestLng: req.body._southWestLng
+  }
+
+  let patrasCenter = new GeoPoint(38.230462, 21.753150);
+
+  var point = geopointToMyPoint(patrasCenter)
+  console.log("Patras center is : ", point);
+
+  if (inRangeOfRect(sensitiveRect, point)) {
+    console.log("IS INSIDE")
+  }
+  else
+    console.log("NOT INSIDE")
+
+  console.log(sensitiveRect)
+
+})
 
 
 router.get('/test', async function (req, res) {
@@ -223,7 +249,7 @@ router.get('/test', async function (req, res) {
     return db.query(sql, [values]);
   }
 
-  
+
 
 
   let entryId;
@@ -234,7 +260,7 @@ router.get('/test', async function (req, res) {
 
   let patrasCenter = new GeoPoint(38.230462, 21.753150);
   let pointToMesureFromPatrasCenter;
-  
+
   // Checking Sensitive Rectangular
   let upperleftBound;
   let lowerDownBound;
@@ -243,42 +269,42 @@ router.get('/test', async function (req, res) {
   //This is my funciton, if point within Range returns true. Else false.
   if (inRangeOfRect(upperleftBound, lowerDownBound, insertedPoint))
 
-  for (i = 0; i < jsonData.locations.length; i++) {
+    for (i = 0; i < jsonData.locations.length; i++) {
 
 
-    pointToMesureFromPatrasCenter = new GeoPoint(jsonData.locations[i].latitudeE7 * (Math.pow(10, -7)),
-      jsonData.locations[i].longitudeE7 * (Math.pow(10, -7)));
+      pointToMesureFromPatrasCenter = new GeoPoint(jsonData.locations[i].latitudeE7 * (Math.pow(10, -7)),
+        jsonData.locations[i].longitudeE7 * (Math.pow(10, -7)));
 
-    // If the point to be inserted out of 10Km Patras Cetner Skip this Spot
-    if(patrasCenter.distanceTo(pointToMesureFromPatrasCenter, true) > 10){
-      console.log("Out Of Patras")
-      continue;
-    }
-    entryId = await bulkInsert(db, 'entry', [jsonData.locations[i]])
-
-
-    console.log("Entry ID: ", entryId.insertId);
+      // If the point to be inserted out of 10Km Patras Cetner Skip this Spot
+      if (patrasCenter.distanceTo(pointToMesureFromPatrasCenter, true) > 10) {
+        console.log("Out Of Patras")
+        continue;
+      }
+      entryId = await bulkInsert(db, 'entry', [jsonData.locations[i]])
 
 
-    if ('activity' in jsonData.locations[i]) {
-      for (j = 0; j < jsonData.locations[i].activity.length; j++) {
-        activity1Id = await bulkInsert(db, 'activity1', [jsonData.locations[i].activity[j]])
-        //console.log("\tActivity1 ID: ", activity1Id.insertId)
-        let insertActivity1ConnectAcitivity2 = db.query('INSERT INTO LocationConnectActivity(`entryId`, `a1`) VALUES(' + entryId.insertId + ',' + activity1Id.insertId + ')')
+      console.log("Entry ID: ", entryId.insertId);
 
 
-        if ('activity' in jsonData.locations[i].activity[j]) {
-          for (k = 0; k < jsonData.locations[i].activity[j].activity.length; k++) {
-            activity2Id = await bulkInsert(db, 'activity2', [jsonData.locations[i].activity[j].activity[k]])
-            //console.log("\t\tActivity2 ID: ", activity2Id.insertId)
-            let insertActivity1ConnectAcitivity2 = db.query('INSERT INTO Activity1ConnectActivity2(`a1`, `a2`) VALUES(' + activity1Id.insertId + ',' + activity2Id.insertId + ')')
+      if ('activity' in jsonData.locations[i]) {
+        for (j = 0; j < jsonData.locations[i].activity.length; j++) {
+          activity1Id = await bulkInsert(db, 'activity1', [jsonData.locations[i].activity[j]])
+          //console.log("\tActivity1 ID: ", activity1Id.insertId)
+          let insertActivity1ConnectAcitivity2 = db.query('INSERT INTO LocationConnectActivity(`entryId`, `a1`) VALUES(' + entryId.insertId + ',' + activity1Id.insertId + ')')
 
+
+          if ('activity' in jsonData.locations[i].activity[j]) {
+            for (k = 0; k < jsonData.locations[i].activity[j].activity.length; k++) {
+              activity2Id = await bulkInsert(db, 'activity2', [jsonData.locations[i].activity[j].activity[k]])
+              //console.log("\t\tActivity2 ID: ", activity2Id.insertId)
+              let insertActivity1ConnectAcitivity2 = db.query('INSERT INTO Activity1ConnectActivity2(`a1`, `a2`) VALUES(' + activity1Id.insertId + ',' + activity2Id.insertId + ')')
+
+            }
           }
         }
       }
-    }
 
-  }
+    }
 })
 
 
