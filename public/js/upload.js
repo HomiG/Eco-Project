@@ -63,13 +63,20 @@ var testVar = map.on('areaselected', (e) => {
 
 function uploadJSONFiltered() {
   
-  $.ajax({
-    url: "/troll",
-    type:'POST',
-    data: sensitiveRect,
-    success: function (result) {
-      console.log("SUCCESS!@")
-    }
-  });
+  
+
+
+  
+
+
+
+  // $.ajax({
+  //   url: "/upload",
+  //   type:'POST',
+  //   data: sensitiveRect,
+  //   success: function (result) {
+  //     console.log("SUCCESS!@")
+  //   }
+  // });
 
 }

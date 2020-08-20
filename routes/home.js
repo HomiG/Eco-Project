@@ -4,6 +4,7 @@ const { inRangeOfRect, geopointToMyPoint } = require('../public/js/myGeographica
 
 const express = require('express');
 const multer = require('multer');
+const path = require("path")
 const bodyParser = require('body-parser')
 const bcrypt = require('bcrypt')
 const router = express.Router();
@@ -15,50 +16,39 @@ const doAsync = require('doasync')
 const fs = require('fs');
 const ejs = require('ejs');
 const util = require('util');
-// const upload=require('express-fileupload')
+
+const upload = require('express-fileupload')
 
 
 
 const { encrypt, decrypt } = require('../public/js/encryptDecrypt');
-const { json } = require('express');
-const { Console } = require('console');
 
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
 router.use(express.json());
 router.use(bodyParser());
-// router.use(upload())
+router.use(upload())
 
 
-// var Storage = multer.diskStorage({
+router.post("/api/Upload", function (req, res) {
 
-//   destination: function(req, file, callback) {
+  if (req.files) {
+    console.log(req.files)
+    var file = req.files.file;
+    var filename = file.name;
+    console.log(filename);
+    file.mv('./uploads/' + filename, function (err) {
+      if (err) {
+        res.send(err)
+      }
+      else {
+        //fs.unlinkSync('./uploads/' + filename); 
+        res.status(200).send("File Uploaded")
+      }
+    })
+  }
 
-//       callback(null, "./uploads");
-
-//   },
-
-//   filename: function(req, file, callback) {
-
-//       callback(null, file.fieldname + "_" + Date.now() + "_" + file.originalname);
-
-//   }
-
-// });
-
-// var upload = multer({
-
-// storage: Storage
-
-// }).array("Uploader", 1); //Field name and max count
-
-// app.get("/", function(req, res) {
-
-// res.sendFile(__dirname + "/index.ejs");
-
-// });
-
-
+});
 
 
 
@@ -166,16 +156,10 @@ router.get('/mainPage', function (req, res) {
   res.render('../views/main_page.ejs')
 });
 
-router.post('/upload', function (req, res) {
-  if (req.files) {
-    console.log(req.files)
-  }
-})
 
-// router.post('/upload', async function (req,res){
-//   if(req.files){
-//     console.log(req.files)
-//   }
+
+
+
 // //check if given password maches saved password
 // if(await bcrypt.compare(req.body.password, savedPassword));
 
@@ -184,6 +168,11 @@ router.post('/upload', function (req, res) {
 
 
 
+router.post('/upload', function (req, res) {
+  console.log(req.files)
+  res.send("DONE")
+
+})
 
 
 router.post('/troll', function (req, res) {
@@ -213,8 +202,15 @@ router.post('/troll', function (req, res) {
 })
 
 
-router.get('/test', async function (req, res) {
+router.post('/test', async function (req, res) {
 
+  // Sensitive Rectangular sent with the Ajax Post 
+  var sensitiveRect = {
+    _northEastLat: req.body._northEastLat,
+    _northEastLng: req.body._northEastLng,
+    _southWestLat: req.body._southWestLat,
+    _southWestLng: req.body._southWestLng
+  }
 
   let jsonData = require('../locationHistory.json')
   //This is for Running the Code Async
@@ -259,52 +255,57 @@ router.get('/test', async function (req, res) {
   let i, j, k;
 
   let patrasCenter = new GeoPoint(38.230462, 21.753150);
-  let pointToMesureFromPatrasCenter;
+  let pointToBeInserted;
 
   // Checking Sensitive Rectangular
   let upperleftBound;
   let lowerDownBound;
   let insertedPoint
 
-  //This is my funciton, if point within Range returns true. Else false.
-  if (inRangeOfRect(upperleftBound, lowerDownBound, insertedPoint))
 
-    for (i = 0; i < jsonData.locations.length; i++) {
+  for (i = 0; i < jsonData.locations.length; i++) {
 
 
-      pointToMesureFromPatrasCenter = new GeoPoint(jsonData.locations[i].latitudeE7 * (Math.pow(10, -7)),
-        jsonData.locations[i].longitudeE7 * (Math.pow(10, -7)));
+    pointToBeInserted = new GeoPoint(jsonData.locations[i].latitudeE7 * (Math.pow(10, -7)),
+      jsonData.locations[i].longitudeE7 * (Math.pow(10, -7)));
 
-      // If the point to be inserted out of 10Km Patras Cetner Skip this Spot
-      if (patrasCenter.distanceTo(pointToMesureFromPatrasCenter, true) > 10) {
-        console.log("Out Of Patras")
-        continue;
-      }
-      entryId = await bulkInsert(db, 'entry', [jsonData.locations[i]])
+    // If the point to be inserted out of 10Km Patras Cetner, Skip this Spot
+    if (patrasCenter.distanceTo(pointToBeInserted, true) > 10) {
+      console.log("Out Of Patras")
+      continue;
+    }
 
+    // If point is inside the sensitive Area, Skip This Point
+    if (inRangeOfRect(sensitiveRect, geopointToMyPoint(pointToBeInserted))) {
+      console.log("POINT IS INSIDE SENSITIVE AREA ")
+      continue;
+    }
 
-      console.log("Entry ID: ", entryId.insertId);
-
-
-      if ('activity' in jsonData.locations[i]) {
-        for (j = 0; j < jsonData.locations[i].activity.length; j++) {
-          activity1Id = await bulkInsert(db, 'activity1', [jsonData.locations[i].activity[j]])
-          //console.log("\tActivity1 ID: ", activity1Id.insertId)
-          let insertActivity1ConnectAcitivity2 = db.query('INSERT INTO LocationConnectActivity(`entryId`, `a1`) VALUES(' + entryId.insertId + ',' + activity1Id.insertId + ')')
+    entryId = await bulkInsert(db, 'entry', [jsonData.locations[i]])
 
 
-          if ('activity' in jsonData.locations[i].activity[j]) {
-            for (k = 0; k < jsonData.locations[i].activity[j].activity.length; k++) {
-              activity2Id = await bulkInsert(db, 'activity2', [jsonData.locations[i].activity[j].activity[k]])
-              //console.log("\t\tActivity2 ID: ", activity2Id.insertId)
-              let insertActivity1ConnectAcitivity2 = db.query('INSERT INTO Activity1ConnectActivity2(`a1`, `a2`) VALUES(' + activity1Id.insertId + ',' + activity2Id.insertId + ')')
+    console.log("Entry ID: ", entryId.insertId);
 
-            }
+
+    if ('activity' in jsonData.locations[i]) {
+      for (j = 0; j < jsonData.locations[i].activity.length; j++) {
+        activity1Id = await bulkInsert(db, 'activity1', [jsonData.locations[i].activity[j]])
+        //console.log("\tActivity1 ID: ", activity1Id.insertId)
+        let insertActivity1ConnectAcitivity2 = db.query('INSERT INTO LocationConnectActivity(`entryId`, `a1`) VALUES(' + entryId.insertId + ',' + activity1Id.insertId + ')')
+
+
+        if ('activity' in jsonData.locations[i].activity[j]) {
+          for (k = 0; k < jsonData.locations[i].activity[j].activity.length; k++) {
+            activity2Id = await bulkInsert(db, 'activity2', [jsonData.locations[i].activity[j].activity[k]])
+            //console.log("\t\tActivity2 ID: ", activity2Id.insertId)
+            let insertActivity1ConnectAcitivity2 = db.query('INSERT INTO Activity1ConnectActivity2(`a1`, `a2`) VALUES(' + activity1Id.insertId + ',' + activity2Id.insertId + ')')
+
           }
         }
       }
-
     }
+
+  }
 })
 
 

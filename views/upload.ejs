@@ -15,18 +15,19 @@
     crossorigin="" />
 
 
-  
-<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
-  integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
-  crossorigin="">
-</script>
 
-  <script  type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>    
+  <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+    integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+    crossorigin="">
+    </script>
+
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script type="text/javascript" src="../public/js/heatmap.js-2.0.5/build/heatmap.js"></script>
   <script type="text/javascript"
     src="../public/js/heatmap.js-2.0.5/plugins/leaflet-heatmap/leaflet-heatmap.js"></script>
   <script type="text/javascript" src="../public/js/staticVariables.js"></script>
   <script type="text/javascript" src="../public/js/leaflet-area-select-master/dist/Map.SelectArea.min.js"></script>
+  <script type="text/javascript" src="../public/js/simpleUpload.js"></script>
 
 
 
@@ -39,16 +40,17 @@
 </head>
 
 <body>
-  <p>Select Area by pressing Ctrl key and drag on the map the sensitive places</p>
+  <p>Select Area by pressing Ctrl key and move the mouse around the sensitive areas.</p>
 
-  <input type="file" id="docpicker" accept=".json" value="Import" />
 
-  <button type="button" onclick="uploadJSONFiltered()" id="cropButton"> Upload Json (Covered) </button>
+  <form enctype="multipart/form-data" action="api/Upload" method="POST"> 
+    <input type="file" id="docpicker" accept=".json" name="file" value="Import" />
+    <input type="submit"  id="uploadButton" value="Upload"> Upload Json (Covered) </button>
+  </form>
 
   <div id="areaSelected">Area Selected: </div>
 
   <script type="text/javascript" src="../public/js/upload.js"></script>
-
 
 </body>
 
