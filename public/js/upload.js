@@ -89,6 +89,7 @@ function uploadJSONFiltered() {
     processData: false,
     data: formFile,
     success: function (response) {
+      console.log("Uploaded File Successfully!")
       $.ajax({
         url: "/test",
         type: "POST",
@@ -97,7 +98,8 @@ function uploadJSONFiltered() {
         processData: false,
         data: formSensitiveAreas,
         success: function (response) {
-          console.log("Uploaded File Successfully!")
+          console.log("Passed to the Database!")
+          //console.log(response);
         }
       })
     }
