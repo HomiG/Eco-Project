@@ -30,25 +30,30 @@ router.use(bodyParser());
 router.use(upload())
 
 
-router.post("/api/Upload", function (req, res) {
+// router.post("/api/Upload", function (req, res) {
 
-  if (req.files) {
-    console.log(req.files)
-    var file = req.files.file;
-    var filename = file.name;
-    console.log(filename);
-    file.mv('./uploads/' + filename, function (err) {
-      if (err) {
-        res.send(err)
-      }
-      else {
-        //fs.unlinkSync('./uploads/' + filename); 
-        res.status(200).send("File Uploaded")
-      }
-    })
-  }
+//   console.log("Entered api/pupload.")
+//   console.log()
 
-});
+//   if (req.files) {
+//     //console.log(req)
+//     var file = req.files.file;
+//     var filename = file.name;
+//     console.log(filename);
+//     file.mv('./uploads/' + filename, function (err) {
+//       if (err) {
+//         res.send(err)
+//       }
+//       else {
+//         //fs.unlinkSync('./uploads/' + filename); 
+//         //res.redirect(307, '/test');    
+//         console.log("HOME.JS")
+//         res.status(200).send("File Uploaded")
+//       }
+//     })
+//   }
+
+// });
 
 
 
@@ -62,21 +67,6 @@ router.get('/upload', function (req, res) {
   res.render('../views/upload.ejs')
 });
 
-router.post("/api/Upload", function (req, res) {
-
-  upload(req, res, function (err) {
-
-    if (err) {
-
-      return res.end("Something went wrong!");
-
-    }
-
-    return res.end("File uploaded sucessfully!.");
-
-  });
-
-});
 
 
 
@@ -149,6 +139,8 @@ router.post('/login', function (req, res) {
 
 
 
+ 
+
 });
 
 
@@ -168,51 +160,55 @@ router.get('/mainPage', function (req, res) {
 
 
 
-router.post('/upload', function (req, res) {
-  console.log(req.files)
-  res.send("DONE")
-
-})
 
 
-router.post('/troll', function (req, res) {
+router.post('/uploadJson', function (req, res) {
+
+  
+  console.log("Entered api/pupload.")
 
 
 
-  var sensitiveRect = {
-    _northEastLat: req.body._northEastLat,
-    _northEastLng: req.body._northEastLng,
-    _southWestLat: req.body._southWestLat,
-    _southWestLng: req.body._southWestLng
-  }
-
-  let patrasCenter = new GeoPoint(38.230462, 21.753150);
-
-  var point = geopointToMyPoint(patrasCenter)
-  console.log("Patras center is : ", point);
-
-  if (inRangeOfRect(sensitiveRect, point)) {
-    console.log("IS INSIDE")
-  }
-  else
-    console.log("NOT INSIDE")
-
-  console.log(sensitiveRect)
+  if (req.files) {
+    var file = req.files.file;
+    var filename = '1.json';
+    console.log(filename);
+    //File Gets Overwriten 
+    file.mv('./public/uploads/' + filename, function (err) {
+      if (err) {
+        res.send(err)
+      }
+      else{
+        res.send('File uploaded!');
+      }
+    })
+  } 
 
 })
 
 
 router.post('/test', async function (req, res) {
 
-  // Sensitive Rectangular sent with the Ajax Post 
-  var sensitiveRect = {
-    _northEastLat: req.body._northEastLat,
-    _northEastLng: req.body._northEastLng,
-    _southWestLat: req.body._southWestLat,
-    _southWestLng: req.body._southWestLng
-  }
 
-  let jsonData = require('../locationHistory.json')
+
+// Sensitive Rectangular Array sent with the Ajax Post 
+ var areas = JSON.parse(req.body.areas);
+
+  console.log(areas)
+
+
+  // var sensitiveRect = {
+  //   _northEastLat: req.body._northEastLat,
+  //   _northEastLng: req.body._northEastLng,
+  //   _southWestLat: req.body._southWestLat,
+  //   _southWestLng: req.body._southWestLng
+  // }
+
+  let jsonData = fs.readFileSync((path.resolve(__dirname, "../public/uploads/1.json")))
+  jsonData = JSON.parse(jsonData);
+
+  console.log(jsonData)
+  
   //This is for Running the Code Async
   function makeDb() {
     var connection = mysql.createConnection({
@@ -276,10 +272,11 @@ router.post('/test', async function (req, res) {
     }
 
     // If point is inside the sensitive Area, Skip This Point
-    if (inRangeOfRect(sensitiveRect, geopointToMyPoint(pointToBeInserted))) {
+    if (inRangeOfRect(areas, geopointToMyPoint(pointToBeInserted))) {
       console.log("POINT IS INSIDE SENSITIVE AREA ")
       continue;
     }
+
 
     entryId = await bulkInsert(db, 'entry', [jsonData.locations[i]])
 
@@ -306,6 +303,8 @@ router.post('/test', async function (req, res) {
     }
 
   }
+  
+  console.log("The End!")
 })
 
 

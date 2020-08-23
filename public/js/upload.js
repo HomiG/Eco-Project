@@ -4,7 +4,9 @@
 // Create Heatmap Instance
 var heatmapLayer = new HeatmapOverlay(cfg);
 var sensitiveRect;
-var div = document.getElementById('areaSelected')
+var counter = 1;
+var sensitiveRectArr = [];
+var sensitiveRectCord = document.getElementById('areaSelected')
 
 // Declaer the baseLayer
 baseLayer = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoicmFuZG9tbmFtZWdyIiwiYSI6ImNrZHJwaWdkbDBiNXYyeW83NmQ1aDU2bDkifQ.TAMboxLmOiUsmRbljrplEQ',
@@ -45,10 +47,10 @@ var circle = L.circle(patrasLatLng, {
 
 
 map.selectArea.enable();
-var testVar = map.on('areaselected', (e) => {
-  div.innerHTML = "\nArea Selected: NorthEast: lat " + e.bounds._northEast.lat + ", lng " + e.bounds._northEast.lng +
+map.on('areaselected', (e) => {
+  sensitiveRectCord.innerHTML = counter++ + ") Area(s) Selected: NorthEast: lat " + e.bounds._northEast.lat + ", lng " + e.bounds._northEast.lng +
     " \nSouthWest: lat " + e.bounds._southWest.lat + ", lng " + e.bounds._southWest.lng;
-  console.log(e.bounds.toBBoxString()); // lon, lat, lon, lat
+  //  console.log(e.bounds.toBBoxString()); // lon, lat, lon, lat
 
   sensitiveRect = {
     _northEastLat: e.bounds._northEast.lat,
@@ -56,27 +58,49 @@ var testVar = map.on('areaselected', (e) => {
     _southWestLat: e.bounds._southWest.lat,
     _southWestLng: e.bounds._southWest.lng
   }
-  
-  
 
+  sensitiveRectArr.push(sensitiveRect)
+
+ // console.log(sensitiveRectArr)
 });
+var toll = [{ a: 1, b: 2 }, { a: 3, b: 4 }]
 
 function uploadJSONFiltered() {
+
+  var docPicker = document.getElementById('docpicker');
+  //console.log(docPicker.files[0])
+
   
-  
+
+  var file = docPicker.files[0];
+  var formFile = new FormData(); // Create a form (it's like an array) where you put all the data you want to send via post. Accepts strings and files.
+  var formSensitiveAreas = new FormData();
+
+  formFile.append('file', file);
+
+  formSensitiveAreas.append("areas", JSON.stringify(sensitiveRectArr))
 
 
-  
-
-
-
-  // $.ajax({
-  //   url: "/upload",
-  //   type:'POST',
-  //   data: sensitiveRect,
-  //   success: function (result) {
-  //     console.log("SUCCESS!@")
-  //   }
-  // });
+  $.ajax({
+    url: "/uploadJson",
+    type: "POST",
+    cache: false,
+    contentType: false,
+    processData: false,
+    data: formFile,
+    success: function (response) {
+      $.ajax({
+        url: "/test",
+        type: "POST",
+        cache: false,
+        contentType: false,
+        processData: false,
+        data: formSensitiveAreas,
+        success: function (response) {
+          console.log("Uploaded File Successfully!")
+        }
+      })
+    }
+  });
 
 }

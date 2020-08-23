@@ -1,8 +1,12 @@
 function inRangeOfRect(rectangular, insertedPoint) { //returns true if a point is inside the given rectangular
 
-    if (rectangular._northEastLat > insertedPoint.latitude && rectangular._northEastLng > insertedPoint.longitude) {
-        if (rectangular._southWestLat < insertedPoint.latitude && rectangular._southWestLng < insertedPoint.longitude) {
-            return true;
+
+    var i;
+    for (i = 0; i < rectangular.length; i++) {
+        if (rectangular[i]._northEastLat > insertedPoint.latitude && rectangular[i]._northEastLng > insertedPoint.longitude) {
+            if (rectangular[i]._southWestLat < insertedPoint.latitude && rectangular[i]._southWestLng < insertedPoint.longitude) {
+                return true;
+            }
         }
     }
     return false;

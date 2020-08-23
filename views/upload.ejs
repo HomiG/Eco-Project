@@ -43,10 +43,9 @@
   <p>Select Area by pressing Ctrl key and move the mouse around the sensitive areas.</p>
 
 
-  <form enctype="multipart/form-data" action="api/Upload" method="POST"> 
-    <input type="file" id="docpicker" accept=".json" name="file" value="Import" />
-    <input type="submit"  id="uploadButton" value="Upload"> Upload Json (Covered) </button>
-  </form>
+  <input type="file" id="docpicker" accept=".json" name="file" value="Import" />
+  <button type="button" onclick="uploadJSONFiltered()" id="uploadButton" value="Upload"> Upload Json (Covered)</button>
+
 
   <div id="areaSelected">Area Selected: </div>
 

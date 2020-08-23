@@ -1,9 +1,19 @@
-var GeoPoint = require('geopoint')
+async function operation() {
+    return new Promise(function(resolve, reject) {
+        var a = 0;
+        var b = 1;
+        a = a + b;
+        a = 5;
 
+        // may be a heavy db call or http request?
+        resolve(a) // successfully fill promise
+    })
+}
+var a
+async function app() {
+    var a = await operation() // a is 5
+}
 
+app()
 
-point1 = new GeoPoint(38.246034, 21.731404);
-point2 = new GeoPoint(38.269623, 21.746004);
-var distance = point1.distanceTo(point2, true)//output in kilometers
-
-console.log(distance)
+console.log(a)
