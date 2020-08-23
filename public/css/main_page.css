@@ -3,11 +3,14 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-
+  font-size: 20px;
+  /* color: white; */
 }
 
 
 body  {
+  /* background-image:  url("/public/img/back7.png") ;   */
+
    background-color: #ffffff21;
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -26,7 +29,9 @@ body  {
   background-image:  url("/public/img/patras6_f.png") ;  
   background-size: cover;
   color: white;
-  padding-left: 0px;
+  padding-left: 0px; 
+
+  
 
 }
 
@@ -43,6 +48,7 @@ h1 {
   color: rgb(255, 255, 255);
   text-align: center;
   margin-top: 30px;
+  font-size: 30px;
 }
 
 h2 {
@@ -51,6 +57,7 @@ h2 {
   margin-top: 100px;
   font-weight: bold;
   /* 2863CA */
+  font-size: 25px;
 }
 
 h3{
@@ -108,6 +115,7 @@ h3{
   position: fixed; 
   margin-top: 0px; 
   margin-left: 50px;
+  /* font-size: 15px; */
 }
 
 @media screen and (max-width: 700px) {
@@ -227,6 +235,7 @@ background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
 
 .upload_btn{
  width: 150px;
+ height: 50px;
 background-color:  #945f90;
 border-radius: 10px;
 bottom: 20px;
