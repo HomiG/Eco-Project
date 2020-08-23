@@ -303,8 +303,8 @@ router.post('/test', async function (req, res) {
     }
 
   }
-  
-  console.log("The End!")
+  res.send("Upload Succefully");
+  console.log("The End!");
 })
 
 
