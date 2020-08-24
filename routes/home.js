@@ -147,6 +147,7 @@ router.post('/login', function (req, res) {
       userObject.username=result[0].username;
       userObject.userId=loginData.userId;
       userObject.email=loginData.email;
+      console.log(userObject.userId);
       res.redirect('/mainpage');
     }
   });
@@ -412,7 +413,7 @@ router.post('/test', async function (req, res) {
         host: "localhost",
         user: "root",
         password: '',
-        database: 'ecoproject',
+        database: 'ecoproject1',
         port: 3306
       });
       return {
@@ -427,11 +428,11 @@ router.post('/test', async function (req, res) {
     }
     const db = makeDb();
   
-  
+    
     function bulkInsert(db, table, objectArray) {
       let keys = Object.keys(objectArray[0]);
       if (keys.includes("activity")) { // Checking if 
-        keys.pop();
+        keys.splice(keys.indexOf('activity'),1);
       }
       let values = objectArray.map(obj => keys.map(key => obj[key]));
       let sql = 'INSERT INTO ' + table + ' (' + keys.join(',') + ') VALUES ?';
@@ -474,7 +475,7 @@ router.post('/test', async function (req, res) {
         continue;
       }
   
-  
+      jsonData.locations[i].userId=userObject.userId;
       entryId = await bulkInsert(db, 'entry', [jsonData.locations[i]])
   
   
