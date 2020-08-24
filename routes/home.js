@@ -104,6 +104,12 @@ router.post('/signup', async function (req, res) {
     res.status(500)
   }
 });
+  var userObject={
+    username: '',
+    email: '',
+    userId: 0,
+    ecoscore:0
+  }
 
 
 function checkAuth(req, res, next) {
@@ -125,19 +131,23 @@ router.post('/login', function (req, res) {
 
   sess=req.session;
   sess.userId=loginData.userId;
+  
 
 
-
-  connection.query("SELECT userId FROM user WHERE userId= '" + loginData.userId + "'", function (err, result) {
+  connection.query("SELECT userId, username FROM user WHERE userId= '" + loginData.userId + "'", function (err, result) {
     if (err) throw err;
     if (!result.length) {
       res.status(500).send("You can't Procced, no user Found");
       console.log(result);
     }
     else {
-      //req.session.user_id = result.username;
+      
+      
+      console.log(result[0].username)
+      userObject.username=result[0].username;
+      userObject.userId=loginData.userId;
+      userObject.email=loginData.email;
       res.redirect('/mainpage');
-      console.log(result)
     }
   });
 
@@ -147,7 +157,7 @@ router.post('/login', function (req, res) {
 
 
 router.get('/mainPage', checkAuth,function (req, res) {
-  res.render('../views/main_page.ejs')
+  res.render('../views/main_page.ejs',{x:userObject.username})
 });
 
 
@@ -180,29 +190,23 @@ router.post('/uploadJson', function (req, res) {
 // //check if given password maches saved password
 // if(await bcrypt.compare(req.body.password, savedPassword));
 
-router.get('/chart', checkAuth,function(req,res){
+router.get('/ecocharts', /*checkAuth,*/ function(req,res){
   var result;
-  let score = {
-    "walking": 0,
-    "bicycle": "0",
-    "on_foot": "0",
-    "vehicle": "0"
-
-  }
-  connection.query("SELECT SUM(confidence) FROM entry INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1 INNER JOIN activity1connectactivity2 on activity1.aa1=activity1connectactivity2.a1 INNER JOIN activity2 on activity2.aa2=activity1connectactivity2.a2  WHERE type= 'WALKING'", function (err, result) {
+  var hey;
+  connection.query("SELECT SUM(confidence) as walking FROM entry INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1 INNER JOIN activity1connectactivity2 on activity1.aa1=activity1connectactivity2.a1 INNER JOIN activity2 on activity2.aa2=activity1connectactivity2.a2  WHERE type= 'WALKING' AND entry.userId='"+ userObject.userId +"'", function (err, result) {
     if (err) throw err;
     if (!result.length) {
-      res.status(500).send("You can't Procced, no user Found");
+      res.status(500).send("You can't Proceed, no user Found");
       console.log(result);
     }
     else {
-      score.walking=result;
-      console.log(score.walking);}
+      //hey=result[0].walking;
+      console.log(result);}
       
 
 
     });
-    res.render('../views/chart.ejs',{scores:score});
+    res.render('../views/ecocharts.ejs');
   });
 
 
