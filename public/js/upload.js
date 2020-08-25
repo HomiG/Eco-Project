@@ -1,3 +1,5 @@
+//const { end } = require("../../config/database");
+
 
 
 
@@ -30,7 +32,7 @@ var map = L.map('mapid', {
 });
 
 
-heatmapLayer.setData(testData);
+//heatmapLayer.setData(testData);
 
 
 // Add ta marker in Given Cetner Of Patras 
@@ -60,17 +62,18 @@ map.on('areaselected', (e) => {
   }
 
   sensitiveRectArr.push(sensitiveRect)
+  console.log(sensitiveRectArr)
 
- // console.log(sensitiveRectArr)
+  // console.log(sensitiveRectArr)
 });
-var toll = [{ a: 1, b: 2 }, { a: 3, b: 4 }]
 
 function uploadJSONFiltered() {
 
+  var statusDiv = document.getElementById('status')
   var docPicker = document.getElementById('docpicker');
   //console.log(docPicker.files[0])
 
-  
+
 
   var file = docPicker.files[0];
   var formFile = new FormData(); // Create a form (it's like an array) where you put all the data you want to send via post. Accepts strings and files.
@@ -89,6 +92,7 @@ function uploadJSONFiltered() {
     processData: false,
     data: formFile,
     success: function (response) {
+      statusDiv.innerHTML = 'File uplaoding to the database...'
       console.log("Uploaded File Successfully!")
       $.ajax({
         url: "/test",
@@ -98,7 +102,8 @@ function uploadJSONFiltered() {
         processData: false,
         data: formSensitiveAreas,
         success: function (response) {
-          console.log("Passed to the Database!")
+          statusDiv.innerHTML = 'File Uploaded Succesfully!'
+          alert("Passed Into Database")
           //console.log(response);
         }
       })
@@ -106,3 +111,52 @@ function uploadJSONFiltered() {
   });
 
 }
+
+function showFullHeatmap(){
+  $.ajax({
+    url: "/getHeatmap",
+    type: "POST",
+    cache: false,
+    contentType: false,
+    processData: false,
+    success: function (response) {
+      console.log(response)
+      heatmapLayer.setData(response)
+
+    }
+  })
+
+
+}
+
+
+function submitDates() {
+  startDate = document.getElementById('startDate');
+  endDate = document.getElementById('endDate');
+
+  var dateForm = new FormData();
+  dateForm.append('since', startDate.valueAsNumber)
+  dateForm.append('until', endDate.valueAsNumber);
+
+
+
+
+  $.ajax({
+    url: "/rangeDates",
+    type: "POST",
+    cache: false,
+    contentType: false,
+    processData: false,
+    data: dateForm,
+    success: function (response) {
+      console.log(response)
+      heatmapLayer.setData(response)
+
+    }
+  })
+
+
+
+
+}
+

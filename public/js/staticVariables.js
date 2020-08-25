@@ -4,13 +4,6 @@
 // };
 
 
-var testData = {
-    max: 100,
-    data: [{lat: 38.24344139035739, lng:21.730643412753906, count: 3},{lat: 38.243115684054565, lng: 21.731243470549877, count: 1}
-    ,{lat: 38.24668580550469, lng: 21.733390343997776, count: 2}
-    ,{lat: 38.24564798531859, lng: 21.73447044803055, count: 4}
-    ,{lat: 38.24481960356496, lng: 21.73552388282794, count: 5}]
-  };
 
 var patrasLatLng = [38.230462, 21.753150];
 
@@ -18,7 +11,7 @@ var cfg = {
 
     // radius should be small ONLY if scaleRadius is true (or small radius is intended)
     // if scaleRadius is false it will be the constant radius used in pixels
-    "radius": 0.001,
+    "radius": 0.0005,
     "maxOpacity": .8,
     // scales the radius based on map zoom
     "scaleRadius": true,
