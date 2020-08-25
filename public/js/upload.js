@@ -92,7 +92,7 @@ function uploadJSONFiltered() {
     processData: false,
     data: formFile,
     success: function (response) {
-      statusDiv.innerHTML = 'File uplaoding to the database...'
+      statusDiv.innerHTML = 'File uplaoding to the database... Please wait'
       console.log("Uploaded File Successfully!")
       $.ajax({
         url: "/test",
