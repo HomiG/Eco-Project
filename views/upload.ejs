@@ -5,6 +5,9 @@
 
   <link rel="stylesheet" href="/public/css/upload.css">
 
+  <input type="date" id="startDate" name="From">
+  <input type="date" id="endDate" name="Until">
+  <button id="submitDatesButton" onclick="submitDates()">Range Dates</button>
   <div id="mapid"></div>
 
 
@@ -23,6 +26,8 @@
     crossorigin="">
     </script>
 
+
+
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script type="text/javascript" src="../public/js/heatmap.js-2.0.5/build/heatmap.js"></script>
   <script type="text/javascript"
@@ -38,25 +43,29 @@
     #mapid {
       margin: auto;
       border-radius: 400px;
-      width: 800px; 
+      width: 800px;
       height: 800px;
-      position: relative; 
+      position: relative;
       z-index: 500
     }
   </style>
 </head>
 
 <body>
-  <p>Select Area by pressing Ctrl key and move the mouse around the sensitive areas.</p>
+
+  <div class="text">
+    <p>Select Area by pressing Ctrl key and move the mouse around the sensitive areas.</p>
 
 
-  <input type="file" id="docpicker" accept=".json" name="file" value="Import" />
-  <button type="button" onclick="uploadJSONFiltered()" id="uploadButton" value="Upload"> Upload Json (Covered)</button>
+    <input type="file" id="docpicker" accept=".json" name="file" value="Import" />
+    <button type="button" onclick="uploadJSONFiltered()" id="uploadButton" value="Upload"> Upload Json
+      (Covered)</button>
+    <div id="status"> ... </div>
 
+    <div id="areaSelected">Area Selected: </div>
 
-  <div id="areaSelected">Area Selected: </div>
-
-  <script type="text/javascript" src="../public/js/upload.js"></script>
+    <script type="text/javascript" src="../public/js/upload.js"></script>
+  </div>
 
 </body>
 
