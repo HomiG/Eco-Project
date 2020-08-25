@@ -375,11 +375,31 @@ router.post('/rangeDates', async function (req, res) {
   res.send(objectForHeatmap);
 })
 
-router.post('/getHeatmap', async function () {
+router.post('/getHeatmap', async function (req, res) {
 
   const db = makeDb();
 
+  var rangedDates = await db.query('SELECT latitudeE7, longitudeE7 FROM `entry` WHERE userId = \'' + userObject.userId + '\'')
 
+  var i;
+  var locationsObject;
+  var objectForHeatmap //This is a javascript object that HeatmapJs understands and translate it into colors
+  var locationsObjectArr = [];
+
+  for (i = 0; i < rangedDates.length; i++) {
+    locationsObject = {
+      lat: rangedDates[i].latitudeE7 * Math.pow(10, -7),
+      lng: rangedDates[i].longitudeE7 * Math.pow(10, -7),
+      count: 1
+    }
+    locationsObjectArr.push(locationsObject)
+  }
+
+  objectForHeatmap = {
+    data: locationsObjectArr,
+    max: locationsObjectArr.length
+  }
+  res.send(objectForHeatmap);
 
 })
 

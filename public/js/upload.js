@@ -112,6 +112,23 @@ function uploadJSONFiltered() {
 
 }
 
+function showFullHeatmap(){
+  $.ajax({
+    url: "/getHeatmap",
+    type: "POST",
+    cache: false,
+    contentType: false,
+    processData: false,
+    success: function (response) {
+      console.log(response)
+      heatmapLayer.setData(response)
+
+    }
+  })
+
+
+}
+
 
 function submitDates() {
   startDate = document.getElementById('startDate');
