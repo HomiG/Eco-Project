@@ -193,24 +193,50 @@ router.post('/uploadJson', function (req, res) {
 
 router.get('/ecocharts', /*checkAuth,*/ function(req,res){
   var result;
-  var hey;
-  connection.query("SELECT SUM(confidence) as walking FROM entry INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1 INNER JOIN activity1connectactivity2 on activity1.aa1=activity1connectactivity2.a1 INNER JOIN activity2 on activity2.aa2=activity1connectactivity2.a2  WHERE type= 'WALKING' AND entry.userId='"+ userObject.userId +"'", function (err, result) {
+  var hey1,hey2;
+  var ecoscore;
+  function calc_ecoscore(callback){
+  connection.query("SELECT SUM(confidence) as walking FROM entry INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1 INNER JOIN activity1connectactivity2 on activity1.aa1=activity1connectactivity2.a1 INNER JOIN activity2 on activity2.aa2=activity1connectactivity2.a2  WHERE type= 'ON_FEET' OR type='ON_BICYCLE' AND entry.userId='"+ userObject.userId +"'", function (err, result) {
     if (err) throw err;
     if (!result.length) {
       res.status(500).send("You can't Proceed, no user Found");
       console.log(result);
     }
     else {
-      //hey=result[0].walking;
+      hey1=result[0].walking;
       console.log(result);}
       
 
 
     });
-    res.render('../views/ecocharts.ejs');
+    connection.query("SELECT SUM(confidence) as vehicle FROM entry INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1 INNER JOIN activity1connectactivity2 on activity1.aa1=activity1connectactivity2.a1 INNER JOIN activity2 on activity2.aa2=activity1connectactivity2.a2  WHERE type= 'IN_VEHICLE' AND entry.userId='"+ userObject.userId +"'", function (err, result) {
+      if (err) throw err;
+      if (!result.length) {
+        res.status(500).send("You can't Proceed, no user Found");
+        console.log(result);
+      }
+      else {
+        hey2=result[0].vehicle;
+        console.log(result);}
+        
+  
+  
+      });
+      var f=hey1/(hey1+hey2)*100;
+      callback(f );}
+
+      calc_ecoscore(function(y){
+        ecoscore=y;
+        console.log(y);
+      })
+      
+    res.render('../views/ecocharts.ejs', {y:ecoscore});
   });
 
 
+  router.get('/charts', /*checkAuth,*/ function(req,res){
+    res.render('../views/ecocharts.ejs')
+  });
 
 router.post('/upload',checkAuth, function (req, res) {
   console.log(req.files)
@@ -465,13 +491,13 @@ router.post('/test', async function (req, res) {
   
       // If the point to be inserted out of 10Km Patras Cetner, Skip this Spot
       if (patrasCenter.distanceTo(pointToBeInserted, true) > 10) {
-        console.log("Out Of Patras")
+        //console.log("Out Of Patras")
         continue;
       }
   
       // If point is inside the sensitive Area, Skip This Point
       if (inRangeOfRect(areas, geopointToMyPoint(pointToBeInserted))) {
-        console.log("POINT IS INSIDE SENSITIVE AREA ")
+        //console.log("POINT IS INSIDE SENSITIVE AREA ")
         continue;
       }
   
@@ -479,7 +505,7 @@ router.post('/test', async function (req, res) {
       entryId = await bulkInsert(db, 'entry', [jsonData.locations[i]])
   
   
-      console.log("Entry ID: ", entryId.insertId);
+      //console.log("Entry ID: ", entryId.insertId);
   
   
       if ('activity' in jsonData.locations[i]) {
