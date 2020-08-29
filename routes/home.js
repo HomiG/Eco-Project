@@ -462,7 +462,12 @@ router.post('/test', async function (req, res) {
   }
 
 
-
+  // let speedupInsert = await db.query("SET SQL_MODE = \"NO_AUTO_VALUE_ON_ZERO\"") 
+  // speedupInsert = await db.query("SET AUTOCOMMIT = 0")
+  // speedupInsert = await db.query("SET unique_checks = 0;")
+  // speedupInsert = await db.query("SET foreign_key_checks=0;")
+  // speedupInsert = await db.query("START TRANSACTION;")
+  // console.log(speedupInsert)
 
   let entryId;
   let activity1Id;
@@ -496,7 +501,8 @@ router.post('/test', async function (req, res) {
     entryId = await bulkInsert(db, 'entry', [jsonData.locations[i]])
 
 
-    //console.log("Entry ID: ", entryId.insertId);
+
+    console.log("Entry ID: ", entryId.insertId);
 
 
     if ('activity' in jsonData.locations[i]) {
