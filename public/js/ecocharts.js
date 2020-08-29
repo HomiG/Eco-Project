@@ -1,24 +1,5 @@
-<html>
-  <script>var y;</script>
-    <head>
-    
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-        <title>My Chart.js Chart</title>
-      </head>
-<body>
-  <h1>Your ecoscore is <%=y%> %</h1>
-  <div class="container">
-    <canvas id="PieChartOfTransportations"></canvas>
-  </div>
-  <div class="container">
-    <canvas id="LeaderBoard"></canvas>
-  </div>
-  <script>
-    
+ 
+   
     let ChartOfTransportations = document.getElementById('PieChartOfTransportations').getContext('2d');
     let BarLeaderBoard=document.getElementById('LeaderBoard').getContext('2d');
     // Global Options
@@ -140,18 +121,14 @@
         }
       }
     });
-  </script>
-</body>
-</html>
-
-
-
-
-
-
-
-
-
-
-
-
+    jay=y;
+    $.ajax({
+        url: "/ecocharts",
+        type: "POST",
+        cache: false,
+        contentType: false,
+        processData: false,
+        data: jay,
+        success: function (response) {
+            console.log("Success");
+        });

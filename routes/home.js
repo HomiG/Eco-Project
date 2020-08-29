@@ -195,25 +195,55 @@ router.post('/uploadJson', function (req, res) {
 
 router.get('/ecocharts', /*checkAuth,*/ function (req, res) {
   var result;
-  var hey;
-  connection.query("SELECT SUM(confidence) as walking FROM entry INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1 INNER JOIN activity1connectactivity2 on activity1.aa1=activity1connectactivity2.a1 INNER JOIN activity2 on activity2.aa2=activity1connectactivity2.a2  WHERE type= 'WALKING' AND entry.userId='" + userObject.userId + "'", function (err, result) {
-    if (err) throw err;
-    if (!result.length) {
-      res.status(500).send("You can't Proceed, no user Found");
-      console.log(result);
-    }
-    else {
-      //hey=result[0].walking;
-      console.log(result);
-    }
+  var hey1, hey2;
+  var ecoscore;
+  function calc_ecoscore(callback) {
+    connection.query("SELECT SUM(confidence) as walking FROM entry INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1 INNER JOIN activity1connectactivity2 on activity1.aa1=activity1connectactivity2.a1 INNER JOIN activity2 on activity2.aa2=activity1connectactivity2.a2  WHERE type= 'ON_FEET' OR type='ON_BICYCLE' AND entry.userId='" + userObject.userId + "'", function (err, result) {
+      if (err) throw err;
+      if (!result.length) {
+        res.status(500).send("You can't Proceed, no user Found");
+        console.log(result);
+      }
+      else {
+        hey1 = result[0].walking;
+        console.log(result);
+      }
 
 
 
-  });
+    });
+    connection.query("SELECT SUM(confidence) as vehicle FROM entry INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1 INNER JOIN activity1connectactivity2 on activity1.aa1=activity1connectactivity2.a1 INNER JOIN activity2 on activity2.aa2=activity1connectactivity2.a2  WHERE type= 'IN_VEHICLE' AND entry.userId='" + userObject.userId + "'", function (err, result) {
+      if (err) throw err;
+      if (!result.length) {
+        res.status(500).send("You can't Proceed, no user Found");
+        console.log(result);
+      }
+      else {
+        hey2 = result[0].vehicle;
+        console.log(result);
+      }
+
+
+
+    });
+    var f = hey1 / (hey1 + hey2) * 100;
+    callback(f);
+  }
+
+  calc_ecoscore(function (y) {
+    ecoscore = y;
+    console.log(y);
+  })
+
+  //res.render('../views/ecocharts.ejs', {y:ecoscore});
+  // });
   res.render('../views/ecocharts.ejs');
 });
 
 
+router.get('/charts', /*checkAuth,*/ function (req, res) {
+  res.render('../views/ecocharts.ejs')
+});
 
 router.post('/upload', checkAuth, function (req, res) {
   console.log(req.files)
@@ -405,8 +435,8 @@ router.post('/getHeatmap', async function (req, res) {
 
 router.post('/test', async function (req, res) {
 
-
-
+  var date = new Date();
+  var timestamp = date.getTime();
   // Sensitive Rectangular Array sent with the Ajax Post 
   var areas = JSON.parse(req.body.areas);
 
@@ -487,6 +517,8 @@ router.post('/test', async function (req, res) {
       }
     }
   }
+
+  let lastFileUpload = await db.query("INSERT INTO `userLastUpload`(`date`,`userId`) VALUES('" + timestamp+ "', '" + userObject.userId + "')")
   res.send("Upload Succefully");
   console.log("The End!");
 })
