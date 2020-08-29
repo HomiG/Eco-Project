@@ -9,7 +9,7 @@
       host: "localhost",
       user: "root",
       password: '',
-      database: 'ecoproject',
+      database: 'ecoproject1',
       port: 3306
     });
     return {

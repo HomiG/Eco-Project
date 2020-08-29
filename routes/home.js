@@ -23,6 +23,7 @@ const upload = require('express-fileupload')
 
 const { encrypt, decrypt } = require('../public/js/encryptDecrypt');
 const { timeStamp } = require('console');
+const { stringify } = require('querystring');
 
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
@@ -193,54 +194,121 @@ router.post('/uploadJson', function (req, res) {
 // //check if given password maches saved password
 // if(await bcrypt.compare(req.body.password, savedPassword));
 
-router.get('/ecocharts', /*checkAuth,*/ function (req, res) {
+router.post('/ecocharts', /*checkAuth,*/async function (req, res) {
   var result;
-  var hey1,hey2;
-  var ecoscore;
-  function calc_ecoscore(callback){
-  connection.query("SELECT SUM(confidence) as walking FROM entry INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1 INNER JOIN activity1connectactivity2 on activity1.aa1=activity1connectactivity2.a1 INNER JOIN activity2 on activity2.aa2=activity1connectactivity2.a2  WHERE type= 'ON_FEET' OR type='ON_BICYCLE' AND entry.userId='"+ userObject.userId +"'", function (err, result) {
-    if (err) throw err;
-    if (!result.length) {
-      res.status(500).send("You can't Proceed, no user Found");
-      console.log(result);
+
+  const db = makeDb();
+
+  let hey1, hey2;
+  var results;
+  console.log("Hey I am in");
+  var lastMonth = new Date();
+  var m = lastMonth.getMonth();
+  lastMonth.setMonth(lastMonth.getMonth() - 1);
+
+  // If still in same month, set date to last day of 
+  // previous month
+  if (lastMonth.getMonth() == m) lastMonth.setDate(0);
+  lastMonth.setHours(0, 0, 0);
+  lastMonth.setMilliseconds(0);
+  lastMonth = lastMonth;
+
+  var lastYear = new Date();
+  lastYear.setFullYear(lastYear.getFullYear() - 1);
+  lastYear = lastYear;
+  console.log(lastYear);
+  results = await db.query("SELECT confidence, type, activity1.timestampMs  FROM entry INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1 INNER JOIN activity1connectactivity2 on activity1.aa1=activity1connectactivity2.a1 INNER JOIN activity2 on activity2.aa2=activity1connectactivity2.a2  WHERE entry.userId='" + userObject.userId + "'");
+  var firstDate=new Date;
+  var lastDate= new Date(0);
+  var walkingMonth = 0;
+  var vehicleMonth = 1;
+  var walkingYear = 0;
+  var bicycleYear = 0;
+  var vehicleYear = 0;
+  var i;
+  for (i = 0; i < results.length; i++) {
+    var d = new Date(parseInt(results[i].timestampMs));
+    if(d>lastDate){
+      lastDate=d;
     }
-    else {
-      hey1=result[0].walking;
-      console.log(result);}
-      
-
-
-    });
-    connection.query("SELECT SUM(confidence) as vehicle FROM entry INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1 INNER JOIN activity1connectactivity2 on activity1.aa1=activity1connectactivity2.a1 INNER JOIN activity2 on activity2.aa2=activity1connectactivity2.a2  WHERE type= 'IN_VEHICLE' AND entry.userId='"+ userObject.userId +"'", function (err, result) {
-      if (err) throw err;
-      if (!result.length) {
-        res.status(500).send("You can't Proceed, no user Found");
-        console.log(result);
+    if(d<firstDate){
+      firstDate=d;
+    }
+    if (d > lastYear) {
+      if (results[i].type == 'ON_FOOT') {
+        walkingYear = walkingYear + results[i].confidence;
       }
-      else {
-        hey2=result[0].vehicle;
-        console.log(result);}
-        
-  
-  
-      });
-      var f=hey1/(hey1+hey2)*100;
-      callback(f );}
+      else
+        if (results[i].type == 'ON_BICYCLE') {
+          bicycleYear = bicycleYear + results[i].confidence;
+        }
+        else
+        if(results[i].type == 'IN_VEHICLE'){
+          vehicleYear=vehicleYear+results[i].confidence;
+        }
+        if(d >lastMonth){
+          if (results[i].type == 'ON_FOOT'|| results[i].type == 'ON_BICYCLE' ) {
+            walkingMonth = walkingMonth + results[i].confidence;
+          }
+          else
+          if(results[i].type == 'IN_VEHICLE'){
+            vehicleMonth=vehicleMonth+results[i].confidence;
 
-      calc_ecoscore(function(y){
-        ecoscore=y;
-        console.log(y);
-      })
-      
-    //res.render('../views/ecocharts.ejs', {y:ecoscore});
- // });
-  res.render('../views/ecocharts.ejs');
+          }
+        }
+
+  }
+  }
+  // if (err) throw err;
+  // if (!result.length) {
+  //   res.status(500).send("You can't Proceed, no user Found");
+  //   console.log(result);
+  // }
+  // else {
+  //   hey1=result[0].walking;
+  //   console.log(result);}
+
+  //console.log(hey1[0].walking)
+
+
+  // });
+  // hey2 = await db.query("SELECT SUM(confidence) as vehicle FROM entry INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1 INNER JOIN activity1connectactivity2 on activity1.aa1=activity1connectactivity2.a1 INNER JOIN activity2 on activity2.aa2=activity1connectactivity2.a2  WHERE type= 'IN_VEHICLE' AND entry.userId='" + userObject.userId + "'");
+  // //   if (err) throw err;
+  // //   if (!result.length) {
+  // //     res.status(500).send("You can't Proceed, no user Found");
+  // //     console.log(result);
+  // //   }
+  // //   else {
+  // //     hey2 = result[0].vehicle;
+  // //     console.log(result);
+  // //   }
+  // // });
+
+
+  // console.log(hey2[0].vehicle)
+
+
+  // var ecoscore = hey1[0].walking / (hey1[0].walking + hey2[0].vehicle) * 100;
+  // ecoscore = JSON.stringify(ecoscore);
+ let data={
+    firstdate:firstDate,
+    lastdate: lastDate,
+    ecoscore: (walkingMonth/(walkingMonth+vehicleMonth)/100),
+    walking:walkingYear/100,
+    bicycle: bicycleYear/100,
+    vehicle: vehicleYear/100
+  }
+  res.send(data);
+
+
+
+
 });
 
 
-  router.get('/charts', /*checkAuth,*/ function(req,res){
-    res.render('../views/ecocharts.ejs')
-  });
+router.get('/charts', /*checkAuth,*/ function (req, res) {
+  res.render('../views/ecocharts.ejs')
+});
 
 router.post('/upload', checkAuth, function (req, res) {
   console.log(req.files)
