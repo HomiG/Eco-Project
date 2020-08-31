@@ -24,6 +24,7 @@ const upload = require('express-fileupload')
 const { encrypt, decrypt } = require('../public/js/encryptDecrypt');
 const { timeStamp } = require('console');
 const { stringify } = require('querystring');
+const { get } = require('jquery');
 
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
@@ -189,10 +190,50 @@ router.post('/uploadJson', function (req, res) {
 
 })
 
+router.get('/leaderboard', function (req, res) {
+  res.render('../views/leaderboard.ejs')
+});
+
+router.post('/leaderboard', async function (req, res) {
+  const db = makeDb();
+  var todayMonth = req.body.todayMonth;
+
+  var eareseCurrentLeaderBoard = await db.query('truncate table userVehicleScore');
+  eareseCurrentLeaderBoard = await db.query('truncate table userWalkingScore');
+  eareseCurrentLeaderBoard = await db.query('truncate table userecoscore');
+
+  var updateCurrentMonth = await db.query('UPDATE lastMonth set startingDate = ' + todayMonth);
+
+  // GET GENERAL TOP 3 ECOSCORES
+  var getEcoscores = await db.query('SELECT user.username, ecoscore FROM userEcoscore INNER JOIN user ON user.userId = userEcoscore.userId ORDER BY ecoscore DESC LIMIT 3')
+  // GET CURRENT USER'S ECOSCORE
+  var currentUserEcoscore = await db.query('SELECT user.username, ecoscore FROM userEcoscore INNER JOIN user ON user.userId = userEcoscore.userId WHERE user.userId = \'' + userObject.userId + '\'')
 
 
-// //check if given password maches saved password
-// if(await bcrypt.compare(req.body.password, savedPassword));
+  const arrayColumn = (arr, n) => arr.map(x => x[n]); // Function to get Column N of 2D array.
+
+  var outputData = getEcoscores.map(Object.values); // Converting Array of Objects into Array of Arrays
+
+  var ecoscoreObject = {
+    names: arrayColumn(outputData, 0), //Get the names 
+    scores: arrayColumn(outputData, 1) //Get the Scores Coresponding
+  }
+
+  // CHECK IF ECOSCORE RESULT IS EMPTY
+  if (!getEcoscores.length == 0) {
+    // CHECK IF USER IS IN THE TOP 3, IF NOT ADD HIM AS THE EXTRA ELEMENT
+    if (!ecoscoreObject['names'].includes(currentUserEcoscore[0].username)) {
+      ecoscoreObject['names'].push(currentUserEcoscore[0].username);
+      ecoscoreObject['scores'].push(currentUserEcoscore[0].ecoscore);
+    }
+  }
+  console.log(ecoscoreObject)
+
+  res.send(ecoscoreObject);
+
+
+
+})
 
 router.post('/ecocharts', /*checkAuth,*/async function (req, res) {
   var result;
@@ -218,8 +259,8 @@ router.post('/ecocharts', /*checkAuth,*/async function (req, res) {
   lastYear = lastYear;
   console.log(lastYear);
   results = await db.query("SELECT confidence, type, activity1.timestampMs  FROM entry INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1 INNER JOIN activity1connectactivity2 on activity1.aa1=activity1connectactivity2.a1 INNER JOIN activity2 on activity2.aa2=activity1connectactivity2.a2  WHERE entry.userId='" + userObject.userId + "'");
-  var firstDate=new Date;
-  var lastDate= new Date(0);
+  var firstDate = new Date;
+  var lastDate = new Date(0);
   var walkingMonth = 0;
   var vehicleMonth = 1;
   var walkingYear = 0;
@@ -228,11 +269,11 @@ router.post('/ecocharts', /*checkAuth,*/async function (req, res) {
   var i;
   for (i = 0; i < results.length; i++) {
     var d = new Date(parseInt(results[i].timestampMs));
-    if(d>lastDate){
-      lastDate=d;
+    if (d > lastDate) {
+      lastDate = d;
     }
-    if(d<firstDate){
-      firstDate=d;
+    if (d < firstDate) {
+      firstDate = d;
     }
     if (d > lastYear) {
       if (results[i].type == 'ON_FOOT') {
@@ -243,21 +284,21 @@ router.post('/ecocharts', /*checkAuth,*/async function (req, res) {
           bicycleYear = bicycleYear + results[i].confidence;
         }
         else
-        if(results[i].type == 'IN_VEHICLE'){
-          vehicleYear=vehicleYear+results[i].confidence;
-        }
-        if(d >lastMonth){
-          if (results[i].type == 'ON_FOOT'|| results[i].type == 'ON_BICYCLE' ) {
-            walkingMonth = walkingMonth + results[i].confidence;
+          if (results[i].type == 'IN_VEHICLE') {
+            vehicleYear = vehicleYear + results[i].confidence;
           }
-          else
-          if(results[i].type == 'IN_VEHICLE'){
-            vehicleMonth=vehicleMonth+results[i].confidence;
+      if (d > lastMonth) {
+        if (results[i].type == 'ON_FOOT' || results[i].type == 'ON_BICYCLE') {
+          walkingMonth = walkingMonth + results[i].confidence;
+        }
+        else
+          if (results[i].type == 'IN_VEHICLE') {
+            vehicleMonth = vehicleMonth + results[i].confidence;
 
           }
-        }
+      }
 
-  }
+    }
   }
   // if (err) throw err;
   // if (!result.length) {
@@ -290,13 +331,13 @@ router.post('/ecocharts', /*checkAuth,*/async function (req, res) {
 
   // var ecoscore = hey1[0].walking / (hey1[0].walking + hey2[0].vehicle) * 100;
   // ecoscore = JSON.stringify(ecoscore);
- let data={
-    firstdate:firstDate,
+  let data = {
+    firstdate: firstDate,
     lastdate: lastDate,
-    ecoscore: (walkingMonth/(walkingMonth+vehicleMonth)/100),
-    walking:walkingYear/100,
-    bicycle: bicycleYear/100,
-    vehicle: vehicleYear/100
+    ecoscore: (walkingMonth / (walkingMonth + vehicleMonth) / 100),
+    walking: walkingYear / 100,
+    bicycle: bicycleYear / 100,
+    vehicle: vehicleYear / 100
   }
   res.send(data);
 
@@ -589,7 +630,7 @@ router.post('/test', async function (req, res) {
     }
   }
 
-  let lastFileUpload = await db.query("INSERT INTO `userLastUpload`(`date`,`userId`) VALUES('" + timestamp+ "', '" + userObject.userId + "')")
+  let lastFileUpload = await db.query("INSERT INTO `userLastUpload`(`date`,`userId`) VALUES('" + timestamp + "', '" + userObject.userId + "')")
   res.send("Upload Succefully");
   console.log("The End!");
 })
