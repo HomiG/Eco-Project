@@ -691,6 +691,7 @@ router.post('/test', async function (req, res) {
   //console.log(areas)
 
 
+
   let jsonData = fs.readFileSync((path.resolve(__dirname, "../public/uploads/1.json")))
   jsonData = JSON.parse(jsonData);
 
@@ -757,14 +758,14 @@ router.post('/test', async function (req, res) {
       for (j = 0; j < jsonData.locations[i].activity.length; j++) {
         activity1Id = await bulkInsert(db, 'activity1', [jsonData.locations[i].activity[j]])
         //console.log("\tActivity1 ID: ", activity1Id.insertId)
-        let insertActivity1ConnectAcitivity2 = db.query('INSERT INTO LocationConnectActivity(`entryId`, `a1`) VALUES(' + entryId.insertId + ',' + activity1Id.insertId + ')')
+        let insertActivity1ConnectAcitivity2 = await db.query('INSERT INTO LocationConnectActivity(`entryId`, `a1`) VALUES(' + entryId.insertId + ',' + activity1Id.insertId + ')')
 
 
         if ('activity' in jsonData.locations[i].activity[j]) {
           for (k = 0; k < jsonData.locations[i].activity[j].activity.length; k++) {
             activity2Id = await bulkInsert(db, 'activity2', [jsonData.locations[i].activity[j].activity[k]])
             //console.log("\t\tActivity2 ID: ", activity2Id.insertId)
-            let insertActivity1ConnectAcitivity2 = db.query('INSERT INTO Activity1ConnectActivity2(`a1`, `a2`) VALUES(' + activity1Id.insertId + ',' + activity2Id.insertId + ')')
+            let insertActivity1ConnectAcitivity2 = await db.query('INSERT INTO Activity1ConnectActivity2(`a1`, `a2`) VALUES(' + activity1Id.insertId + ',' + activity2Id.insertId + ')')
 
           }
         }
@@ -779,3 +780,10 @@ router.post('/test', async function (req, res) {
 
 
 module.exports = router;
+
+
+
+
+
+
+

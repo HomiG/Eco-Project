@@ -1,186 +1,198 @@
-
-<html> 
+<html>
 <script></script>
-    <head>
-        <meta charset="UTF-8">
 
-        <title>Main page</title>
-        <link rel="stylesheet" href="/public/css/main_page.css">
+<head>
+    <meta charset="UTF-8">
 
-        <link href="https://fonts.googleapis.com/css?family=Muli|Raleway&display=swap" rel="stylesheet">
-         
+    <title>Main page</title>
+    <link rel="stylesheet" href="/public/css/main_page.css">
 
-    </head>
+    <link href="https://fonts.googleapis.com/css?family=Muli|Raleway&display=swap" rel="stylesheet">
 
-    <body>       
 
-        <div class="header">
-            <h1>ECO PROJECT</h1>
-            <p>Every moment is a fresh beginning. </p>
-           <p style="font-size: 15px;">– T.S Eliot </p>
-          </div>
+</head>
 
-        <span style="font-size: 30px;" class="colapsed_menu"  onclick="openNav() ">&#9776; </span>
+<body>
 
-             <!-- The sidebar -->
-            <div id="mySidenav" class="sidebar" >
-                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-                <a class="active" href="#score">Score οικολογικής μετακίνησης</a>
-                <a href="#leaderboard">Leaderboard</a>
-                <a href="#heatmap">Γράφημα - Heatmap</a>
-                <a href="#upload">Upload</a>
-                <a href="#about">About</a>
-            </div>
+    <div class="header">
+        <h1>ECO PROJECT</h1>
+        <p>Every moment is a fresh beginning. </p>
+        <p style="font-size: 15px;">– T.S Eliot </p>
+    </div>
 
-                     
-        
-        <div class="main">
+    <span style="font-size: 30px;" class="colapsed_menu" onclick="openNav() ">&#9776; </span>
 
-            <h2>Welcome, <%=x%>  </h2>
+    <!-- The sidebar -->
+    <div id="mySidenav" class="sidebar">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a class="active" href="#score">Score οικολογικής μετακίνησης</a>
+        <a href="#leaderboard">Leaderboard</a>
+        <a href="#heatmap">Γράφημα - Heatmap</a>
+        <a href="#upload">Upload</a>
+        <a href="#about">About</a>
+    </div>
 
-            <div id="score" style="margin-top: 0px">
-                <h2>Score οικολογικής μετακίνησης.</h2>
-                <hr style="width:50px; border:5px solid #945f90; margin-top:35px; border-radius: 100px;" >
-                <p style="margin-top:35px">ΚΑΤΑΠΛΗΚΤΙΚΑ!</p>
-               
-                
-                    <p>Το γραφημα θα μπει εδω</p>
-                Πρώτη σου φορά μου λες πως σου συμβαίνει αυτό
-                Πως τρελαίνεσαι και δεν μπορείς ούτε λεπτό
-                Μακριά από τη δική μου αγκαλιά
-                Τα δικά μου τα φιλιά
-                Δε κοιμάσαι
-                Λες παντού με βλέπεις, πως φοβάσαι
-                Μην χαθεί όλο αυτό
-                Εγώ
-                Στη ζωή σου λες πως φέρνω πανικό
-                Εγώ
-                Αχ και να ξέρες ακόμα τι μπορώ
-                Εγώ
-                Κι ότι είχες παλιό
-                Πλέον ζει στο κενό
-                Sorry αν φταίω μα έτσι απλά είμαι εγώ
 
-                Πρώτη σου φορά μου λες πως τόσο αγαπάς
-                Είχες μάθει στο να φεύγεις να τα παράτας
-                Μα μη με συγκρίνεις με τα χθεσινά
-                Εδώ δεν περνούν αυτά
 
-                Δε κοιμάσαι
-                Λες παντού με βλέπεις, πως φοβάσαι
-                Μην χαθεί όλο αυτό
+    <div class="main">
 
-                Εγώ
-                Στη ζωή σου λες πως φέρνω πανικό
-                Εγώ
-                Αχ και να ξέρες ακόμα τι μπορώ
-                Εγώ
-                Κι ότι είχες παλιό
-                Πλέον ζει στο κενό
-                Sorry αν φταίω μα έτσι απλά είμαι εγώ
+        <h2>Welcome, <%=x%> </h2>
 
-                Εγώ
-                Στη ζωή σου λες πως φέρνω πανικό
-                Εγώ
-                Αχ και να ξέρες ακόμα τι μπορώ
-                Εγώ
-                Κι ότι είχες παλιό
-                Πλέον ζει στο κενό
-                Sorry αν φταίω μα έτσι απλά είμαι εγώ
-            </div>
+        <div id="score" style="margin-top: 0px">
+            <h2>Score οικολογικής μετακίνησης.</h2>
+            <hr style="width:50px; border:5px solid #945f90; margin-top:35px; border-radius: 100px;">
+            <p style="margin-top:35px">ΚΑΤΑΠΛΗΚΤΙΚΑ!</p>
 
-            <div id="leaderboard" style="margin-top: 75px">
-                <h2>Leaderboard.</h2>
-                <hr style="width:50px; border:5px solid #945f90; margin-top:35px; border-radius: 100px;" >
-                <p style="margin-top:35px">ΟΙ 3 ΚΑΛΥΤΕΡΟΙ!</p>
-                <p>Δεν εισαι μεσα σε αυτους, try harder! Γραφω διαφορα για να δω την διαφορα! Δεν εχει νοημα
-                    τιποτα πια! 
-                    Πενηντάρικα (πενηντάρικα)
-                    Απ' τα πενηντάρικα
-                    Έσκασε το πορτοφόλι απ' τα πενηντάρικα
-                    Έχω κάνει τα κιλά να κάνουν ακροβατικά
-                    Μια ζωή ήμουνα dealer είχα γούστα ακριβά
-                    Από πιτσιρικάς ήξερα τι ήθελα
-                    
-                    Θέλω κότερα, ελικόπτερα, θέλω οικόπεδα
-                    Γούστα ακριβά, έχω γούστα ακριβά
-                    Θέλω κότερα, ελικόπτερα, θέλω οικόπεδα
-                    Γούστα ακριβά, έχω γούστα ακριβά
-                    
-                </p>
-            </div>
 
-            <div id="heatmap" style="margin-top: 75px">
-                <h2>Γράφημα - Heatmap.</h2>
-                <hr style="width:50px; border:5px solid #945f90; margin-top:35px; border-radius: 100px; " >
-                <p style="margin-top:35px">Επελεξε φιλτρα!</p>
-                <p>Διπλα μπορεις να δεις τον χαρτι! </p>
-                Χάραξε και δε νυστάζω
-                σκέφτομαι τι μου πες χθες
-                Άσε με να σε κοιτάζω
-                κι άμα ξημερώσει ό, τι θες
-                Γύρισε να σ' αγκαλιάσω
-                τώρα ξέρω πως δε φταις
-                Άσε με να σε χορτάσω
-                κι άμα βγει ο ήλιος ό, τι θες.
-                Στο τσιγάρο που κρατώ
-                Στον ένα μου Θεό
-                Να μη δώσει να ξημερωθώ
-                Στο κορμί αυτό το αγγελικό
-                Στο στόμα που φιλώ
-                Έτσι μια ζωή θα σ' αγαπώ
-                Στο κορμί αυτό το αγγελικό
-                Στο στόμα που φιλώ
-                Έτσι μια ζωή θα σ' αγαπώ Ξάπλωσε να σε κρατήσω
-                κλείσαν όλες οι πληγές
-                Άσε με να σε κοιμήσω
-                κι αύριο για σένα ό, τι θες
-                Γύρισε να σ' αγκαλιάσω
-                τώρα ξέρω πως δε φταις
-                Άσε με να σε χορτάσω
-                κι άμα βγει ο ήλιος ό, τι θες
-                Στο τσιγάρο που κρατώ
-                Στον ένα μου Θεό
-                Να μη δώσει να ξημερωθώ
-                Στο κορμί αυτό το αγγελικό
-                Στο στόμα που φιλώ
-                Έτσι μια ζωή θα σ' αγαπώ
-                Στο κορμί αυτό το αγγελικό
-                Στο στόμα που φιλώ
-                Έτσι μια ζωή θα σ' αγαπώ
-            </div>
+            <p>Το γραφημα θα μπει εδω</p>
+            Πρώτη σου φορά μου λες πως σου συμβαίνει αυτό
+            Πως τρελαίνεσαι και δεν μπορείς ούτε λεπτό
+            Μακριά από τη δική μου αγκαλιά
+            Τα δικά μου τα φιλιά
+            Δε κοιμάσαι
+            Λες παντού με βλέπεις, πως φοβάσαι
+            Μην χαθεί όλο αυτό
+            Εγώ
+            Στη ζωή σου λες πως φέρνω πανικό
+            Εγώ
+            Αχ και να ξέρες ακόμα τι μπορώ
+            Εγώ
+            Κι ότι είχες παλιό
+            Πλέον ζει στο κενό
+            Sorry αν φταίω μα έτσι απλά είμαι εγώ
 
-            <div id="upload" style="margin-top: 75px">
-                <h2>Upload.</h2>
-                <hr style="width:50px; border:5px solid #945f90; margin-top:35px; border-radius: 100px; " >
-                <p style="margin-top:35px">Κανε κι εσυ upload!</p>
-                
-                <button class="upload_btn" onclick="uploadFile()" id="UploadButton" title="Upload your files">Upload</button>
-              
-                <script>
-                    document.getElementById("")
-                    var myfile
-                    
-                </script> 
+            Πρώτη σου φορά μου λες πως τόσο αγαπάς
+            Είχες μάθει στο να φεύγεις να τα παράτας
+            Μα μη με συγκρίνεις με τα χθεσινά
+            Εδώ δεν περνούν αυτά
 
-                
-         
+            Δε κοιμάσαι
+            Λες παντού με βλέπεις, πως φοβάσαι
+            Μην χαθεί όλο αυτό
 
-            </div>
+            Εγώ
+            Στη ζωή σου λες πως φέρνω πανικό
+            Εγώ
+            Αχ και να ξέρες ακόμα τι μπορώ
+            Εγώ
+            Κι ότι είχες παλιό
+            Πλέον ζει στο κενό
+            Sorry αν φταίω μα έτσι απλά είμαι εγώ
+
+            Εγώ
+            Στη ζωή σου λες πως φέρνω πανικό
+            Εγώ
+            Αχ και να ξέρες ακόμα τι μπορώ
+            Εγώ
+            Κι ότι είχες παλιό
+            Πλέον ζει στο κενό
+            Sorry αν φταίω μα έτσι απλά είμαι εγώ
+        </div>
+
+        <div id="leaderboard" style="margin-top: 75px">
+            <h2>Leaderboard.</h2>
+            <hr style="width:50px; border:5px solid #945f90; margin-top:35px; border-radius: 100px;">
+            <p style="margin-top:35px">ΟΙ 3 ΚΑΛΥΤΕΡΟΙ!</p>
+            <p>Δεν εισαι μεσα σε αυτους, try harder! Γραφω διαφορα για να δω την διαφορα! Δεν εχει νοημα
+                τιποτα πια!
+                Πενηντάρικα (πενηντάρικα)
+                Απ' τα πενηντάρικα
+                Έσκασε το πορτοφόλι απ' τα πενηντάρικα
+                Έχω κάνει τα κιλά να κάνουν ακροβατικά
+                Μια ζωή ήμουνα dealer είχα γούστα ακριβά
+                Από πιτσιρικάς ήξερα τι ήθελα
+
+                Θέλω κότερα, ελικόπτερα, θέλω οικόπεδα
+                Γούστα ακριβά, έχω γούστα ακριβά
+                Θέλω κότερα, ελικόπτερα, θέλω οικόπεδα
+                Γούστα ακριβά, έχω γούστα ακριβά
+
+            </p>
+        </div>
+
+        <div id="heatmap" style="margin-top: 75px">
+            <h2>Γράφημα - Heatmap.</h2>
+            <hr style="width:50px; border:5px solid #945f90; margin-top:35px; border-radius: 100px; ">
+            <p style="margin-top:35px">Επελεξε φιλτρα!</p>
+
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <meta http-equiv="X-UA-Compatible" content="ie=edge">
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+            <input type="date" id="startDate" name="From">
+            <input type="date" id="endDate" name="Until">
+            <button id="submitDatesButton" onclick="submitDates()">Range Dates</button>
+            <button id="showFullHeatmapButton" onclick="showFullHeatmap()">Draw Whole Heatmap</button>
+            <div id="mapid"></div>
+
+
+            <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+                integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+                crossorigin="">
+                </script>
+            <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+                integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+                crossorigin="" />
+
+            <script type="text/javascript"
+                src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+            <script type="text/javascript" src="../public/js/heatmap.js-2.0.5/build/heatmap.js"></script>
+            <script type="text/javascript"
+                src="../public/js/heatmap.js-2.0.5/plugins/leaflet-heatmap/leaflet-heatmap.js"></script>
+            <script type="text/javascript" src="../public/js/staticVariables.js"></script>
+            <script type="text/javascript"
+                src="../public/js/leaflet-area-select-master/dist/Map.SelectArea.min.js"></script>
+            <script type="text/javascript" src="../public/js/simpleUpload.js"></script>
+
+
+
+
+            <style>
+                #mapid {
+                    width: 1000px;
+                    height: 500px;
+                    position: relative;
+                }
+            </style>
+            <script type="text/javascript" src="../public/js/upload.js"></script>
+
+        </div>
+
+        <div id="upload" style="margin-top: 75px">
+            <h2>Upload.</h2>
+            <hr style="width:50px; border:5px solid #945f90; margin-top:35px; border-radius: 100px; ">
+            <p style="margin-top:35px">Κανε κι εσυ upload!</p>
+
+            <button class="upload_btn" onclick="uploadFile()" id="UploadButton"
+                title="Upload your files">Upload</button>
+
+            <script>
+                document.getElementById("")
+                var myfile
+
+            </script>
+
 
 
 
         </div>
 
-        <!-- <button id="myBtn"><a href="#top" style="color: blue">Top</a></button> -->
-        <!-- <a id="back2Top" title="Back to top" href="#">&#10148;</a> -->
-
-        <button onclick="scrollToTop()" id="myBtn" title="Go to top">^</button>
-
-      
 
 
-        <script src="/public/js/main_page.js"></script> 
+    </div>
 
-    </body>
-    </html>
+    <!-- <button id="myBtn"><a href="#top" style="color: blue">Top</a></button> -->
+    <!-- <a id="back2Top" title="Back to top" href="#">&#10148;</a> -->
+
+    <button onclick="scrollToTop()" id="myBtn" title="Go to top">^</button>
+
+
+
+
+    <script src="/public/js/main_page.js"></script>
+
+</body>
+
+</html>
