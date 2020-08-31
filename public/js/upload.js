@@ -112,7 +112,7 @@ function uploadJSONFiltered() {
 
 }
 
-function showFullHeatmap(){
+function showFullHeatmap() {
   $.ajax({
     url: "/getHeatmap",
     type: "POST",
@@ -139,7 +139,7 @@ function submitDates() {
   dateForm.append('until', endDate.valueAsNumber);
 
 
- var generalData;
+  var generalData;
 
   $.ajax({
     url: "/rangeDates",
@@ -151,68 +151,87 @@ function submitDates() {
     success: function (response) {
       console.log(response)
       heatmapLayer.setData(response.objectForHeatmap)
-      generalData=response.finalObjectArr;
+      generalData = response.finalObject;
     }
   })
-   // Global Options
-   Chart.defaults.global.defaultFontFamily = 'Lato';
-   Chart.defaults.global.defaultFontSize = 18;
-   Chart.defaults.global.defaultFontColor = '#777';
+  // Global Options
+  Chart.defaults.global.defaultFontFamily = 'Lato';
+  Chart.defaults.global.defaultFontSize = 18;
+  Chart.defaults.global.defaultFontColor = '#777';
   let myChart = document.getElementById('myChart').getContext('2d');
 
- 
+  function getKeyWithMaxValue(object) { 
+    var maxObjectsValue = Math.max(...Object.values(test))
+    return Object.keys(object).find(key => object[key] === maxObjectsValue); 
+}
 
   let massPopChart = new Chart(myChart, {
-    type:'radar', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
-    data:{
-      labels:['IN_VEHICLE','RUNNING','WALKING', 'TILTING','STILL','ON_BICYCLE','UNKNOWN'],
-      datasets:[{
-        label:'Hour of The Day',
-        data:[
-          JSON.stringify(generalData.hour)
+    type: 'radar', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
+    data: {
+      labels: ['00:00', '01:00',  '02:00', '03:00','04:00','05:00',  '06:00', '07:00',
+      '08:00','09:00',  '10:00', '11:00','12:00','13:00', '14:00', '15:00',  '16:00',
+      '17:00','18:00', '19:00', '20:00', '21:00', '22:00',  '23:00'],
+      datasets: [{
+        label: 'Hour of The Day',
+        data: [
+          getKeyWithMaxValue(generalData['vehicle']['hour']),
+          getKeyWithMaxValue(generalData['running']['hour']),
+          getKeyWithMaxValue(generalData['walking']['hour']),
+          getKeyWithMaxValue(generalData['tilting']['hour']),
+          getKeyWithMaxValue(generalData['still']['hour']),
+          getKeyWithMaxValue(generalData['bicycle']['hour']),
+          getKeyWithMaxValue(generalData['unknown']['hour'])
+
         ],
         backgroundColor: [
           'rgba(255, 99, 132, 0.6)'],
-        borderWidth:1,
-        borderColor:'#777',
-        hoverBorderWidth:3,
-        hoverBorderColor:'#000'
-      },{
-          label:'Day of The Week',
-          data:[
-            JSON.stringify(generalData.day)
-          ],
-         
-          borderWidth:1,
-          borderColor:'#777',
-          hoverBorderWidth:3,
-          hoverBorderColor:'#000'
-        }
-    ]
+        borderWidth: 1,
+        borderColor: '#777',
+        hoverBorderWidth: 3,
+        hoverBorderColor: '#000'
+      }, {
+        label: 'Day of The Week',
+        data: [
+          getKeyWithMaxValue(generalData['vehicle']['day']),
+          getKeyWithMaxValue(generalData['running']['day']),
+          getKeyWithMaxValue(generalData['walking']['day']),
+          getKeyWithMaxValue(generalData['tilting']['day']),
+          getKeyWithMaxValue(generalData['still']['day']),
+          getKeyWithMaxValue(generalData['bicycle']['day']),
+          getKeyWithMaxValue(generalData['unknown']['day'])
+
+        ],
+
+        borderWidth: 1,
+        borderColor: '#777',
+        hoverBorderWidth: 3,
+        hoverBorderColor: '#000'
+      }
+      ]
     },
-    options:{
-      title:{
-        display:true,
-        text:'Statistics',
-        fontSize:25
+    options: {
+      title: {
+        display: true,
+        text: 'Statistics',
+        fontSize: 25
       },
-      legend:{
-        display:true,
-        position:'right',
-        labels:{
-          fontColor:'#000'
+      legend: {
+        display: true,
+        position: 'right',
+        labels: {
+          fontColor: '#000'
         }
       },
-      layout:{
-        padding:{
-          left:50,
-          right:0,
-          bottom:0,
-          top:0
+      layout: {
+        padding: {
+          left: 50,
+          right: 0,
+          bottom: 0,
+          top: 0
         }
       },
-      tooltips:{
-        enabled:true
+      tooltips: {
+        enabled: true
       }
     }
   });

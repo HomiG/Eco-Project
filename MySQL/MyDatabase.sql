@@ -93,8 +93,6 @@
   )  ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-  INSERT INTO userEcoscore(ecoscore, userId)
-  SELECT 
   
   DROP TABLE IF EXISTS `userWalkingScore`;
   CREATE TABLE `userWalkingScore`(
@@ -120,14 +118,14 @@
   )  ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-  INSERT INTO lastMonth(startingDate) VALUES (1543668339001)
-  UPDATE lastMonth set startingDate = 1513551020885
+--   INSERT INTO lastMonth(startingDate) VALUES (1543668339001)
+--   UPDATE lastMonth set startingDate = 1513551020885
 
 
 
-truncate table userVehicleScore;
-truncate table userWalkingScore;
-truncate table userecoscore;
+-- truncate table userVehicleScore;
+-- truncate table userWalkingScore;
+-- truncate table userecoscore;
 
 
   -- TRIGGERS --

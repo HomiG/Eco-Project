@@ -561,56 +561,56 @@ router.post('/rangeDates', async function (req, res) {
         break;
     }
   }
-  let finalObjectArr = [
-    {
+  let finalObject = {
+    vehicle:{
       type: 'IN_VEHICLE',
       date: calcDays(statsObjectAr, 'IN_VEHICLE').day,
       hours: calcDays(statsObjectAr, 'IN_VEHICLE').hour
     },
-    {
+    running:{
       type: 'RUNNING',
       date: calcDays(statsObjectAr, 'RUNNING').day,
       hours: calcDays(statsObjectAr, 'RUNNING').hour
     },
-    {
+    walking:{
       type: 'WALKING',
       date: calcDays(statsObjectAr, 'WALKING').day,
       hours: calcDays(statsObjectAr, 'WALKING').hour
     },
-    {
+    tilting:{
       type: 'TILTING',
       date: calcDays(statsObjectAr, 'TILTING').day,
       hours: calcDays(statsObjectAr, 'TILTING').hour
     },
-    {
+    still:{
       type: 'STILL',
       date: calcDays(statsObjectAr, 'STILL').day,
       hours: calcDays(statsObjectAr, 'STILL').hour
     },
-    {
+    bicycle:{
       type: 'ON_BICYCLE',
       date: calcDays(statsObjectAr, 'ON_BICYCLE').day,
       hours: calcDays(statsObjectAr, 'ON_BICYCLE').hour
     },
-    {
+    unknown:{
       type: 'UNKNOWN',
       date: calcDays(statsObjectAr, 'UNKNOWN').day,
       hours: calcDays(statsObjectAr, 'UNKNOWN').hour
     }
-  ]
-  console.log(locationsObjectArr)
-  console.log(finalObjectArr.type);
+  }
+  //console.log(locationsObjectArr)
+  console.log(finalObject['bicycle']['hours']);
 
 
 
 
-  console.log(type);
+  //console.log(type);
   
   objectForHeatmap = {
     data: locationsObjectArr,
     max: locationsObjectArr.length
   }
-  res.send({objectForHeatmap,finalObjectArr});
+  res.send({objectForHeatmap,finalObjectArr: finalObject});
 })
 
 router.post('/getHeatmap', async function (req, res) {
