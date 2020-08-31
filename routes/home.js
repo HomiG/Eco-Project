@@ -198,10 +198,50 @@ router.post('/uploadJson', function (req, res) {
 
 })
 
+router.get('/leaderboard', function (req, res) {
+  res.render('../views/leaderboard.ejs')
+});
+
+router.post('/leaderboard', async function (req, res) {
+  const db = makeDb();
+  var todayMonth = req.body.todayMonth;
+
+  var eareseCurrentLeaderBoard = await db.query('truncate table userVehicleScore');
+  eareseCurrentLeaderBoard = await db.query('truncate table userWalkingScore');
+  eareseCurrentLeaderBoard = await db.query('truncate table userecoscore');
+
+  var updateCurrentMonth = await db.query('UPDATE lastMonth set startingDate = ' + todayMonth);
+
+  // GET GENERAL TOP 3 ECOSCORES
+  var getEcoscores = await db.query('SELECT user.username, ecoscore FROM userEcoscore INNER JOIN user ON user.userId = userEcoscore.userId ORDER BY ecoscore DESC LIMIT 3')
+  // GET CURRENT USER'S ECOSCORE
+  var currentUserEcoscore = await db.query('SELECT user.username, ecoscore FROM userEcoscore INNER JOIN user ON user.userId = userEcoscore.userId WHERE user.userId = \'' + userObject.userId + '\'')
 
 
-// //check if given password maches saved password
-// if(await bcrypt.compare(req.body.password, savedPassword));
+  const arrayColumn = (arr, n) => arr.map(x => x[n]); // Function to get Column N of 2D array.
+
+  var outputData = getEcoscores.map(Object.values); // Converting Array of Objects into Array of Arrays
+
+  var ecoscoreObject = {
+    names: arrayColumn(outputData, 0), //Get the names 
+    scores: arrayColumn(outputData, 1) //Get the Scores Coresponding
+  }
+
+  // CHECK IF ECOSCORE RESULT IS EMPTY
+  if (!getEcoscores.length == 0) {
+    // CHECK IF USER IS IN THE TOP 3, IF NOT ADD HIM AS THE EXTRA ELEMENT
+    if (!ecoscoreObject['names'].includes(currentUserEcoscore[0].username)) {
+      ecoscoreObject['names'].push(currentUserEcoscore[0].username);
+      ecoscoreObject['scores'].push(currentUserEcoscore[0].ecoscore);
+    }
+  }
+  console.log(ecoscoreObject)
+
+  res.send(ecoscoreObject);
+
+
+
+})
 
 router.post('/ecocharts', /*checkAuth,*/async function (req, res) {
   var result;
