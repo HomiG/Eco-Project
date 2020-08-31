@@ -23,7 +23,7 @@
     `longitudeE7` int(11) NOT NULL,
     `latitudeE7` int(11) NOT NULL,
     `altitude` int(11),
-    `timestampMs` varchar(100) NOT NULL,
+    `timestampMs` varchar(20) NOT NULL,
     `userId` varchar(100),
     PRIMARY KEY (`entryId`),
     FOREIGN KEY (`userId`) REFERENCES `user`(`userId`)
@@ -32,18 +32,8 @@
   DROP TABLE IF EXISTS `activity`;
   CREATE TABLE `activity1`(
     `aa1` int(11) NOT NULL AUTO_INCREMENT,
-    `timestampMs` varchar(100) NOT NULL,
+    `timestampMs` varchar(20) NOT NULL,
     PRIMARY KEY(`aa1`)
-  )  ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-  DROP TABLE IF EXISTS `userLastUpload`;
-  CREATE TABLE `userLastUpload`(
-    `aa` int(11) NOT NULL AUTO_INCREMENT,
-    `date` varchar(100) NOT NULL,
-    `userId` varchar(100),
-    PRIMARY KEY(`aa`),
-    FOREIGN KEY (`userId`) REFERENCES `user`(`userId`)  ON DELETE RESTRICT ON UPDATE CASCADE
-
   )  ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -73,6 +63,112 @@
     FOREIGN KEY (`entryId`) REFERENCES `entry`(`entryId`)  ON DELETE RESTRICT ON UPDATE CASCADE,
     PRIMARY KEY(`a1`, `entryId`)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+  DROP TABLE IF EXISTS `userLastUpload`;
+  CREATE TABLE `userLastUpload`(
+    `aa` int(11) NOT NULL AUTO_INCREMENT,
+    `date` varchar(100) NOT NULL,
+    `userId` varchar(100),
+    PRIMARY KEY(`aa`),
+    FOREIGN KEY (`userId`) REFERENCES `user`(`userId`)  ON DELETE RESTRICT ON UPDATE CASCADE
+
+  )  ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+  DROP TABLE IF EXISTS `lastMonth`;
+  CREATE TABLE `lastMonth` (
+    `startingDate` varchar(100) NOT NULL,
+    PRIMARY KEY(`startingDate`)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+  DROP TABLE IF EXISTS `userEcoscore`;
+  CREATE TABLE `userEcoscore`(
+    `aa` int(11) NOT NULL AUTO_INCREMENT,
+    `ecoscore` varchar(100) NOT NULL,
+    `userId` varchar(100),
+    PRIMARY KEY(`aa`),
+    FOREIGN KEY (`userId`) REFERENCES `user`(`userId`)  ON DELETE RESTRICT ON UPDATE CASCADE
+
+  )  ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+  INSERT INTO userEcoscore(ecoscore, userId)
+  SELECT 
+  
+  DROP TABLE IF EXISTS `userWalkingScore`;
+  CREATE TABLE `userWalkingScore`(
+    `aa` int(11) NOT NULL AUTO_INCREMENT,
+    `walking` INT(15),
+    `startingDate` varchar(15),
+    `userId` varchar(100),
+    PRIMARY KEY(`aa`),
+    FOREIGN KEY (`userId`) REFERENCES `user`(`userId`)  ON DELETE RESTRICT ON UPDATE CASCADE
+
+  )  ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+  DROP TABLE IF EXISTS `userVehicleScore`;
+  CREATE TABLE `userVehicleScore`(
+    `aa` int(11) NOT NULL AUTO_INCREMENT,
+    `vehicle` INT(15),
+    `startingDate` varchar(20),
+    `userId` varchar(100),
+    PRIMARY KEY(`aa`),
+    FOREIGN KEY (`userId`) REFERENCES `user`(`userId`)  ON DELETE RESTRICT ON UPDATE CASCADE
+
+  )  ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+  INSERT INTO lastMonth(startingDate) VALUES (1543668339001)
+  UPDATE lastMonth set startingDate = 1513551020885
+
+
+
+truncate table userVehicleScore;
+truncate table userWalkingScore;
+truncate table userecoscore;
+
+
+  -- TRIGGERS --
+  delimiter #
+
+  DROP TRIGGER IF EXISTS afterMonthInsertUpdate;
+  CREATE TRIGGER afterMonthInsertUpdate
+    AFTER UPDATE ON `lastMonth` for each row
+    -- 2592000000
+    BEGIN
+      INSERT INTO userWalkingScore(userId, walking, startingDate) 
+      SELECT user.userId, SUM(confidence) as walking, new.startingDate FROM user 
+      INNER JOIN entry on user.userId = entry.userId 
+      INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId 
+      INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1 
+      INNER JOIN activity1connectactivity2 on activity1.aa1=activity1connectactivity2.a1 
+      INNER JOIN activity2 on activity2.aa2=activity1connectactivity2.a2 
+      WHERE (entry.timestampMs  > new.startingDate AND entry.timestampMs  <  (new.startingDate + 2592000000)) AND (type= 'ON_FEET' OR type='ON_BICYCLE') GROUP BY user.userId;
+      
+      
+      INSERT INTO userVehicleScore(userId, vehicle, startingDate) 
+      SELECT user.userId, SUM(confidence) as walking, new.startingDate FROM user 
+      INNER JOIN entry on user.userId = entry.userId 
+      INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId 
+      INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1 
+      INNER JOIN activity1connectactivity2 on activity1.aa1=activity1connectactivity2.a1 
+      INNER JOIN activity2 on activity2.aa2=activity1connectactivity2.a2 
+      WHERE (entry.timestampMs  > new.startingDate AND entry.timestampMs  <  (new.startingDate + 2592000000))  AND type= 'IN_VEHICLE' GROUP BY user.userId; 
+    
+    
+      INSERT INTO userEcoscore(ecoscore, userId) 
+      SELECT userwalkingscore.walking / (userwalkingscore.walking + uservehiclescore.vehicle)as ecoscore, userwalkingscore.userId from userwalkingscore 
+      INNER JOIN uservehiclescore on userwalkingscore.userId=uservehiclescore.userId 
+      INNER JOIN lastmonth on lastmonth.startingDate = userwalkingscore.startingDate 
+      WHERE userwalkingscore.startingDate = uservehiclescore.startingDate AND userwalkingscore.startingDate = lastmonth.startingDate;
+    
+    END#
+
+     delimiter ;
+
+
 
 
   INSERT INTO `user` (`username`, `password`, `userId`, `email`, `admin`) VALUES
