@@ -24,6 +24,7 @@ const upload = require('express-fileupload')
 const { encrypt, decrypt } = require('../public/js/encryptDecrypt');
 const { timeStamp } = require('console');
 const { stringify } = require('querystring');
+const { type } = require('jquery');
 
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
@@ -137,28 +138,36 @@ router.post('/login', function (req, res) {
 
 
 
-  connection.query("SELECT userId, username FROM user WHERE userId= '" + loginData.userId + "'", function (err, result) {
+  connection.query("SELECT userId, username, admin FROM user WHERE userId= '" + loginData.userId + "'", function (err, result) {
     if (err) throw err;
     if (!result.length) {
       res.status(500).send("You can't Procced, no user Found");
       console.log(result);
     }
     else {
-
+    
 
       console.log(result[0].username)
       userObject.username = result[0].username;
+      var admin=result[0].admin;   
       userObject.userId = loginData.userId;
       userObject.email = loginData.email;
       console.log(userObject.userId);
+      if(admin){
+        res.redirect('/admin')
+      }
+      else{
       res.redirect('/mainpage');
-    }
+    }}
   });
 
 
 
 });
 
+router.get('/admin', checkAuth, function (req, res) {
+  res.render('../views/admin.ejs')
+});
 
 router.get('/mainPage', checkAuth, function (req, res) {
   res.render('../views/main_page.ejs', { x: userObject.username })
@@ -218,8 +227,8 @@ router.post('/ecocharts', /*checkAuth,*/async function (req, res) {
   lastYear = lastYear;
   console.log(lastYear);
   results = await db.query("SELECT confidence, type, activity1.timestampMs  FROM entry INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1 INNER JOIN activity1connectactivity2 on activity1.aa1=activity1connectactivity2.a1 INNER JOIN activity2 on activity2.aa2=activity1connectactivity2.a2  WHERE entry.userId='" + userObject.userId + "'");
-  var firstDate=new Date;
-  var lastDate= new Date(0);
+  var firstDate = new Date;
+  var lastDate = new Date(0);
   var walkingMonth = 0;
   var vehicleMonth = 1;
   var walkingYear = 0;
@@ -228,11 +237,11 @@ router.post('/ecocharts', /*checkAuth,*/async function (req, res) {
   var i;
   for (i = 0; i < results.length; i++) {
     var d = new Date(parseInt(results[i].timestampMs));
-    if(d>lastDate){
-      lastDate=d;
+    if (d > lastDate) {
+      lastDate = d;
     }
-    if(d<firstDate){
-      firstDate=d;
+    if (d < firstDate) {
+      firstDate = d;
     }
     if (d > lastYear) {
       if (results[i].type == 'ON_FOOT') {
@@ -243,21 +252,21 @@ router.post('/ecocharts', /*checkAuth,*/async function (req, res) {
           bicycleYear = bicycleYear + results[i].confidence;
         }
         else
-        if(results[i].type == 'IN_VEHICLE'){
-          vehicleYear=vehicleYear+results[i].confidence;
-        }
-        if(d >lastMonth){
-          if (results[i].type == 'ON_FOOT'|| results[i].type == 'ON_BICYCLE' ) {
-            walkingMonth = walkingMonth + results[i].confidence;
+          if (results[i].type == 'IN_VEHICLE') {
+            vehicleYear = vehicleYear + results[i].confidence;
           }
-          else
-          if(results[i].type == 'IN_VEHICLE'){
-            vehicleMonth=vehicleMonth+results[i].confidence;
+      if (d > lastMonth) {
+        if (results[i].type == 'ON_FOOT' || results[i].type == 'ON_BICYCLE') {
+          walkingMonth = walkingMonth + results[i].confidence;
+        }
+        else
+          if (results[i].type == 'IN_VEHICLE') {
+            vehicleMonth = vehicleMonth + results[i].confidence;
 
           }
-        }
+      }
 
-  }
+    }
   }
   // if (err) throw err;
   // if (!result.length) {
@@ -290,13 +299,13 @@ router.post('/ecocharts', /*checkAuth,*/async function (req, res) {
 
   // var ecoscore = hey1[0].walking / (hey1[0].walking + hey2[0].vehicle) * 100;
   // ecoscore = JSON.stringify(ecoscore);
- let data={
-    firstdate:firstDate,
+  let data = {
+    firstdate: firstDate,
     lastdate: lastDate,
-    ecoscore: (walkingMonth/(walkingMonth+vehicleMonth)/100),
-    walking:walkingYear/100,
-    bicycle: bicycleYear/100,
-    vehicle: vehicleYear/100
+    ecoscore: (walkingMonth / (walkingMonth + vehicleMonth) / 100),
+    walking: walkingYear / 100,
+    bicycle: bicycleYear / 100,
+    vehicle: vehicleYear / 100
   }
   res.send(data);
 
@@ -446,28 +455,162 @@ router.post('/rangeDates', async function (req, res) {
   const db = makeDb();
 
   console.log(dateForm.until, "  ", dateForm.since, "--", userObject.userId)
-  var rangedDates = await db.query('SELECT latitudeE7, longitudeE7 FROM `entry` WHERE timestampMs > ' + dateForm.since + ' AND timestampMs < ' + dateForm.until + ' AND userId = \'' + userObject.userId + '\'')
+  var rangedDates = await db.query('SELECT latitudeE7, longitudeE7, confidence ,type, activity1.timestampMs FROM entry INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1 INNER JOIN activity1connectactivity2 on activity1.aa1=activity1connectactivity2.a1 INNER JOIN activity2 on activity2.aa2=activity1connectactivity2.a2 WHERE activity1.timestampMs > ' + dateForm.since + ' AND activity1.timestampMs < ' + dateForm.until + ' AND userId = \'' + userObject.userId + '\'')
 
   var i;
   var locationsObject;
+  var statsObject;
+  var statsObjectAr = [];
   var objectForHeatmap //This is a javascript object that HeatmapJs understands and translate it into colors
   var locationsObjectArr = [];
-
+  var type = {
+    vehicle: 0,
+    running: 0,
+    walking: 0,
+    tilting: 0,
+    still: 0,
+    bicycle: 0,
+    unknown: 0,
+  }
+  function calcDays(Object, type) {
+    let days = [0, 0, 0, 0, 0, 0, 0];
+    let hours = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    var i;
+    for (i = 0; i < Object.length; i++) {
+      if (Object[i].type == type) {
+        var d = new Date(parseInt(Object[i].time));
+        days[d.getDay()]++;
+        hours[d.getHours()]++;
+      }
+    }
+    var day = {
+      Sunday: days[0],
+      Monday: days[1],
+      Tuesday: days[2],
+      Wednesday: days[3],
+      Thursday: days[4],
+      Friday: days[5],
+      Saturday: days[6]
+    }
+    var hour = {
+      '00:00': hours[0],
+      '01:00': hours[1],
+      '02:00': hours[2],
+      '03:00': hours[3],
+      '04:00': hours[4],
+      '05:00': hours[5],
+      '06:00': hours[6],
+      '07:00': hours[7],
+      '08:00': hours[8],
+      '09:00': hours[9],
+      '10:00': hours[10],
+      '11:00': hours[11],
+      '12:00': hours[12],
+      '13:00': hours[13],
+      '14:00': hours[14],
+      '15:00': hours[15],
+      '16:00': hours[16],
+      '17:00': hours[17],
+      '18:00': hours[18],
+      '19:00': hours[19],
+      '20:00': hours[20],
+      '21:00': hours[21],
+      '22:00': hours[22],
+      '23:00': hours[23]
+    }
+    var statData = {
+     day: day,
+     hour: hour
+    }
+    return statData;
+  }
   for (i = 0; i < rangedDates.length; i++) {
     locationsObject = {
       lat: rangedDates[i].latitudeE7 * Math.pow(10, -7),
       lng: rangedDates[i].longitudeE7 * Math.pow(10, -7),
       count: 1
     }
+    statsObject = {
+      type: rangedDates[i].type,
+      time: rangedDates[i].timestampMs,
+      confidence: rangedDates[i].confidence
+    }
     locationsObjectArr.push(locationsObject)
+    statsObjectAr.push(statsObject)
+    switch (statsObject.type) {
+      case 'IN_VEHICLE':
+        type.vehicle = type.vehicle + statsObject.confidence;
+        break;
+      case 'RUNNING':
+        type.running = type.running + statsObject.confidence;
+        break;
+      case 'WALKING':
+        type.walking = type.walking + statsObject.confidence;
+        break;
+      case 'TILTING':
+        type.tilting = type.tilting + statsObject.confidence;
+        break;
+      case 'STILL':
+        type.still = type.still + statsObject.confidence;
+        break;
+      case 'ON_BICYCLE':
+        type.bicycle = type.bicycle + statsObject.confidence;
+        break;
+      case 'UNKNOWN':
+        type.unknown = type.unknown + statsObject.confidence;
+        break;
+    }
   }
+  let finalObjectArr = [
+    {
+      type: 'IN_VEHICLE',
+      date: calcDays(statsObjectAr, 'IN_VEHICLE').day,
+      hours: calcDays(statsObjectAr, 'IN_VEHICLE').hour
+    },
+    {
+      type: 'RUNNING',
+      date: calcDays(statsObjectAr, 'RUNNING').day,
+      hours: calcDays(statsObjectAr, 'RUNNING').hour
+    },
+    {
+      type: 'WALKING',
+      date: calcDays(statsObjectAr, 'WALKING').day,
+      hours: calcDays(statsObjectAr, 'WALKING').hour
+    },
+    {
+      type: 'TILTING',
+      date: calcDays(statsObjectAr, 'TILTING').day,
+      hours: calcDays(statsObjectAr, 'TILTING').hour
+    },
+    {
+      type: 'STILL',
+      date: calcDays(statsObjectAr, 'STILL').day,
+      hours: calcDays(statsObjectAr, 'STILL').hour
+    },
+    {
+      type: 'ON_BICYCLE',
+      date: calcDays(statsObjectAr, 'ON_BICYCLE').day,
+      hours: calcDays(statsObjectAr, 'ON_BICYCLE').hour
+    },
+    {
+      type: 'UNKNOWN',
+      date: calcDays(statsObjectAr, 'UNKNOWN').day,
+      hours: calcDays(statsObjectAr, 'UNKNOWN').hour
+    }
+  ]
   console.log(locationsObjectArr)
+  console.log(finalObjectArr.type);
 
+
+
+
+  console.log(type);
+  
   objectForHeatmap = {
     data: locationsObjectArr,
     max: locationsObjectArr.length
   }
-  res.send(objectForHeatmap);
+  res.send({objectForHeatmap,finalObjectArr});
 })
 
 router.post('/getHeatmap', async function (req, res) {
@@ -589,7 +732,7 @@ router.post('/test', async function (req, res) {
     }
   }
 
-  let lastFileUpload = await db.query("INSERT INTO `userLastUpload`(`date`,`userId`) VALUES('" + timestamp+ "', '" + userObject.userId + "')")
+  let lastFileUpload = await db.query("INSERT INTO `userLastUpload`(`date`,`userId`) VALUES('" + timestamp + "', '" + userObject.userId + "')")
   res.send("Upload Succefully");
   console.log("The End!");
 })
