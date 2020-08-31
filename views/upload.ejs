@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html>
-
+  
 <head>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  
   <link rel="stylesheet" href="/public/css/upload.css">
 
   <input type="date" id="startDate" name="From">
@@ -66,6 +71,9 @@
     <div id="areaSelected">Area Selected: </div>
 
     <script type="text/javascript" src="../public/js/upload.js"></script>
+  </div>
+  <div class="container">
+    <canvas id="myChart"></canvas>
   </div>
 
 </body>
