@@ -126,7 +126,8 @@
 -- truncate table userVehicleScore;
 -- truncate table userWalkingScore;
 -- truncate table userecoscore;
-
+ 
+ 
 
   -- TRIGGERS --
   delimiter #
@@ -165,8 +166,6 @@
     END#
 
      delimiter ;
-
-
 
 
   INSERT INTO `user` (`username`, `password`, `userId`, `email`, `admin`) VALUES

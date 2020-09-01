@@ -354,6 +354,9 @@ router.post('/ecocharts', /*checkAuth,*/async function (req, res) {
 
 });
 
+router.get('/radar', /*checkAuth,*/ function (req, res) {
+  res.render('../views/radar.ejs')
+});
 
 router.get('/charts', /*checkAuth,*/ function (req, res) {
   res.render('../views/ecocharts.ejs')
@@ -486,6 +489,7 @@ router.get('/troll', async function (req, res) {
     }
   }
 })
+
 
 
 router.post('/rangeDates', async function (req, res) {
@@ -650,7 +654,7 @@ router.post('/rangeDates', async function (req, res) {
     data: locationsObjectArr,
     max: locationsObjectArr.length
   }
-  res.send({objectForHeatmap,finalObjectArr: finalObject});
+  res.send({objectForHeatmap, finalObject});
 })
 
 router.post('/getHeatmap', async function (req, res) {

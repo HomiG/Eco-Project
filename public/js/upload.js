@@ -172,17 +172,10 @@ function submitDates() {
       '08:00','09:00',  '10:00', '11:00','12:00','13:00', '14:00', '15:00',  '16:00',
       '17:00','18:00', '19:00', '20:00', '21:00', '22:00',  '23:00'],
       datasets: [{
-        label: 'Hour of The Day',
+        label: 'Vehicle',
         data: [
-          getKeyWithMaxValue(generalData['vehicle']['hour']),
-          getKeyWithMaxValue(generalData['running']['hour']),
-          getKeyWithMaxValue(generalData['walking']['hour']),
-          getKeyWithMaxValue(generalData['tilting']['hour']),
-          getKeyWithMaxValue(generalData['still']['hour']),
-          getKeyWithMaxValue(generalData['bicycle']['hour']),
-          getKeyWithMaxValue(generalData['unknown']['hour'])
-
-        ],
+         JSON.stringify(generalData['vehicle']['hour']),
+          ],
         backgroundColor: [
           'rgba(255, 99, 132, 0.6)'],
         borderWidth: 1,
@@ -190,16 +183,10 @@ function submitDates() {
         hoverBorderWidth: 3,
         hoverBorderColor: '#000'
       }, {
-        label: 'Day of The Week',
+        label: 'Running',
         data: [
-          getKeyWithMaxValue(generalData['vehicle']['day']),
-          getKeyWithMaxValue(generalData['running']['day']),
-          getKeyWithMaxValue(generalData['walking']['day']),
-          getKeyWithMaxValue(generalData['tilting']['day']),
-          getKeyWithMaxValue(generalData['still']['day']),
-          getKeyWithMaxValue(generalData['bicycle']['day']),
-          getKeyWithMaxValue(generalData['unknown']['day'])
-
+          JSON.stringify( generalData['running']['hour']),
+         
         ],
 
         borderWidth: 1,
