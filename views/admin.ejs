@@ -97,64 +97,83 @@
             <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
             <div class="year">
-                <p>From: </p>
-                <input type="text" id="startDate" data-format="YYYY" data-template="YYYY" name="date" value="2015">
+                <p>From:
+                    <input type="text" id="fromDate" data-format="YYYY" data-template="YYYY" name="date" value="2015">
 
-                <p> Until: </p>
-                <input type="text" id="endDate" data-format="YYYY" data-template="YYYY" name="date" value="2025">
+                <p> Until:
+                    <input type="text" id="untilDate" data-format="YYYY" data-template="YYYY" name="date" value="2025">
 
-                <script>
-                    $(function () {
-                        $('#startDate').combodate();
-                        $('#endDate').combodate();
-                    });
-                </script>
+                    <script>
+                        $(function () {
+                            $('#fromDate').combodate();
+                            $('#untilDate').combodate();
+                        });
+                    </script>
             </div>
 
-            <div class="year">
-                <p>From: </p>
-                <select name="fromDay">
-                    <option value="Monday">Monday</option>
-                    <option value="Tuesday">Tuesday</option>
-                    <option value="Wednesday">Wednesday</option>
-                    <option value="Thursday">Thursday</option>
-                    <option value="Friday">Friday</option>
-                    <option value="Saturday">Saturday</option>
-                    <option value="Sunday">Sunday</option>
-                </select>
 
-                <p> Until: </p>
-                <select name="untilDay">
-                    <option value="Monday">Monday</option>
-                    <option value="Tuesday">Tuesday</option>
-                    <option value="Wednesday">Wednesday</option>
-                    <option value="Thursday">Thursday</option>
-                    <option value="Friday">Friday</option>
-                    <option value="Saturday">Saturday</option>
-                    <option value="Sunday">Sunday</option>
-                </select>
+
+
+            <div class="month">
+
+                <p>From:
+                    <input type="text" id="fromMonth" data-format="MM" data-template="MMM" name="date" value="01">
+
+                <p> Until:
+                    <input type="text" id="untiMonth" data-format="MM" data-template="MMM" name="date" value="12">
+                    <script>
+                        $(function () {
+                            $('#fromMonth').combodate();
+                            $('#untiMonth').combodate();
+                        });
+                    </script>
 
             </div>
 
-            <script src="https://cdn.jsdelivr.net/timepicker.js/latest/timepicker.min.js"></script>
-            <link href="https://cdn.jsdelivr.net/timepicker.js/latest/timepicker.min.css" rel="stylesheet" />
+
+            <div class="day">
+                <p>From:
+                    <select name="fromDay" id="fromDay">
+                        <option value="Monday">Monday</option>
+                        <option value=""></option>
+                        <option value="Tuesday">Tuesday</option>
+                        <option value="Wednesday">Wednesday</option>
+                        <option value="Thursday">Thursday</option>
+                        <option value="Friday">Friday</option>
+                        <option value="Saturday">Saturday</option>
+                        <option value="Sunday">Sunday</option>
+                    </select>
+
+                <p> Until:
+                    <select name="untilDay" id="untilDay">
+                        <option value="Sunday">Sunday</option>
+                        <option value=""></option>
+                        <option value="Monday">Monday</option>
+                        <option value="Tuesday">Tuesday</option>
+                        <option value="Wednesday">Wednesday</option>
+                        <option value="Thursday">Thursday</option>
+                        <option value="Friday">Friday</option>
+                        <option value="Saturday">Saturday</option>
+                    </select>
+
+            </div>
 
             <div class="theTime">
 
                 <p> From:
-                    <input type="text" id="startTime" data-format="HH" data-template="HH" name="datetime">
+                    <input type="text" id="fromTime" data-format="HH" data-template="HH" name="datetime">
                 <p> Until:
-                    <input type="text" id="endTime" data-format="HH" data-template="HH" name="datetime">
+                    <input type="text" id="untiTime" data-format="HH" data-template="HH" name="datetime">
                     <script>
 
 
 
                         $(function () {
-                            $('#startTime').combodate({
+                            $('#fromTime').combodate({
                                 firstItem: 'name', //show 'hour' and 'minute' string at first item of dropdown
                                 minuteStep: 1
                             });
-                            $('#endTime').combodate({
+                            $('#untiTime').combodate({
                                 firstItem: 'name', //show 'hour' and 'minute' string at first item of dropdown
                                 minuteStep: 1
                             });
@@ -164,11 +183,26 @@
 
 
 
+            <div id="checkboxes">
+                <label>Activity Type</label>
+                <ul>
+                    <li><input type="checkbox"> IN_VEHICLE</li>                    
+                    <li><input type="checkbox"> WALKING </li>
+                    <li><input type="checkbox"> ON_BICYCLE</li>
+                    <li><input type="checkbox"> ON_FOOT </li>
+                    <li><input type="checkbox"> RUNNING </li>
+                    <li><input type="checkbox"> STILL </li>
+                    <li><input type="checkbox"> TILTING </li>
+                    <li><input type="checkbox"> UNKNOWN</li>
+                </ul>
+                <button id="checkboxButton">Select All/None</button>
+            </div>
 
-            <script>
-                document.querySelector("input[type=number]")
-                    .oninput = e => console.log(new Date(e.target.valueAsNumber, 0, 1))
-            </script>
+
+        
+
+
+
             <button id="submitDatesButton" onclick="submitDates()">Range Dates</button>
             <button id="showFullHeatmapButton" onclick="showFullHeatmap()">Draw Whole Heatmap</button>
             <div id="mapid"></div>
