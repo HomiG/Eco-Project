@@ -1,178 +1,308 @@
-<html> 
-    <head>
-        <meta charset="UTF-8">
+<html>
 
-        <title>Admin page</title>
-        <link rel="stylesheet" href="/public/css/admin.css">
+<head>
+    <meta charset="UTF-8">
 
-        <link href="https://fonts.googleapis.com/css?family=Muli|Raleway&display=swap" rel="stylesheet">
-         
+    <title>Admin page</title>
+    <link rel="stylesheet" href="../public/css/admin.css">
 
-    </head>
+    <link href="https://fonts.googleapis.com/css?family=Muli|Raleway&display=swap" rel="stylesheet">
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-    <body>       
+    <script type="text/javascript" src="/public/js/combodate.js"></script>
+    <script type="text/javascript" src="/public/js/moment.min.js"></script>
 
-        <div class="header">
-            <h1>ECO PROJECT</h1>
-            <p>Every moment is a fresh beginning. </p>
-           <p style="font-size: 15px;">– T.S Eliot </p>
-          </div>
+</head>
 
-        <span class="colapsed_menu"  onclick="openNav() ">&#9776; </span>
+<body>
 
-             <!-- The sidebar -->
-            <div id="mySidenav" class="sidebar"  >
-                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-                <a class="active" href="#dashboard">Απεικόνιση κατάστασης  ΒΔ(dashboard)</a>
-                <a href="#data">Απεικόνιση στοιχείων σε χάρτη</a>
-                <a href="#delete">Διαγραφή  δεδομένων</a>
-                <a href="#download">Εξαγωγή δεδομένων</a>
+    <div class="header">
+        <h1>ECO PROJECT</h1>
+        <p>Every moment is a fresh beginning. </p>
+        <p style="font-size: 15px;">– T.S Eliot </p>
+    </div>
+
+    <span class="colapsed_menu" onclick="openNav() ">&#9776; </span>
+
+    <!-- The sidebar -->
+    <div id="mySidenav" class="sidebar">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a class="active" href="#dashboard">Απεικόνιση κατάστασης ΒΔ(dashboard)</a>
+        <a href="#data">Απεικόνιση στοιχείων σε χάρτη</a>
+        <a href="#delete">Διαγραφή δεδομένων</a>
+        <a href="#download">Εξαγωγή δεδομένων</a>
+    </div>
+
+
+
+    <div class="main">
+
+        <div id="dashboard" style="margin-top: 0px">
+            <h2>Απεικόνιση κατάστασης ΒΔ(dashboard).</h2>
+            <hr style="width:50px; border:5px solid #945f90; margin-top:35px; border-radius: 100px;">
+            <p style="margin-top:35px">ΚΑΤΑΠΛΗΚΤΙΚΑ!</p>
+            <p>Το γραφημα θα μπει εδω</p>
+            Πρώτη σου φορά μου λες πως σου συμβαίνει αυτό
+            Πως τρελαίνεσαι και δεν μπορείς ούτε λεπτό
+            Μακριά από τη δική μου αγκαλιά
+            Τα δικά μου τα φιλιά
+            Δε κοιμάσαι
+            Λες παντού με βλέπεις, πως φοβάσαι
+            Μην χαθεί όλο αυτό
+            Εγώ
+            Στη ζωή σου λες πως φέρνω πανικό
+            Εγώ
+            Αχ και να ξέρες ακόμα τι μπορώ
+            Εγώ
+            Κι ότι είχες παλιό
+            Πλέον ζει στο κενό
+            Sorry αν φταίω μα έτσι απλά είμαι εγώ
+
+            Πρώτη σου φορά μου λες πως τόσο αγαπάς
+            Είχες μάθει στο να φεύγεις να τα παράτας
+            Μα μη με συγκρίνεις με τα χθεσινά
+            Εδώ δεν περνούν αυτά
+
+            Δε κοιμάσαι
+            Λες παντού με βλέπεις, πως φοβάσαι
+            Μην χαθεί όλο αυτό
+
+            Εγώ
+            Στη ζωή σου λες πως φέρνω πανικό
+            Εγώ
+            Αχ και να ξέρες ακόμα τι μπορώ
+            Εγώ
+            Κι ότι είχες παλιό
+            Πλέον ζει στο κενό
+            Sorry αν φταίω μα έτσι απλά είμαι εγώ
+
+            Εγώ
+            Στη ζωή σου λες πως φέρνω πανικό
+            Εγώ
+            Αχ και να ξέρες ακόμα τι μπορώ
+            Εγώ
+            Κι ότι είχες παλιό
+            Πλέον ζει στο κενό
+            Sorry αν φταίω μα έτσι απλά είμαι εγώ
+        </div>
+
+        <div id="data" style="margin-top: 75px">
+            <h2>Απεικόνιση στοιχείων σε χάρτη.</h2>
+            <hr style="width:50px; border:5px solid #945f90; margin-top:35px; border-radius: 100px;">
+            <p style="margin-top:35px">ΟΙ 3 ΚΑΛΥΤΕΡΟΙ!</p>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <meta http-equiv="X-UA-Compatible" content="ie=edge">
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+            <div class="year">
+                <p>From:
+                    <input type="text" id="fromDate" data-format="YYYY" data-template="YYYY" name="date" value="2015">
+
+                <p> Until:
+                    <input type="text" id="untilDate" data-format="YYYY" data-template="YYYY" name="date" value="2025">
+
+                    <script>
+                        $(function () {
+                            $('#fromDate').combodate();
+                            $('#untilDate').combodate();
+                        });
+                    </script>
             </div>
 
-                     
+
+
+
+            <div class="month">
+
+                <p>From:
+                    <input type="text" id="fromMonth" data-format="MM" data-template="MMM" name="date" value="01">
+
+                <p> Until:
+                    <input type="text" id="untiMonth" data-format="MM" data-template="MMM" name="date" value="12">
+                    <script>
+                        $(function () {
+                            $('#fromMonth').combodate();
+                            $('#untiMonth').combodate();
+                        });
+                    </script>
+
+            </div>
+
+
+            <div class="day">
+                <p>From:
+                    <select name="fromDay" id="fromDay">
+                        <option value="Monday">Monday</option>
+                        <option value=""></option>
+                        <option value="Tuesday">Tuesday</option>
+                        <option value="Wednesday">Wednesday</option>
+                        <option value="Thursday">Thursday</option>
+                        <option value="Friday">Friday</option>
+                        <option value="Saturday">Saturday</option>
+                        <option value="Sunday">Sunday</option>
+                    </select>
+
+                <p> Until:
+                    <select name="untilDay" id="untilDay">
+                        <option value="Sunday">Sunday</option>
+                        <option value=""></option>
+                        <option value="Monday">Monday</option>
+                        <option value="Tuesday">Tuesday</option>
+                        <option value="Wednesday">Wednesday</option>
+                        <option value="Thursday">Thursday</option>
+                        <option value="Friday">Friday</option>
+                        <option value="Saturday">Saturday</option>
+                    </select>
+
+            </div>
+
+            <div class="theTime">
+
+                <p> From:
+                    <input type="text" id="fromTime" data-format="HH" data-template="HH" name="datetime">
+                <p> Until:
+                    <input type="text" id="untiTime" data-format="HH" data-template="HH" name="datetime">
+                    <script>
+
+
+
+                        $(function () {
+                            $('#fromTime').combodate({
+                                firstItem: 'name', //show 'hour' and 'minute' string at first item of dropdown
+                                minuteStep: 1
+                            });
+                            $('#untiTime').combodate({
+                                firstItem: 'name', //show 'hour' and 'minute' string at first item of dropdown
+                                minuteStep: 1
+                            });
+                        });
+                    </script>
+            </div>
+
+
+
+            <div id="checkboxes">
+                <label>Activity Type</label>
+                <ul>
+                    <li><input type="checkbox"> IN_VEHICLE</li>                    
+                    <li><input type="checkbox"> WALKING </li>
+                    <li><input type="checkbox"> ON_BICYCLE</li>
+                    <li><input type="checkbox"> ON_FOOT </li>
+                    <li><input type="checkbox"> RUNNING </li>
+                    <li><input type="checkbox"> STILL </li>
+                    <li><input type="checkbox"> TILTING </li>
+                    <li><input type="checkbox"> UNKNOWN</li>
+                </ul>
+                <button id="checkboxButton">Select All/None</button>
+            </div>
+
+
         
-        <div class="main">
-            
-            <div id="dashboard" style="margin-top: 0px">
-                <h2>Απεικόνιση κατάστασης  ΒΔ(dashboard).</h2>
-                <hr style="width:50px; border:5px solid #945f90; margin-top:35px; border-radius: 100px;" >
-                <p style="margin-top:35px">ΚΑΤΑΠΛΗΚΤΙΚΑ!</p>
-                <p>Το γραφημα θα μπει εδω</p>
-                Πρώτη σου φορά μου λες πως σου συμβαίνει αυτό
-                Πως τρελαίνεσαι και δεν μπορείς ούτε λεπτό
-                Μακριά από τη δική μου αγκαλιά
-                Τα δικά μου τα φιλιά
-                Δε κοιμάσαι
-                Λες παντού με βλέπεις, πως φοβάσαι
-                Μην χαθεί όλο αυτό
-                Εγώ
-                Στη ζωή σου λες πως φέρνω πανικό
-                Εγώ
-                Αχ και να ξέρες ακόμα τι μπορώ
-                Εγώ
-                Κι ότι είχες παλιό
-                Πλέον ζει στο κενό
-                Sorry αν φταίω μα έτσι απλά είμαι εγώ
 
-                Πρώτη σου φορά μου λες πως τόσο αγαπάς
-                Είχες μάθει στο να φεύγεις να τα παράτας
-                Μα μη με συγκρίνεις με τα χθεσινά
-                Εδώ δεν περνούν αυτά
 
-                Δε κοιμάσαι
-                Λες παντού με βλέπεις, πως φοβάσαι
-                Μην χαθεί όλο αυτό
 
-                Εγώ
-                Στη ζωή σου λες πως φέρνω πανικό
-                Εγώ
-                Αχ και να ξέρες ακόμα τι μπορώ
-                Εγώ
-                Κι ότι είχες παλιό
-                Πλέον ζει στο κενό
-                Sorry αν φταίω μα έτσι απλά είμαι εγώ
+            <button id="submitDatesButton" onclick="submitDates()">Range Dates</button>
+            <button id="showFullHeatmapButton" onclick="showFullHeatmap()">Draw Whole Heatmap</button>
+            <div id="mapid"></div>
 
-                Εγώ
-                Στη ζωή σου λες πως φέρνω πανικό
-                Εγώ
-                Αχ και να ξέρες ακόμα τι μπορώ
-                Εγώ
-                Κι ότι είχες παλιό
-                Πλέον ζει στο κενό
-                Sorry αν φταίω μα έτσι απλά είμαι εγώ
-            </div>
 
-            <div id="data" style="margin-top: 75px">
-                <h2>Απεικόνιση στοιχείων σε χάρτη.</h2>
-                <hr style="width:50px; border:5px solid #945f90; margin-top:35px; border-radius: 100px;" >
-                <p style="margin-top:35px">ΟΙ 3 ΚΑΛΥΤΕΡΟΙ!</p>
-                <p>Δεν εισαι μεσα σε αυτους, try harder! Γραφω διαφορα για να δω την διαφορα! Δεν εχει νοημα
-                    τιποτα πια! 
-                    Πενηντάρικα (πενηντάρικα)
-                    Απ' τα πενηντάρικα
-                    Έσκασε το πορτοφόλι απ' τα πενηντάρικα
-                    Έχω κάνει τα κιλά να κάνουν ακροβατικά
-                    Μια ζωή ήμουνα dealer είχα γούστα ακριβά
-                    Από πιτσιρικάς ήξερα τι ήθελα
-                    
-                    Θέλω κότερα, ελικόπτερα, θέλω οικόπεδα
-                    Γούστα ακριβά, έχω γούστα ακριβά
-                    Θέλω κότερα, ελικόπτερα, θέλω οικόπεδα
-                    Γούστα ακριβά, έχω γούστα ακριβά
-                    
-                </p>
-            </div>
+            <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+                integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+                crossorigin="">
+                </script>
+            <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+                integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+                crossorigin="" />
 
-            <div id="delete" style="margin-top: 75px">
-                <h2>Διαγραφή  δεδομένων.</h2>
-                <hr style="width:50px; border:5px solid #945f90; margin-top:35px; border-radius: 100px; " >
-                <p style="margin-top:35px">ΠΡΟΣΟΧΗ!</p>
-                <p>ΔΕΝ ΥΠΑΡΧΕΙ ΓΥΡΙΣΜΟΣ! </p>
-                <button id="delete_btn" >DELETE</button>
-            </div>
+            <script type="text/javascript" src="../public/js/heatmap.js-2.0.5/build/heatmap.js"></script>
+            <script type="text/javascript"
+                src="../public/js/heatmap.js-2.0.5/plugins/leaflet-heatmap/leaflet-heatmap.js"></script>
+            <script type="text/javascript" src="../public/js/staticVariables.js"></script>
 
-            <div id="upload" style="margin-top: 75px">
-                <h2>Upload.</h2>
-                <hr style="width:50px; border:5px solid #945f90; margin-top:35px; border-radius: 100px; " >
-                <p style="margin-top:35px">Κανε κι εσυ upload!</p>
-                <p>Μονο σβησε τις περιοχες που δεν θες να φανουν ;) πονηρουλη  </p>
-                Κυρα Γιώργαινα, ο Γιώργος σου που πάει;
-                Για πού το ’βαλε και που το ξενυχτάει;
-                Έβαλε το σκούρο του,
-                άναψε το πούρο του,
-                μπήκε στο αμάξι του
-                και εντάξει του.
 
-                Ο Γιώργος είναι πονηρός
-                κι αυτά που λέει μην τα τρως!
-                Από τις έντεκα και μπρος
-                κυκλοφοράει για γαμπρός.
 
-                Κυρα Γιώργαινα, στο λέω υπευθύνως
-                ο Γιωργάκης σου είν’ ένας θεατρίνος!
-                Για δουλειά σου μίλησε,
-                πονηρά σε φίλησε,
-                η αυγούλα μύρισε
-                και δε γύρισε.
+            <style>
+                #mapid {
+                    width: 1000px;
+                    height: 500px;
+                    position: relative;
+                }
+            </style>
+        </div>
 
-                Ο Γιώργος είναι πονηρός
-                κι αυτά που λέει μην τα τρως!
-                Από τις έντεκα και μπρος
-                κυκλοφοράει για γαμπρός.
+        <div id="delete" style="margin-top: 75px">
+            <h2>Διαγραφή δεδομένων.</h2>
+            <hr style="width:50px; border:5px solid #945f90; margin-top:35px; border-radius: 100px; ">
+            <p style="margin-top:35px">ΠΡΟΣΟΧΗ!</p>
+            <p>ΔΕΝ ΥΠΑΡΧΕΙ ΓΥΡΙΣΜΟΣ! </p>
+            <button id="delete_btn" onclick="deleteAllData()">DELETE</button>
+        </div>
 
-                <!-- <form class="upload" action="/upload" enctype="multipart/form-data" method="POST">
+        <div id="upload" style="margin-top: 75px">
+            <h2>Upload.</h2>
+            <hr style="width:50px; border:5px solid #945f90; margin-top:35px; border-radius: 100px; ">
+            <p style="margin-top:35px">Κανε κι εσυ upload!</p>
+            <p>Μονο σβησε τις περιοχες που δεν θες να φανουν ;) πονηρουλη </p>
+            Κυρα Γιώργαινα, ο Γιώργος σου που πάει;
+            Για πού το ’βαλε και που το ξενυχτάει;
+            Έβαλε το σκούρο του,
+            άναψε το πούρο του,
+            μπήκε στο αμάξι του
+            και εντάξει του.
+
+            Ο Γιώργος είναι πονηρός
+            κι αυτά που λέει μην τα τρως!
+            Από τις έντεκα και μπρος
+            κυκλοφοράει για γαμπρός.
+
+            Κυρα Γιώργαινα, στο λέω υπευθύνως
+            ο Γιωργάκης σου είν’ ένας θεατρίνος!
+            Για δουλειά σου μίλησε,
+            πονηρά σε φίλησε,
+            η αυγούλα μύρισε
+            και δε γύρισε.
+
+            Ο Γιώργος είναι πονηρός
+            κι αυτά που λέει μην τα τρως!
+            Από τις έντεκα και μπρος
+            κυκλοφοράει για γαμπρός.
+
+            <!-- <form class="upload" action="/upload" enctype="multipart/form-data" method="POST">
                     <input type="file" name="uploadFile" accept=".json" required />
                     <br/><br/>
                     <input type="submit" value="UploadFile" /> 
                  </form> -->
-<!-- 
+            <!-- 
                   <input class="uploadfile" type="file" id="selectFiles" value="Import" accept=".json" required /><br />
                 <button id="import">Import</button>
                 <textarea id="result"></textarea> -->
 
-            </div>
+        </div>
 
-            <div id="download" style="margin-top: 75px">
-                <h2>Εξαγωγή δεδομένων.</h2>
-                <hr style="width:50px; border:5px solid #945f90; margin-top:35px; border-radius: 100px; " >
-                <p style="margin-top:35px">Κανε κι εσυ download!</p>
-                <button id="download_btn" >Download</button>
-
-            </div>
-
-
+        <div id="download" style="margin-top: 75px">
+            <h2>Εξαγωγή δεδομένων.</h2>
+            <hr style="width:50px; border:5px solid #945f90; margin-top:35px; border-radius: 100px; ">
+            <p style="margin-top:35px">Κανε κι εσυ download!</p>
+            <button id="download_btn">Download</button>
 
         </div>
 
-        <!-- <button id="myBtn"><a href="#top" style="color: blue">Top</a></button> -->
-        <!-- <a id="back2Top" title="Back to top" href="#">&#10148;</a> -->
-
-        <button onclick="scrollToTop()" id="myBtn" title="Go to top">^</button>
-
-        
 
 
-        <script src="/public/js/admin.js"></script> 
+    </div>
 
-    </body>
-    </html>
+    <!-- <button id="myBtn"><a href="#top" style="color: blue">Top</a></button> -->
+    <!-- <a id="back2Top" title="Back to top" href="#">&#10148;</a> -->
+
+    <button onclick="scrollToTop()" id="myBtn" title="Go to top">^</button>
+
+
+
+
+    <script src="../public/js/admin.js"></script>
+
+</body>
+
+</html>

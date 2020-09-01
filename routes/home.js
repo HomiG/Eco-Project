@@ -35,25 +35,7 @@ router.use(upload())
 
 router.use(session({ secret: 'ssshhhhh' }));
 var sess;
-// router.post("/api/Upload", function (req, res) {
 
-//   if (req.files) {
-//     console.log(req.files)
-//     var file = req.files.file;
-//     var filename = file.name;
-//     console.log(filename);
-//     file.mv('./uploads/' + filename, function (err) {
-//       if (err) {
-//         res.send(err)
-//       }
-//       else {
-//         //fs.unlinkSync('./uploads/' + filename); 
-//         res.status(200).send("File Uploaded")
-//       }
-//     })
-//   }
-
-//});
 
 
 
@@ -65,6 +47,11 @@ router.get('/', function (req, res) {
 
 router.get('/upload', checkAuth, function (req, res) {
   res.render('../views/upload.ejs')
+});
+
+
+router.get('/admin', function (req, res) {
+  res.render('../views/admin.ejs')
 });
 
 
@@ -266,7 +253,15 @@ router.post('/ecocharts', /*checkAuth,*/async function (req, res) {
   lastYear.setFullYear(lastYear.getFullYear() - 1);
   lastYear = lastYear;
   console.log(lastYear);
-  results = await db.query("SELECT confidence, type, activity1.timestampMs  FROM entry INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1 INNER JOIN activity1connectactivity2 on activity1.aa1=activity1connectactivity2.a1 INNER JOIN activity2 on activity2.aa2=activity1connectactivity2.a2  WHERE entry.userId='" + userObject.userId + "'");
+
+  results = await db.query("SELECT confidence, type, activity1.timestampMs  FROM entry "+
+  "INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId "+
+  "INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1 "+
+  "INNER JOIN activity1connectactivity2 on activity1.aa1=activity1connectactivity2.a1 "+
+  "INNER JOIN activity2 on activity2.aa2=activity1connectactivity2.a2  "+
+  "WHERE entry.userId='" + userObject.userId + "'");
+
+
   var firstDate = new Date;
   var lastDate = new Date(0);
   var walkingMonth = 0;
@@ -308,6 +303,8 @@ router.post('/ecocharts', /*checkAuth,*/async function (req, res) {
 
     }
   }
+
+  
   // if (err) throw err;
   // if (!result.length) {
   //   res.status(500).send("You can't Proceed, no user Found");
@@ -491,6 +488,15 @@ router.get('/troll', async function (req, res) {
 })
 
 
+router.post('/deleteData', async function(req, res){
+  let db = makeDb();
+
+  console.log("HERE!")
+  var deleteData = db.query('CALL  deleteData()');
+
+  res.send("Database data Deleted!");
+
+})
 
 router.post('/rangeDates', async function (req, res) {
   var dateForm = req.body
@@ -695,10 +701,11 @@ router.post('/test', async function (req, res) {
   //console.log(areas)
 
 
+
   let jsonData = fs.readFileSync((path.resolve(__dirname, "../public/uploads/1.json")))
   jsonData = JSON.parse(jsonData);
 
-  console.log(jsonData)
+  //console.log(jsonData)
 
   const db = makeDb();
 
@@ -724,6 +731,7 @@ router.post('/test', async function (req, res) {
   let entryId;
   let activity1Id;
   let activity2Id;
+  let activityType;
 
   let i, j, k;
 
@@ -759,19 +767,12 @@ router.post('/test', async function (req, res) {
 
     if ('activity' in jsonData.locations[i]) {
       for (j = 0; j < jsonData.locations[i].activity.length; j++) {
+//        console.log(jsonData.locations[i].activity[j])
+        activityType = Object.values(jsonData.locations[i].activity[j]['activity'][0])[0] // Get The Activity Type with the Highest Confidence, aka the first one
+        jsonData.locations[i].activity[j].type = activityType;
         activity1Id = await bulkInsert(db, 'activity1', [jsonData.locations[i].activity[j]])
         //console.log("\tActivity1 ID: ", activity1Id.insertId)
-        let insertActivity1ConnectAcitivity2 = db.query('INSERT INTO LocationConnectActivity(`entryId`, `a1`) VALUES(' + entryId.insertId + ',' + activity1Id.insertId + ')')
-
-
-        if ('activity' in jsonData.locations[i].activity[j]) {
-          for (k = 0; k < jsonData.locations[i].activity[j].activity.length; k++) {
-            activity2Id = await bulkInsert(db, 'activity2', [jsonData.locations[i].activity[j].activity[k]])
-            //console.log("\t\tActivity2 ID: ", activity2Id.insertId)
-            let insertActivity1ConnectAcitivity2 = db.query('INSERT INTO Activity1ConnectActivity2(`a1`, `a2`) VALUES(' + activity1Id.insertId + ',' + activity2Id.insertId + ')')
-
-          }
-        }
+        let insertActivity1ConnectAcitivity2 = await db.query('INSERT INTO LocationConnectActivity(`entryId`, `a1`) VALUES(' + entryId.insertId + ',' + activity1Id.insertId + ')')
       }
     }
   }
@@ -783,3 +784,10 @@ router.post('/test', async function (req, res) {
 
 
 module.exports = router;
+
+
+
+
+
+
+

@@ -8,8 +8,8 @@ var myChart
 
 datePicker.value = todayDate
 
-
-
+var start = document.getElementById('startDate')
+var end = document.getElementById('endDate')
 // ---------------------- CHART FUNCTIONS ---------------------- //
 
 // MY FUNCTION TO INITIATE A BAR CAHRT 

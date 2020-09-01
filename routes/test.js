@@ -1,19 +1,18 @@
-async function operation() {
-    return new Promise(function(resolve, reject) {
-        var a = 0;
-        var b = 1;
-        a = a + b;
-        a = 5;
+const makeDb = require("../config/db");
 
-        // may be a heavy db call or http request?
-        resolve(a) // successfully fill promise
-    })
-}
-var a
-async function app() {
-    var a = await operation() // a is 5
-}
+async function drawHeatmap(){
+    let date = new Date(1479167372634)
 
-app()
+    console.log(date.getFullYear())
+    console.log(date.getMonth() + 1)
 
-console.log(a)
+
+    var db = makeDb();
+  
+    var locationTimestampData = await db.query('SELECT latitudeE7, longitudeE7, timestampMs FROM `entry` ');
+  
+    console.log(locationTimestampData[0])
+  
+  }
+
+  drawHeatmap();

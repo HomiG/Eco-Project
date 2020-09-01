@@ -33,27 +33,11 @@
   CREATE TABLE `activity1`(
     `aa1` int(11) NOT NULL AUTO_INCREMENT,
     `timestampMs` varchar(20) NOT NULL,
+    `type` varchar(100) NOT NULL,
     PRIMARY KEY(`aa1`)
   )  ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-  DROP TABLE IF EXISTS `activity2`;
-  CREATE TABLE `activity2`(
-    `aa2` int(11) NOT NULL AUTO_INCREMENT,
-    -- type enum('ON_FOOT','RUNNING','TILTING','IN_VEHICLE','UNKNOWN','ON_BICYCLE', 'STILL', 'WALKING', 'IN_ROAD_VEHICLE', 'IN_RAIL_VEHICLE') NOT NULL,
-    `type` varchar(100) NOT NULL,
-    `confidence` int(11) NOT NULL,
-      PRIMARY KEY(`aa2`)
-  )  ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-  DROP TABLE IF EXISTS `Activity1ConnectActivity2`;
-  CREATE TABLE `Activity1ConnectActivity2` (
-    `a1` int(11)  ,
-    `a2` int(11)  ,
-    FOREIGN KEY (`a1`) REFERENCES `activity1`(`aa1`)  ON DELETE RESTRICT ON UPDATE CASCADE,
-    FOREIGN KEY (`a2`) REFERENCES `activity2`(`aa2`)  ON DELETE RESTRICT ON UPDATE CASCADE,
-    PRIMARY KEY(`a1`, `a2`)
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
   DROP TABLE IF EXISTS `LocationConnectActivity`;
   CREATE TABLE `LocationConnectActivity` (
@@ -93,7 +77,6 @@
   )  ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-  
   DROP TABLE IF EXISTS `userWalkingScore`;
   CREATE TABLE `userWalkingScore`(
     `aa` int(11) NOT NULL AUTO_INCREMENT,
@@ -118,16 +101,32 @@
   )  ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
---   INSERT INTO lastMonth(startingDate) VALUES (1543668339001)
---   UPDATE lastMonth set startingDate = 1513551020885
+  -- INSERT INTO lastMonth(startingDate) VALUES (1543668339001)
+  -- UPDATE lastMonth set startingDate = 1513551020885
 
 
+-- STORED PROCEDURES --
+delimiter $$
+CREATE PROCEDURE deleteData()
+BEGIN
+SET FOREIGN_KEY_CHECKS=0;
+truncate table userVehicleScore;
+truncate table userWalkingScore;
+truncate table userecoscore;
 
--- truncate table userVehicleScore;
--- truncate table userWalkingScore;
--- truncate table userecoscore;
- 
- 
+truncate table `user`;
+truncate table activity1;
+
+truncate table entry;
+truncate table lastmonth;
+truncate table locationconnectactivity;
+truncate table userLastUpload;
+truncate table userWalkingScore;
+truncate table userecoscore;
+END $$
+
+DELIMITER ;
+
 
   -- TRIGGERS --
   delimiter #
@@ -138,22 +137,20 @@
     -- 2592000000
     BEGIN
       INSERT INTO userWalkingScore(userId, walking, startingDate) 
-      SELECT user.userId, SUM(confidence) as walking, new.startingDate FROM user 
+      SELECT user.userId, count(activity1.type) as walking, new.startingDate FROM user 
       INNER JOIN entry on user.userId = entry.userId 
       INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId 
       INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1 
-      INNER JOIN activity1connectactivity2 on activity1.aa1=activity1connectactivity2.a1 
-      INNER JOIN activity2 on activity2.aa2=activity1connectactivity2.a2 
-      WHERE (entry.timestampMs  > new.startingDate AND entry.timestampMs  <  (new.startingDate + 2592000000)) AND (type= 'ON_FEET' OR type='ON_BICYCLE') GROUP BY user.userId;
+
+      WHERE (entry.timestampMs  > new.startingDate AND entry.timestampMs  <  (new.startingDate + 2592000000)) AND (type= 'ON_FOOT' OR type='ON_BICYCLE') GROUP BY user.userId;
       
       
       INSERT INTO userVehicleScore(userId, vehicle, startingDate) 
-      SELECT user.userId, SUM(confidence) as walking, new.startingDate FROM user 
+      SELECT user.userId, count(activity1.type) as vehicle, new.startingDate FROM user 
       INNER JOIN entry on user.userId = entry.userId 
       INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId 
       INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1 
-      INNER JOIN activity1connectactivity2 on activity1.aa1=activity1connectactivity2.a1 
-      INNER JOIN activity2 on activity2.aa2=activity1connectactivity2.a2 
+
       WHERE (entry.timestampMs  > new.startingDate AND entry.timestampMs  <  (new.startingDate + 2592000000))  AND type= 'IN_VEHICLE' GROUP BY user.userId; 
     
     
@@ -175,3 +172,34 @@
   ('Lee Fleeting', '$2b$10$D310Hbm7F2Z4iwN3IonQBelUWOC23a/SNFEQSKwny6M0v4bTLu9Am', '915aa500f53a47939496877e265227ad743222b4b5176856bd4a315f9c030fd2', 'lee@coloryouth.gr', 0),
   ('Miz Mimi Brown', '$2b$10$iJYVwzfwVQbXLYnzdeayuOF2jR3PDKTbAQFjjDn./MD7Q8L2zyLz6', 'd24aa26db1bcb7b2b10e9fcc0d59025f9f892c34d89775d1f88cc7ffdb563826', 'mimiiamfirst@gmail.com', 0),
   ('Tamila Zamolodchikova', '$2b$10$ysNutn96fRIABbHfh/oine3EUyqrdMVNedM4nBTHigKZk6iADfP5C', 'fe1f5a595fa60f4218ca5f9b05c806c57e5f419837b153bc641edd53e505997b', 'callmetammie@tsanaka.gr', 0);
+
+
+
+-- 1
+
+ SELECT latitudeE7m, longitudeE7 FROM entry;
+
+-- 2
+  SELECT latitudeE7m, longitudeE7, activity1.timestampMs FROM entry
+  INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId 
+  INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1;
+
+-- 3
+SELECT entry.latitudeE7, entry.longitudeE7, activity2.type from entry 
+INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId 
+INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1 
+INNER JOIN activity1connectactivity2 on activity1.aa1=activity1connectactivity2.a1 
+INNER JOIN activity2 on activity2.aa2=activity1connectactivity2.a2 WHERE activity2.c
+
+
+
+
+
+
+
+-- 1a  Την κατανομή των δραστηριοτήτων των χρηστών (ποσοστό εγγραφών ανά τύπο δραστηριότητας
+SELECT entry.latitudeE7, entry.longitudeE7, activity2.type, COUNT(activity2.confidence) from entry 
+INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId 
+INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1 
+INNER JOIN activity1connectactivity2 on activity1.aa1=activity1connectactivity2.a1 
+INNER JOIN activity2 on activity2.aa2=activity1connectactivity2.a2 GROUP BY activity2.type 
