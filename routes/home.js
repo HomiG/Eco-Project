@@ -35,25 +35,7 @@ router.use(upload())
 
 router.use(session({ secret: 'ssshhhhh' }));
 var sess;
-// router.post("/api/Upload", function (req, res) {
 
-//   if (req.files) {
-//     console.log(req.files)
-//     var file = req.files.file;
-//     var filename = file.name;
-//     console.log(filename);
-//     file.mv('./uploads/' + filename, function (err) {
-//       if (err) {
-//         res.send(err)
-//       }
-//       else {
-//         //fs.unlinkSync('./uploads/' + filename); 
-//         res.status(200).send("File Uploaded")
-//       }
-//     })
-//   }
-
-//});
 
 
 
@@ -65,6 +47,11 @@ router.get('/', function (req, res) {
 
 router.get('/upload', checkAuth, function (req, res) {
   res.render('../views/upload.ejs')
+});
+
+
+router.get('/admin', function (req, res) {
+  res.render('../views/admin.ejs')
 });
 
 
@@ -487,6 +474,16 @@ router.get('/troll', async function (req, res) {
   }
 })
 
+
+router.post('/deleteData', async function(req, res){
+  let db = makeDb();
+
+  console.log("HERE!")
+  var deleteData = db.query('CALL  deleteData()');
+
+  res.send("Database data Deleted!");
+
+})
 
 router.post('/rangeDates', async function (req, res) {
   var dateForm = req.body

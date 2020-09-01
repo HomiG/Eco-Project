@@ -124,10 +124,29 @@
   UPDATE lastMonth set startingDate = 1513551020885
 
 
-
+-- STORED PROCEDURES --
+delimiter $$
+CREATE PROCEDURE deleteData()
+BEGIN
+SET FOREIGN_KEY_CHECKS=0;
 truncate table userVehicleScore;
 truncate table userWalkingScore;
 truncate table userecoscore;
+
+truncate table `user`;
+truncate table activity1;
+truncate table activity2;
+truncate table activity1connectactivity2;
+
+truncate table entry;
+truncate table lastmonth;
+truncate table locationconnectactivity;
+truncate table userLastUpload;
+truncate table userWalkingScore;
+truncate table userecoscore;
+END $$
+
+DELIMITER ;
 
 
   -- TRIGGERS --
