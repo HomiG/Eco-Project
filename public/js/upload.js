@@ -92,7 +92,7 @@ function uploadJSONFiltered() {
     processData: false,
     data: formFile,
     success: function (response) {
-      statusDiv.innerHTML = 'File uplaoding to the database... Please wait'
+      statusDiv.innerHTML = 'File uploading to the database... Please wait'
       console.log("Uploaded File Successfully!")
       $.ajax({
         url: "/test",
@@ -112,7 +112,7 @@ function uploadJSONFiltered() {
 
 }
 
-function showFullHeatmap(){
+function showFullHeatmap() {
   $.ajax({
     url: "/getHeatmap",
     type: "POST",
@@ -139,7 +139,6 @@ function submitDates() {
   dateForm.append('until', endDate.valueAsNumber);
 
 
- var generalData;
 
   $.ajax({
     url: "/rangeDates",
@@ -150,74 +149,9 @@ function submitDates() {
     data: dateForm,
     success: function (response) {
       console.log(response)
-      heatmapLayer.setData(response.objectForHeatmap)
-      generalData=response.finalObjectArr;
+      heatmapLayer.setData(response)
     }
   })
-   // Global Options
-   Chart.defaults.global.defaultFontFamily = 'Lato';
-   Chart.defaults.global.defaultFontSize = 18;
-   Chart.defaults.global.defaultFontColor = '#777';
-  let myChart = document.getElementById('myChart').getContext('2d');
-
  
-
-  let massPopChart = new Chart(myChart, {
-    type:'radar', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
-    data:{
-      labels:['IN_VEHICLE','RUNNING','WALKING', 'TILTING','STILL','ON_BICYCLE','UNKNOWN'],
-      datasets:[{
-        label:'Hour of The Day',
-        data:[
-          JSON.stringify(generalData.hour)
-        ],
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.6)'],
-        borderWidth:1,
-        borderColor:'#777',
-        hoverBorderWidth:3,
-        hoverBorderColor:'#000'
-      },{
-          label:'Day of The Week',
-          data:[
-            JSON.stringify(generalData.day)
-          ],
-         
-          borderWidth:1,
-          borderColor:'#777',
-          hoverBorderWidth:3,
-          hoverBorderColor:'#000'
-        }
-    ]
-    },
-    options:{
-      title:{
-        display:true,
-        text:'Statistics',
-        fontSize:25
-      },
-      legend:{
-        display:true,
-        position:'right',
-        labels:{
-          fontColor:'#000'
-        }
-      },
-      layout:{
-        padding:{
-          left:50,
-          right:0,
-          bottom:0,
-          top:0
-        }
-      },
-      tooltips:{
-        enabled:true
-      }
-    }
-  });
-
-
-
 }
 

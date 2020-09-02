@@ -1,6 +1,6 @@
-  DROP DATABASE IF EXISTS ecoproject;
-  CREATE DATABASE ECOPROJECT;
-  USE ECOPROJECT;
+  DROP DATABASE IF EXISTS ecoproject1;
+  CREATE DATABASE ECOPROJECT1;
+  USE ECOPROJECT1;
 
 
   DROP TABLE IF EXISTS `user`;
@@ -163,8 +163,6 @@ DELIMITER ;
     END#
 
      delimiter ;
-
-
 
 
   INSERT INTO `user` (`username`, `password`, `userId`, `email`, `admin`) VALUES

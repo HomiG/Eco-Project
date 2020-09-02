@@ -259,12 +259,10 @@ router.post('/ecocharts', /*checkAuth,*/async function (req, res) {
   lastYear = lastYear;
   console.log(lastYear);
 
-  results = await db.query("SELECT confidence, type, activity1.timestampMs  FROM entry " +
-    "INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId " +
-    "INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1 " +
-    "INNER JOIN activity1connectactivity2 on activity1.aa1=activity1connectactivity2.a1 " +
-    "INNER JOIN activity2 on activity2.aa2=activity1connectactivity2.a2  " +
-    "WHERE entry.userId='" + userObject.userId + "'");
+  results = await db.query("SELECT type, activity1.timestampMs  FROM entry "+
+  "INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId "+
+  "INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1 "+
+  "WHERE entry.userId='" + userObject.userId + "'");
 
 
   var firstDate = new Date;
@@ -285,23 +283,23 @@ router.post('/ecocharts', /*checkAuth,*/async function (req, res) {
     }
     if (d > lastYear) {
       if (results[i].type == 'ON_FOOT') {
-        walkingYear = walkingYear + results[i].confidence;
+        walkingYear++;
       }
       else
         if (results[i].type == 'ON_BICYCLE') {
-          bicycleYear = bicycleYear + results[i].confidence;
+          bicycleYear ++;
         }
         else
           if (results[i].type == 'IN_VEHICLE') {
-            vehicleYear = vehicleYear + results[i].confidence;
+            vehicleYear ++;
           }
       if (d > lastMonth) {
         if (results[i].type == 'ON_FOOT' || results[i].type == 'ON_BICYCLE') {
-          walkingMonth = walkingMonth + results[i].confidence;
+          walkingMonth ++;
         }
         else
           if (results[i].type == 'IN_VEHICLE') {
-            vehicleMonth = vehicleMonth + results[i].confidence;
+            vehicleMonth ++;
 
           }
       }
@@ -344,10 +342,10 @@ router.post('/ecocharts', /*checkAuth,*/async function (req, res) {
   let data = {
     firstdate: firstDate,
     lastdate: lastDate,
-    ecoscore: (walkingMonth / (walkingMonth + vehicleMonth) / 100),
-    walking: walkingYear / 100,
-    bicycle: bicycleYear / 100,
-    vehicle: vehicleYear / 100
+    ecoscore: (walkingMonth / (walkingMonth + vehicleMonth)),
+    walking: walkingYear ,
+    bicycle: bicycleYear ,
+    vehicle: vehicleYear 
   }
   res.send(data);
 
@@ -356,6 +354,9 @@ router.post('/ecocharts', /*checkAuth,*/async function (req, res) {
 
 });
 
+router.get('/radar', /*checkAuth,*/ function (req, res) {
+  res.render('../views/radar.ejs')
+});
 
 router.get('/charts', /*checkAuth,*/ function (req, res) {
   res.render('../views/ecocharts.ejs')
@@ -582,22 +583,25 @@ router.post('/deleteData', async function (req, res) {
   res.send("Database data Deleted!");
 
 })
+router.post('/radarRangeDates', async function (req, res) {
 
-router.post('/rangeDates', async function (req, res) {
   var dateForm = req.body
 
   //This is for Running the Code Async
   const db = makeDb();
 
   console.log(dateForm.until, "  ", dateForm.since, "--", userObject.userId)
-  var rangedDates = await db.query('SELECT latitudeE7, longitudeE7, confidence ,type, activity1.timestampMs FROM entry INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1 INNER JOIN activity1connectactivity2 on activity1.aa1=activity1connectactivity2.a1 INNER JOIN activity2 on activity2.aa2=activity1connectactivity2.a2 WHERE activity1.timestampMs > ' + dateForm.since + ' AND activity1.timestampMs < ' + dateForm.until + ' AND userId = \'' + userObject.userId + '\'')
+  var rangedDates = await db.query('SELECT type, activity1.timestampMs FROM entry INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1 WHERE activity1.timestampMs > ' + dateForm.since + ' AND activity1.timestampMs < ' + dateForm.until + ' AND userId = \'' + userObject.userId + '\'')
 
-
-
+  var i;
+  
+  var statsObject;
+  var statsObjectAr = [];
+ 
+ 
   var type = {
     vehicle: 0,
-    running: 0,
-    walking: 0,
+   feet: 0,
     tilting: 0,
     still: 0,
     bicycle: 0,
@@ -656,87 +660,120 @@ router.post('/rangeDates', async function (req, res) {
     return statData;
   }
   for (i = 0; i < rangedDates.length; i++) {
-    locationsObject = {
-      lat: rangedDates[i].latitudeE7 * Math.pow(10, -7),
-      lng: rangedDates[i].longitudeE7 * Math.pow(10, -7),
-      count: 1
-    }
+    
     statsObject = {
       type: rangedDates[i].type,
       time: rangedDates[i].timestampMs,
       confidence: rangedDates[i].confidence
     }
-    locationsObjectArr.push(locationsObject)
+    
     statsObjectAr.push(statsObject)
     switch (statsObject.type) {
       case 'IN_VEHICLE':
-        type.vehicle = type.vehicle + statsObject.confidence;
+        type.vehicle ++;
         break;
-      case 'RUNNING':
-        type.running = type.running + statsObject.confidence;
-        break;
-      case 'WALKING':
-        type.walking = type.walking + statsObject.confidence;
+      case 'ON_FOOT':
+        type.foot ++;
         break;
       case 'TILTING':
-        type.tilting = type.tilting + statsObject.confidence;
+        type.tilting ++;
         break;
       case 'STILL':
-        type.still = type.still + statsObject.confidence;
+        type.still ++;
         break;
       case 'ON_BICYCLE':
-        type.bicycle = type.bicycle + statsObject.confidence;
+        type.bicycle ++;
         break;
       case 'UNKNOWN':
-        type.unknown = type.unknown + statsObject.confidence;
+        type.unknown  ++;
         break;
     }
   }
-  let finalObjectArr = [
-    {
+  let finalObject = {
+    vehicle:{
       type: 'IN_VEHICLE',
       date: calcDays(statsObjectAr, 'IN_VEHICLE').day,
       hours: calcDays(statsObjectAr, 'IN_VEHICLE').hour
     },
-    {
-      type: 'RUNNING',
-      date: calcDays(statsObjectAr, 'RUNNING').day,
-      hours: calcDays(statsObjectAr, 'RUNNING').hour
+   foot:{
+      type: 'ON_FOOT',
+      date: calcDays(statsObjectAr, 'ON_FOOT').day,
+      hours: calcDays(statsObjectAr, 'ON_FOOT').hour
     },
-    {
-      type: 'WALKING',
-      date: calcDays(statsObjectAr, 'WALKING').day,
-      hours: calcDays(statsObjectAr, 'WALKING').hour
-    },
-    {
+    tilting:{
       type: 'TILTING',
       date: calcDays(statsObjectAr, 'TILTING').day,
       hours: calcDays(statsObjectAr, 'TILTING').hour
     },
-    {
+    still:{
       type: 'STILL',
       date: calcDays(statsObjectAr, 'STILL').day,
       hours: calcDays(statsObjectAr, 'STILL').hour
     },
-    {
+    bicycle:{
       type: 'ON_BICYCLE',
       date: calcDays(statsObjectAr, 'ON_BICYCLE').day,
       hours: calcDays(statsObjectAr, 'ON_BICYCLE').hour
     },
-    {
+    unknown:{
       type: 'UNKNOWN',
       date: calcDays(statsObjectAr, 'UNKNOWN').day,
       hours: calcDays(statsObjectAr, 'UNKNOWN').hour
     }
-  ]
-  console.log(locationsObjectArr)
-  console.log(finalObjectArr.type);
+  }
+  //console.log(locationsObjectArr)
+  console.log(finalObject['bicycle']['hours']);
 
 
   objectForHeatmap = convertQuerryToHeatmapObject(rangedDates);
 
 
-  res.send({ objectForHeatmap, finalObjectArr });
+  //console.log(type);
+  
+ 
+  res.send(finalObject);
+})
+
+router.post('/rangeDates', async function (req, res) {
+  var dateForm = req.body
+
+  //This is for Running the Code Async
+  const db = makeDb();
+
+  console.log(dateForm.until, "  ", dateForm.since, "--", userObject.userId)
+  var rangedDates = await db.query('SELECT latitudeE7, longitudeE7 FROM entry  WHERE activity1.timestampMs > ' + dateForm.since + ' AND activity1.timestampMs < ' + dateForm.until + ' AND userId = \'' + userObject.userId + '\'')
+
+  var i;
+  var locationsObject;
+  
+  var objectForHeatmap //This is a javascript object that HeatmapJs understands and translate it into colors
+  var locationsObjectArr = [];
+  
+  for (i = 0; i < rangedDates.length; i++) {
+    locationsObject = {
+      lat: rangedDates[i].latitudeE7 * Math.pow(10, -7),
+      lng: rangedDates[i].longitudeE7 * Math.pow(10, -7),
+      count: 1
+    }
+    
+    locationsObjectArr.push(locationsObject)
+    
+    
+  }
+  
+  //console.log(locationsObjectArr)
+  console.log(finalObject['bicycle']['hours']);
+
+
+
+
+  //console.log(type);
+  
+  objectForHeatmap = {
+    data: locationsObjectArr,
+    max: locationsObjectArr.length
+  }
+  res.send(objectForHeatmap);
 })
 
 router.post('/getHeatmap', async function (req, res) {
@@ -808,7 +845,7 @@ router.post('/test', async function (req, res) {
 
     // If the point to be inserted out of 10Km Patras Cetner, Skip this Spot
     if (patrasCenter.distanceTo(pointToBeInserted, true) > 10) {
-      console.log("Out Of Patras")
+      //console.log("Out Of Patras")
       continue;
     }
 
@@ -823,7 +860,7 @@ router.post('/test', async function (req, res) {
 
 
 
-    console.log("Entry ID: ", entryId.insertId);
+    //console.log("Entry ID: ", entryId.insertId);
 
 
     if ('activity' in jsonData.locations[i]) {
