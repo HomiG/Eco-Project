@@ -190,18 +190,42 @@ function rangedHeatmap() {
     mode = 2;
   }
 
-  else if(noDateChoosed(dateArr) && !noCheckboxChoosed()){
+  else if (noDateChoosed(dateArr) && !noCheckboxChoosed()) {
     mode = 3;
   }
 
-  else if(!noDateChoosed(dateArr) && !noCheckboxChoosed()){
+  else if (!noDateChoosed(dateArr) && !noCheckboxChoosed()) {
     mode = 4;
   }
 
   console.log('mode');
 
+
+  var checkBoxObject = {
+    IN_VEHICLE: document.getElementById('IN_VEHICLE').checked,
+    ON_BICYCLE: document.getElementById('ON_BICYCLE').checked,
+    ON_FOOT: document.getElementById('ON_FOOT').checked,
+    STILL: document.getElementById('STILL').checked,
+    TILTING: document.getElementById('TILTING').checked,
+    UNKNOWN: document.getElementById('UNKNOWN').checked
+  }
+
+  var datesObject = {
+    fromDate: document.getElementById('fromDate').value,
+    untilDate: document.getElementById('untilDate').value,
+    fromMonth: document.getElementById('fromMonth').value,
+    untilMonth: document.getElementById('untilMonth').value,
+    fromDay: document.getElementById('fromDay').value,
+    untilDay: document.getElementById('untilDay').value,
+    fromTime: document.getElementById('fromTime').value,
+    untilTime: document.getElementById('untilTime').value
+  }
+
+
   var formFile = new FormData();
   formFile.append('mode', mode);
+  formFile.append('checkboxes', JSON.stringify(checkBoxObject))
+  formFile.append('dates', JSON.stringify(datesObject))
 
   $.ajax({
     url: "/drawSpecifiedHeatmap",

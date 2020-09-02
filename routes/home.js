@@ -506,28 +506,67 @@ router.get('/drawfullheatmap', async function (req, res) {
 
 
 router.post('/drawSpecifiedHeatmap', async function (req, res) {
-  console.log(req);
+  console.log(req.body);
 
-  db = makeDb();
+
+  // Get ARRAY of key given value If Multiple keys have Same value 
+  function getKeyByValue(object, value) {
+    return Object.keys(object).filter(key => object[key] === value);
+  }
+
 
   var mode = req.body.mode;
+
+  var dates = JSON.parse(req.body.dates)
+
+  var checkboxes = JSON.parse(req.body.checkboxes)
+
+  var tickedCheckboxes = getKeyByValue(checkboxes, true)
+
+  // console.log(mode);
+  // console.log(dates);
+  console.log(checkboxes);
+
+
+
+  // ----- CONVERTING THE ARRAY OF CHECKBOXES INTO WHAT TYPES TO CALL FROM THE DATABASE! ----- //
+  var encloseWithinQuotes = "'" + tickedCheckboxes.join("','") + "'";
+  var stringForSQLQuery = encloseWithinQuotes.replace(/,/g, ' OR TYPE = ');
+// ----- CONVERTING THE ARRAY OF CHECKBOXES INTO WHAT TYPES TO CALL FROM THE DATABASE! ----- //
+  
+
+
+  var db = makeDb();
+
 
   var query;
 
 
-  switch (mode) {
-    case 2:
-      query = db.query(''); 
+  switch (parseInt(mode)) {
+    case 2: // YES Date , NO Checkbox
+      query = await db.query(' SELECT latitudeE7m, longitudeE7, activity1.timestampMs FROM entry '+
+      'INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId '+
+      'INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1'); 
       break;
-    case 3:
-      query = db.query('');
+    case 3: // NO Date, YES Checkbox
+      query = await db.query('SELECT entry.latitudeE7, entry.longitudeE7 FROM `entry` '+
+      'INNER JOIN activity1 on activity1.aa1=entry.entryId '+
+      'WHERE type = ' + stringForSQLQuery) ; // Includes only the places the person have been on a spefic catagory of movement
       break;
-    case 4:
-      query = db.query('');
+    case 4: // YES Date, YES Checbox
+      query = await db.query('SELECT entry.latitudeE7, entry.longitudeE7, activity1.timestampMs FROM `entry` '+
+      'INNER JOIN activity1 on activity1.aa1=entry.entryId '+
+      'WHERE type = ' + stringForSQLQuery);
       break;
     default:
     // code block
   }
+
+  // ENDING HERE I HAVE GOT FROM THE DATABASE THE LOCATION having SPECIFIC ACTIVITIES (if asked)
+  // NOW TIME (if asked) has to be DETERMINED!
+
+  console.log("Query Result ", query)
+
 
 })
 
