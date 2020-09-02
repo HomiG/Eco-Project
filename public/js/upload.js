@@ -92,7 +92,7 @@ function uploadJSONFiltered() {
     processData: false,
     data: formFile,
     success: function (response) {
-      statusDiv.innerHTML = 'File uplaoding to the database... Please wait'
+      statusDiv.innerHTML = 'File uploading to the database... Please wait'
       console.log("Uploaded File Successfully!")
       $.ajax({
         url: "/test",
@@ -139,7 +139,6 @@ function submitDates() {
   dateForm.append('until', endDate.valueAsNumber);
 
 
-  var generalData;
 
   $.ajax({
     url: "/rangeDates",
@@ -150,80 +149,9 @@ function submitDates() {
     data: dateForm,
     success: function (response) {
       console.log(response)
-      heatmapLayer.setData(response.objectForHeatmap)
-      generalData = response.finalObject;
+      heatmapLayer.setData(response)
     }
   })
-  // Global Options
-  Chart.defaults.global.defaultFontFamily = 'Lato';
-  Chart.defaults.global.defaultFontSize = 18;
-  Chart.defaults.global.defaultFontColor = '#777';
-  let myChart = document.getElementById('myChart').getContext('2d');
-
-  function getKeyWithMaxValue(object) { 
-    var maxObjectsValue = Math.max(...Object.values(test))
-    return Object.keys(object).find(key => object[key] === maxObjectsValue); 
-}
-
-  let massPopChart = new Chart(myChart, {
-    type: 'radar', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
-    data: {
-      labels: ['00:00', '01:00',  '02:00', '03:00','04:00','05:00',  '06:00', '07:00',
-      '08:00','09:00',  '10:00', '11:00','12:00','13:00', '14:00', '15:00',  '16:00',
-      '17:00','18:00', '19:00', '20:00', '21:00', '22:00',  '23:00'],
-      datasets: [{
-        label: 'Vehicle',
-        data: [
-         JSON.stringify(generalData['vehicle']['hour']),
-          ],
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.6)'],
-        borderWidth: 1,
-        borderColor: '#777',
-        hoverBorderWidth: 3,
-        hoverBorderColor: '#000'
-      }, {
-        label: 'Running',
-        data: [
-          JSON.stringify( generalData['running']['hour']),
-         
-        ],
-
-        borderWidth: 1,
-        borderColor: '#777',
-        hoverBorderWidth: 3,
-        hoverBorderColor: '#000'
-      }
-      ]
-    },
-    options: {
-      title: {
-        display: true,
-        text: 'Statistics',
-        fontSize: 25
-      },
-      legend: {
-        display: true,
-        position: 'right',
-        labels: {
-          fontColor: '#000'
-        }
-      },
-      layout: {
-        padding: {
-          left: 50,
-          right: 0,
-          bottom: 0,
-          top: 0
-        }
-      },
-      tooltips: {
-        enabled: true
-      }
-    }
-  });
-
-
-
+ 
 }
 
