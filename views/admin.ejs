@@ -120,11 +120,11 @@
                     <input type="text" id="fromMonth" data-format="MM" data-template="MMM" name="date" value="01">
 
                 <p> Until:
-                    <input type="text" id="untiMonth" data-format="MM" data-template="MMM" name="date" value="12">
+                    <input type="text" id="untilMonth" data-format="MM" data-template="MMM" name="date" value="12">
                     <script>
                         $(function () {
                             $('#fromMonth').combodate();
-                            $('#untiMonth').combodate();
+                            $('#untilMonth').combodate();
                         });
                     </script>
 
@@ -163,7 +163,7 @@
                 <p> From:
                     <input type="text" id="fromTime" data-format="HH" data-template="HH" name="datetime">
                 <p> Until:
-                    <input type="text" id="untiTime" data-format="HH" data-template="HH" name="datetime">
+                    <input type="text" id="untilTime" data-format="HH" data-template="HH" name="datetime">
                     <script>
 
 
@@ -173,7 +173,7 @@
                                 firstItem: 'name', //show 'hour' and 'minute' string at first item of dropdown
                                 minuteStep: 1
                             });
-                            $('#untiTime').combodate({
+                            $('#untilTime').combodate({
                                 firstItem: 'name', //show 'hour' and 'minute' string at first item of dropdown
                                 minuteStep: 1
                             });
@@ -186,24 +186,23 @@
             <div id="checkboxes">
                 <label>Activity Type</label>
                 <ul>
-                    <li><input type="checkbox"> IN_VEHICLE</li>                    
-                    <li><input type="checkbox"> WALKING </li>
-                    <li><input type="checkbox"> ON_BICYCLE</li>
-                    <li><input type="checkbox"> ON_FOOT </li>
-                    <li><input type="checkbox"> RUNNING </li>
-                    <li><input type="checkbox"> STILL </li>
-                    <li><input type="checkbox"> TILTING </li>
-                    <li><input type="checkbox"> UNKNOWN</li>
+                    <li><input type="checkbox" onchange="run()" id="IN_VEHICLE"> IN_VEHICLE</li>
+                    <li><input type="checkbox" id="ON_BICYCLE"> ON_BICYCLE</li>
+                    <li><input type="checkbox" id="ON_FOOT"> ON_FOOT </li>
+                    <li><input type="checkbox" id="STILL"> STILL </li>
+                    <li><input type="checkbox" id="TILTING"> TILTING </li>
+                    <li><input type="checkbox" id="UNKNOWN"> UNKNOWN</li>
                 </ul>
-                <button id="checkboxButton">Select All/None</button>
+                <button onclick="toggleCheckboxed()">Select All/None</button>
+
             </div>
 
 
-        
 
 
 
-            <button id="submitDatesButton" onclick="submitDates()">Range Dates</button>
+
+            <button id="rangedHeatmap" onclick="rangedHeatmap()">Range Dates</button>
             <button id="showFullHeatmapButton" onclick="showFullHeatmap()">Draw Whole Heatmap</button>
             <div id="mapid"></div>
 

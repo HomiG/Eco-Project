@@ -181,21 +181,20 @@ DELIMITER ;
 
  SELECT latitudeE7m, longitudeE7 FROM entry;
 
--- 2
+-- 2 ANALYZE LOCALLY 
   SELECT latitudeE7m, longitudeE7, activity1.timestampMs FROM entry
   INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId 
   INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1;
 
 -- 3
-SELECT entry.latitudeE7, entry.longitudeE7, activity2.type from entry 
-INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId 
-INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1 
-INNER JOIN activity1connectactivity2 on activity1.aa1=activity1connectactivity2.a1 
-INNER JOIN activity2 on activity2.aa2=activity1connectactivity2.a2 WHERE activity2.c
+SELECT entry.latitudeE7, entry.longitudeE7 FROM `entry` 
+INNER JOIN activity1 on activity1.aa1=entry.entryId 
+WHERE type = ... 
 
-
-
-
+-- 4 // ANALYZE LOCALLY CAUSE OF TIMESTAMP 
+SELECT entry.latitudeE7, entry.longitudeE7, activity1.timestampMs FROM `entry` 
+INNER JOIN activity1 on activity1.aa1=entry.entryId 
+WHERE type = ... 
 
 
 

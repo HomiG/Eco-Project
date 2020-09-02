@@ -1,17 +1,99 @@
 
 var fromDate = document.getElementById('fromDate');
 var untilDate = document.getElementById('untilDate');
+var fromMonth = document.getElementById('fromMonth');
+var untilMonth = document.getElementById('untilMonth');
 var fromDay = document.getElementById('fromDay');
 var untilDay = document.getElementById('untilDay');
 var fromTime = document.getElementById('fromTime');
 var untilTime = document.getElementById('untilTime');
+var toggleCheckboxes = document.getElementById('toggleCheckboxes');
 
-var locationTimestampObject = {
-  latitude: 1,
-  longitude: 1,
-  timestamp: 1
+var checkBoxObject = {
+  IN_VEHICLE: document.getElementById('IN_VEHICLE').checked,
+  ON_BICYCLE: document.getElementById('ON_BICYCLE'),
+  ON_FOOT: document.getElementById('ON_FOOT'),
+  STILL: document.getElementById('STILL'),
+  TILTING: document.getElementById('TILTING'),
+  UNKNOWN: document.getElementById('UNKNOWN')
 }
 
+
+
+
+var dateArr = [];
+dateArr.push(fromDate, untilDate, fromMonth, untilMonth, fromDay, untilDay, fromTime, untilTime);
+
+
+
+
+// ----- FRONT ENT FUNCITON ----- 
+// Chcecks if a date has been choosed.
+function noDateChoosed(arr) {
+
+  let i;
+  for (i = 0; i < arr.length; i++) {
+    console.log(arr[i].value)
+    if (arr[i].value.length > 0) {
+      return false;
+    }
+  }
+  return true;
+}
+
+function noCheckboxChoosed() {
+  if (document.getElementById('IN_VEHICLE').checked == true ||
+    document.getElementById('ON_BICYCLE').checked == true ||
+    document.getElementById('ON_FOOT').checked == true ||
+    document.getElementById('STILL').checked == true ||
+    document.getElementById('TILTING').checked == true ||
+    document.getElementById('UNKNOWN').checked == true) {
+    return false
+  }
+  else {
+    return true
+  }
+}
+
+
+
+function toggleCheckboxed() {
+  if (document.getElementById('IN_VEHICLE').checked == false) {
+    document.getElementById('IN_VEHICLE').checked = true
+    document.getElementById('ON_BICYCLE').checked = true
+    document.getElementById('ON_FOOT').checked = true
+    document.getElementById('STILL').checked = true
+    document.getElementById('TILTING').checked = true
+    document.getElementById('UNKNOWN').checked = true
+  }
+  else {
+    document.getElementById('IN_VEHICLE').checked = false
+    document.getElementById('ON_BICYCLE').checked = false
+    document.getElementById('ON_FOOT').checked = false
+    document.getElementById('STILL').checked = false
+    document.getElementById('TILTING').checked = false
+    document.getElementById('UNKNOWN').checked = false
+  }
+}
+
+
+function run() {
+
+  var checkBoxObject = {
+    IN_VEHICLE: document.getElementById('IN_VEHICLE').checked,
+    ON_BICYCLE: document.getElementById('ON_BICYCLE').checked,
+    ON_FOOT: document.getElementById('ON_FOOT').checked,
+    STILL: document.getElementById('STILL').checked,
+    TILTING: document.getElementById('TILTING').checked,
+    UNKNOWN: document.getElementById('UNKNOWN').checked
+  }
+
+
+
+
+  console.log(noCheckboxChoosed())
+
+}
 
 
 
@@ -60,9 +142,6 @@ var circle = L.circle(patrasLatLng, {
 
 
 // Database Delete All Data, by sending post
-
-
-
 function deleteAllData() {
   $.ajax({
     url: "/deleteData",
@@ -78,16 +157,69 @@ function deleteAllData() {
 
 
 
-function drawHeatmap(){
+function showFullHeatmap() {
+  console.log('wholeheatmap')
+  $.ajax({
+    url: "/drawfullheatmap",
+    type: "get",
+    cache: false,
+    contentType: false,
+    processData: false,
+    success: function (response) {
+      console.log('data recieved')
+      heatmapLayer.setData(response)
 
-  var db = makeDb();
-
-  var locationTimestampData = db.query('SELECT latitudeE7, longitudeE7, timestampMs FROM `entry` ');
-
-  console.long(locationTimestampData)
+    }
+  })
 
 }
 
+function rangedHeatmap() {
+
+  // send the mode to the server to bring back the right heatmap proccessed.
+
+  var mode = -1;
+
+  if (noDateChoosed(dateArr) && noCheckboxChoosed()) {
+    mode = 1;
+    showFullHeatmap();
+    return;
+  }
+
+  else if (!noDateChoosed(dateArr) && noCheckboxChoosed()) {
+    mode = 2;
+  }
+
+  else if(noDateChoosed(dateArr) && !noCheckboxChoosed()){
+    mode = 3;
+  }
+
+  else if(!noDateChoosed(dateArr) && !noCheckboxChoosed()){
+    mode = 4;
+  }
+
+  console.log('mode');
+
+  var formFile = new FormData();
+  formFile.append('mode', mode);
+
+  $.ajax({
+    url: "/drawSpecifiedHeatmap",
+    type: "post",
+    cache: false,
+    contentType: false,
+    processData: false,
+    data: formFile,
+    success: function (response) {
+      console.log('data recieved')
+      heatmapLayer.setData(response)
+
+    }
+  })
+
+
+
+}
 
 
 

@@ -1,6 +1,8 @@
 'use strict'
 const GeoPoint = require('geopoint')
 const { inRangeOfRect, geopointToMyPoint } = require('../public/js/myGeographicalModules')
+const convertQuerryToHeatmapObject = require('../public/js/convertQuerryToHeatmapObject')
+
 
 const express = require('express');
 const session = require('express-session');
@@ -25,6 +27,8 @@ const { encrypt, decrypt } = require('../public/js/encryptDecrypt');
 const { timeStamp } = require('console');
 const { stringify } = require('querystring');
 const { type } = require('jquery');
+
+
 
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
@@ -132,20 +136,21 @@ router.post('/login', function (req, res) {
       console.log(result);
     }
     else {
-    
+
 
       console.log(result[0].username)
       userObject.username = result[0].username;
-      var admin=result[0].admin;   
+      var admin = result[0].admin;
       userObject.userId = loginData.userId;
       userObject.email = loginData.email;
       console.log(userObject.userId);
-      if(admin){
+      if (admin) {
         res.redirect('/admin')
       }
-      else{
-      res.redirect('/mainpage');
-    }}
+      else {
+        res.redirect('/mainpage');
+      }
+    }
   });
 
 
@@ -254,12 +259,12 @@ router.post('/ecocharts', /*checkAuth,*/async function (req, res) {
   lastYear = lastYear;
   console.log(lastYear);
 
-  results = await db.query("SELECT confidence, type, activity1.timestampMs  FROM entry "+
-  "INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId "+
-  "INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1 "+
-  "INNER JOIN activity1connectactivity2 on activity1.aa1=activity1connectactivity2.a1 "+
-  "INNER JOIN activity2 on activity2.aa2=activity1connectactivity2.a2  "+
-  "WHERE entry.userId='" + userObject.userId + "'");
+  results = await db.query("SELECT confidence, type, activity1.timestampMs  FROM entry " +
+    "INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId " +
+    "INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1 " +
+    "INNER JOIN activity1connectactivity2 on activity1.aa1=activity1connectactivity2.a1 " +
+    "INNER JOIN activity2 on activity2.aa2=activity1connectactivity2.a2  " +
+    "WHERE entry.userId='" + userObject.userId + "'");
 
 
   var firstDate = new Date;
@@ -304,7 +309,7 @@ router.post('/ecocharts', /*checkAuth,*/async function (req, res) {
     }
   }
 
-  
+
   // if (err) throw err;
   // if (!result.length) {
   //   res.status(500).send("You can't Proceed, no user Found");
@@ -485,7 +490,51 @@ router.get('/troll', async function (req, res) {
 })
 
 
-router.post('/deleteData', async function(req, res){
+
+
+router.get('/drawfullheatmap', async function (req, res) {
+  var db = makeDb();
+
+  var allHeatmapData = await db.query('SELECT latitudeE7, longitudeE7 FROM `entry` ');
+
+
+  var objectForHeatmap = convertQuerryToHeatmapObject(allHeatmapData);
+
+  res.send(objectForHeatmap);
+
+})
+
+
+router.post('/drawSpecifiedHeatmap', async function (req, res) {
+  console.log(req);
+
+  db = makeDb();
+
+  var mode = req.body.mode;
+
+  var query;
+
+
+  switch (mode) {
+    case 2:
+      query = db.query(''); 
+      break;
+    case 3:
+      query = db.query('');
+      break;
+    case 4:
+      query = db.query('');
+      break;
+    default:
+    // code block
+  }
+
+})
+
+
+
+
+router.post('/deleteData', async function (req, res) {
   let db = makeDb();
 
   console.log("HERE!")
@@ -504,12 +553,8 @@ router.post('/rangeDates', async function (req, res) {
   console.log(dateForm.until, "  ", dateForm.since, "--", userObject.userId)
   var rangedDates = await db.query('SELECT latitudeE7, longitudeE7, confidence ,type, activity1.timestampMs FROM entry INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1 INNER JOIN activity1connectactivity2 on activity1.aa1=activity1connectactivity2.a1 INNER JOIN activity2 on activity2.aa2=activity1connectactivity2.a2 WHERE activity1.timestampMs > ' + dateForm.since + ' AND activity1.timestampMs < ' + dateForm.until + ' AND userId = \'' + userObject.userId + '\'')
 
-  var i;
-  var locationsObject;
-  var statsObject;
-  var statsObjectAr = [];
-  var objectForHeatmap //This is a javascript object that HeatmapJs understands and translate it into colors
-  var locationsObjectArr = [];
+
+
   var type = {
     vehicle: 0,
     running: 0,
@@ -566,8 +611,8 @@ router.post('/rangeDates', async function (req, res) {
       '23:00': hours[23]
     }
     var statData = {
-     day: day,
-     hour: hour
+      day: day,
+      hour: hour
     }
     return statData;
   }
@@ -649,15 +694,10 @@ router.post('/rangeDates', async function (req, res) {
   console.log(finalObjectArr.type);
 
 
+  objectForHeatmap = convertQuerryToHeatmapObject(rangedDates);
 
 
-  console.log(type);
-  
-  objectForHeatmap = {
-    data: locationsObjectArr,
-    max: locationsObjectArr.length
-  }
-  res.send({objectForHeatmap,finalObjectArr});
+  res.send({ objectForHeatmap, finalObjectArr });
 })
 
 router.post('/getHeatmap', async function (req, res) {
@@ -666,24 +706,9 @@ router.post('/getHeatmap', async function (req, res) {
 
   var rangedDates = await db.query('SELECT latitudeE7, longitudeE7 FROM `entry` WHERE userId = \'' + userObject.userId + '\'')
 
-  var i;
-  var locationsObject;
-  var objectForHeatmap //This is a javascript object that HeatmapJs understands and translate it into colors
-  var locationsObjectArr = [];
+  objectForHeatmap = convertQuerryToHeatmapObject(rangedDates)
 
-  for (i = 0; i < rangedDates.length; i++) {
-    locationsObject = {
-      lat: rangedDates[i].latitudeE7 * Math.pow(10, -7),
-      lng: rangedDates[i].longitudeE7 * Math.pow(10, -7),
-      count: 1
-    }
-    locationsObjectArr.push(locationsObject)
-  }
 
-  objectForHeatmap = {
-    data: locationsObjectArr,
-    max: locationsObjectArr.length
-  }
   res.send(objectForHeatmap);
 
 })
@@ -764,7 +789,7 @@ router.post('/test', async function (req, res) {
 
     if ('activity' in jsonData.locations[i]) {
       for (j = 0; j < jsonData.locations[i].activity.length; j++) {
-//        console.log(jsonData.locations[i].activity[j])
+        //        console.log(jsonData.locations[i].activity[j])
         activityType = Object.values(jsonData.locations[i].activity[j]['activity'][0])[0] // Get The Activity Type with the Highest Confidence, aka the first one
         jsonData.locations[i].activity[j].type = activityType;
         activity1Id = await bulkInsert(db, 'activity1', [jsonData.locations[i].activity[j]])
