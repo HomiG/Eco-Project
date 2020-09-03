@@ -398,9 +398,9 @@ router.post('/statistics', async function (req, res) {
  
  var users={};
 
-  var type = {
+  var tipos = {
     vehicle: 0,
-   feet: 0,
+    foot: 0,
     tilting: 0,
     still: 0,
     bicycle: 0,
@@ -479,7 +479,6 @@ router.post('/statistics', async function (req, res) {
     statsObject = {
       type: rangedDates[i].type,
       time: rangedDates[i].timestampMs,
-      confidence: rangedDates[i].confidence
     }
     
     statsObjectAr.push(statsObject)
@@ -506,35 +505,36 @@ router.post('/statistics', async function (req, res) {
   }
   let finalObject = {
     vehicle:{
-      type: 'IN_VEHICLE',
+      type: tipos.vehicle,
       date: calcDays(statsObjectAr, 'IN_VEHICLE').day,
       hours: calcDays(statsObjectAr, 'IN_VEHICLE').hour
     },
    foot:{
-      type: 'ON_FOOT',
+      type: tipos.foot,
       date: calcDays(statsObjectAr, 'ON_FOOT').day,
       hours: calcDays(statsObjectAr, 'ON_FOOT').hour
     },
     tilting:{
-      type: 'TILTING',
+      type: tipos.tilting,
       date: calcDays(statsObjectAr, 'TILTING').day,
       hours: calcDays(statsObjectAr, 'TILTING').hour
     },
     still:{
-      type: 'STILL',
+      type: tipos.still,
       date: calcDays(statsObjectAr, 'STILL').day,
       hours: calcDays(statsObjectAr, 'STILL').hour
     },
     bicycle:{
-      type: 'ON_BICYCLE',
+      type: tipos.bicycle,
       date: calcDays(statsObjectAr, 'ON_BICYCLE').day,
       hours: calcDays(statsObjectAr, 'ON_BICYCLE').hour
     },
     unknown:{
-      type: 'UNKNOWN',
+      type: tipos.unknown,
       date: calcDays(statsObjectAr, 'UNKNOWN').day,
       hours: calcDays(statsObjectAr, 'UNKNOWN').hour
-    }
+    }, 
+    
   }
   //console.log(locationsObjectArr)
   console.log(finalObject['bicycle']['hours']);
@@ -906,12 +906,12 @@ router.post('/radarRangeDates', async function (req, res) {
   var statsObjectAr = [];
 
 
-  var type = {
+  var tipos = {
     vehicle: 0,
-    feet: 0,
-    tilting: 0,
-    still: 0,
+    foot: 0,
     bicycle: 0,
+    still: 0,
+    tilting: 0,
     unknown: 0,
   }
   function calcDays(Object, type) {
@@ -971,62 +971,62 @@ router.post('/radarRangeDates', async function (req, res) {
     statsObject = {
       type: rangedDates[i].type,
       time: rangedDates[i].timestampMs,
-      confidence: rangedDates[i].confidence
     }
 
     statsObjectAr.push(statsObject)
     switch (statsObject.type) {
       case 'IN_VEHICLE':
-        type.vehicle++;
+        tipos.vehicle++;
         break;
       case 'ON_FOOT':
-        type.foot++;
+        tipos.foot++;
         break;
       case 'TILTING':
-        type.tilting++;
+        tipos.tilting++;
         break;
       case 'STILL':
-        type.still++;
+        tipos.still++;
         break;
       case 'ON_BICYCLE':
-        type.bicycle++;
+        tipos.bicycle++;
         break;
       case 'UNKNOWN':
-        type.unknown++;
+        tipos.unknown++;
         break;
     }
   }
   let finalObject = {
-    vehicle: {
-      type: 'IN_VEHICLE',
+    vehicle:{
+      type: tipos.vehicle,
       date: calcDays(statsObjectAr, 'IN_VEHICLE').day,
       hours: calcDays(statsObjectAr, 'IN_VEHICLE').hour
     },
-    foot: {
-      type: 'ON_FOOT',
+   foot:{
+      type: tipos.foot,
       date: calcDays(statsObjectAr, 'ON_FOOT').day,
       hours: calcDays(statsObjectAr, 'ON_FOOT').hour
     },
-    tilting: {
-      type: 'TILTING',
+    tilting:{
+      type: tipos.tilting,
       date: calcDays(statsObjectAr, 'TILTING').day,
       hours: calcDays(statsObjectAr, 'TILTING').hour
     },
-    still: {
-      type: 'STILL',
+    still:{
+      type: tipos.still,
       date: calcDays(statsObjectAr, 'STILL').day,
       hours: calcDays(statsObjectAr, 'STILL').hour
     },
-    bicycle: {
-      type: 'ON_BICYCLE',
+    bicycle:{
+      type: tipos.bicycle,
       date: calcDays(statsObjectAr, 'ON_BICYCLE').day,
       hours: calcDays(statsObjectAr, 'ON_BICYCLE').hour
     },
-    unknown: {
-      type: 'UNKNOWN',
+    unknown:{
+      type: tipos.unknown,
       date: calcDays(statsObjectAr, 'UNKNOWN').day,
       hours: calcDays(statsObjectAr, 'UNKNOWN').hour
-    }
+    }, 
+    
   }
   //console.log(locationsObjectArr)
   console.log(finalObject['bicycle']['hours']);
