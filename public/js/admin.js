@@ -180,21 +180,21 @@ function rangedHeatmap() {
 
   var mode = -1;
 
-  if (noDateChoosed(dateArr) && noCheckboxChoosed()) {
+  if (noDateChoosed(dateArr) && noCheckboxChoosed()) { // NO DATE, NO CHEKCBOX
     mode = 1;
     showFullHeatmap();
     return;
   }
 
-  else if (!noDateChoosed(dateArr) && noCheckboxChoosed()) {
+  else if (!noDateChoosed(dateArr) && noCheckboxChoosed()) { // YES DATE, NO CHEKCBOX
     mode = 2;
   }
 
-  else if (noDateChoosed(dateArr) && !noCheckboxChoosed()) {
+  else if (noDateChoosed(dateArr) && !noCheckboxChoosed()) { //NO DATE, YES CHECKBOX
     mode = 3;
   }
 
-  else if (!noDateChoosed(dateArr) && !noCheckboxChoosed()) {
+  else if (!noDateChoosed(dateArr) && !noCheckboxChoosed()) { //YES DATE, YES CHECKBOX
     mode = 4;
   }
 
