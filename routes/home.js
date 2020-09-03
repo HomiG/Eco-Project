@@ -26,7 +26,8 @@ const upload = require('express-fileupload')
 const { encrypt, decrypt } = require('../public/js/encryptDecrypt');
 const { timeStamp } = require('console');
 const { stringify } = require('querystring');
-const { type } = require('jquery');
+const { type, data } = require('jquery');
+const { parse } = require('path');
 
 
 
@@ -267,10 +268,10 @@ router.post('/ecocharts', checkAuth, async function (req, res) {
   lastYear = lastYear;
   console.log(lastYear);
 
-  results = await db.query("SELECT type, activity1.timestampMs  FROM entry "+
-  "INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId "+
-  "INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1 "+
-  "WHERE entry.userId='" + userObject.userId + "'");
+  results = await db.query("SELECT type, activity1.timestampMs  FROM entry " +
+    "INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId " +
+    "INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1 " +
+    "WHERE entry.userId='" + userObject.userId + "'");
 
 
   var firstDate = new Date;
@@ -295,19 +296,19 @@ router.post('/ecocharts', checkAuth, async function (req, res) {
       }
       else
         if (results[i].type == 'ON_BICYCLE') {
-          bicycleYear ++;
+          bicycleYear++;
         }
         else
           if (results[i].type == 'IN_VEHICLE') {
-            vehicleYear ++;
+            vehicleYear++;
           }
       if (d > lastMonth) {
         if (results[i].type == 'ON_FOOT' || results[i].type == 'ON_BICYCLE') {
-          walkingMonth ++;
+          walkingMonth++;
         }
         else
           if (results[i].type == 'IN_VEHICLE') {
-            vehicleMonth ++;
+            vehicleMonth++;
 
           }
       }
@@ -351,9 +352,9 @@ router.post('/ecocharts', checkAuth, async function (req, res) {
     firstdate: firstDate,
     lastdate: lastDate,
     ecoscore: (walkingMonth / (walkingMonth + vehicleMonth)),
-    walking: walkingYear ,
-    bicycle: bicycleYear ,
-    vehicle: vehicleYear 
+    walking: walkingYear,
+    bicycle: bicycleYear,
+    vehicle: vehicleYear
   }
   res.send(data);
 
@@ -683,29 +684,197 @@ router.get('/drawfullheatmap', checkAuth,async function (req, res) {
 })
 
 
-router.post('/drawSpecifiedHeatmap', checkAuth ,async function (req, res) {
-  console.log(req);
+router.post('/drawSpecifiedHeatmap', async function (req, res) {
+  console.log(req.body);
 
-  db = makeDb();
+
+  // Get ARRAY of key given value If Multiple keys have Same value 
+  function getKeyByValue(object, value) {
+    return Object.keys(object).filter(key => object[key] === value);
+  }
+
+
+  function dayStringToNumber(dayString) {
+    let weekday = ['Sunday',
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday']
+
+    return (weekday.indexOf(dayString));
+  }
+
 
   var mode = req.body.mode;
+
+  var dates = JSON.parse(req.body.dates)
+
+  var checkboxes = JSON.parse(req.body.checkboxes)
+
+  var tickedCheckboxes = getKeyByValue(checkboxes, true)
+
+  // console.log(mode);
+  console.log(dates);
+  //console.log(checkboxes);
+
+  // fromDate: '2015',
+  //   untilDate: '2025',
+  //     fromMonth: '01',
+  //       untilMonth: '12',
+  //         fromDay: 'Monday',
+  //           untilDay: 'Sunday',
+  //             fromTime: '',
+  //               untilTime: ''
+
+
+
+
+  // Get the fields from the Date object, that have to value
+  var emptyFields = getKeyByValue(dates, '');
+
+
+
+
+
+  // Checks if what has came into the database is empty and if so
+  // Substracts 1 on MONTHS AND DAYS(Monday, Tuesday...)
+  // Parse Strings into integes for later comparison
+  //
+  function calibrateDatesForDatabaseFiltering(dates, emptyFields) {
+
+    for (var i = 0; i < emptyFields.length; i++) {
+      if (emptyFields[i] == 'fromDate') { // check if from is empty
+        dates[emptyFields[i]] = 1900
+      }
+      else if (emptyFields[i] == 'untilDate') { // check if until date is empty 
+        dates[emptyFields[i]] = 2200;
+      }
+      else if (emptyFields[i] == 'fromMonth') { // check if from month is empty 
+        dates[emptyFields[i]] = 0;
+      }
+      else if (emptyFields[i] == 'untilMonth') { // check if until Month is empty 
+        dates[emptyFields[i]] = 11;
+      }
+      else if (emptyFields[i] == 'fromDay') { // check if from day is empty 
+        dates[emptyFields[i]] = 0;
+      }
+      else if (emptyFields[i] == 'untilDay') { // check if until day is empty 
+        dates[emptyFields[i]] = 6;
+      }
+      else if (emptyFields[i] == 'fromTime') { // check if from time is empty 
+        dates[emptyFields[i]] = 0;
+      }
+      else if (emptyFields[i] == 'untilTime') { // check if until time is empty 
+        dates[emptyFields[i]] = 23;
+      }
+    }
+
+
+    if (!emptyFields.includes('fromDate')) {
+      dates['fromDate'] = parseInt(dates['fromDate'])
+    }
+    if (!emptyFields.includes('untilDate')) {
+      dates['untilDate'] = parseInt(dates['untilDate'])
+    }
+    if (!emptyFields.includes('fromMonth')) {
+      dates['fromMonth'] = dates['fromMonth'] - 1;
+    }
+    if (!emptyFields.includes('untilMonth')) {
+      dates['untilMonth'] = dates['untilMonth'] - 1;
+    }
+    if (!emptyFields.includes('fromDay')) {
+      dates['fromDay'] = dayStringToNumber(dates['fromDay'])
+    }
+    if (!emptyFields.includes('untilDay')) {
+      dates['untilDay'] = dayStringToNumber(dates['untilDay'])
+    }
+    if (!emptyFields.includes('fromTime')) {
+      dates['fromTime'] = parseInt(dates['fromTime'])
+    }
+    if (!emptyFields.includes('untilTime')) {
+      dates['untilTime'] = parseInt(dates['untilTime'])
+    }
+
+
+  }
+
+  calibrateDatesForDatabaseFiltering(dates, emptyFields);
+  console.log(dates)
+
+
+
+
+
+
+
+
+
+  // ----- CONVERTING THE ARRAY OF CHECKBOXES INTO WHAT TYPES TO CALL FROM THE DATABASE! ----- //
+  var encloseWithinQuotes = "'" + tickedCheckboxes.join("','") + "'";
+  var stringForSQLQuery = encloseWithinQuotes.replace(/,/g, ' OR TYPE = ');
+  // ----- CONVERTING THE ARRAY OF CHECKBOXES INTO WHAT TYPES TO CALL FROM THE DATABASE! ----- //
+
+
+
+  var db = makeDb();
+
 
   var query;
 
 
-  switch (mode) {
-    case 2:
-      query = db.query(''); 
+  switch (parseInt(mode)) {
+    case 2: // YES Date , NO Checkbox
+      query = await db.query(' SELECT latitudeE7, longitudeE7, activity1.timestampMs FROM entry ' +
+        'INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId ' +
+        'INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1');
       break;
-    case 3:
-      query = db.query('');
+    case 3: // NO Date, YES Checkbox
+      query = await db.query('SELECT entry.latitudeE7, entry.longitudeE7 FROM `entry` ' +
+        'INNER JOIN activity1 on activity1.aa1=entry.entryId ' +
+        'WHERE type = ' + stringForSQLQuery); // Includes only the places the person have been on a spefic catagory of movement
       break;
-    case 4:
-      query = db.query('');
+    case 4: // YES Date, YES Checbox
+      query = await db.query('SELECT entry.latitudeE7, entry.longitudeE7, activity1.timestampMs FROM `entry` ' +
+        'INNER JOIN activity1 on activity1.aa1=entry.entryId ' +
+        'WHERE type = ' + stringForSQLQuery);
       break;
     default:
     // code block
   }
+
+  // ENDING HERE I HAVE GOT FROM THE DATABASE THE LOCATION having SPECIFIC ACTIVITIES (if asked)
+  // NOW TIME (if asked) has to be DETERMINED!
+
+   console.log("Query Result ", query , '\n END')
+
+  var i;
+  var rangedLocations=[];
+  for (i = 0; i < query.length; i++) {
+    var currentTimestamp = new Date(parseInt(query[i].timestampMs));
+    //console.log(currentTimestamp.getYear() + 1900 + ' >= ' + dates.dateForm + "   " + (currentTimestamp.getYear() + 1900) + '  <=  ' + dates.untilDate);
+
+    if ((currentTimestamp.getYear() + 1900 >= dates.fromDate) && (currentTimestamp.getYear() + 1900) <= dates.untilDate) { // Check Year
+      // console.log("Pass 1");
+      // console.log((currentTimestamp.getMonth()) +'  >=  '+ dates.fromMonth  + "  ++  " + (currentTimestamp.getMonth()) + '  <=  ' + dates.untilMonth);
+      if ((currentTimestamp.getMonth()  >= dates.fromMonth) && (currentTimestamp.getMonth()  <= dates.untilMonth)) { // Check Month
+        // console.log("Pass 2");
+        if ((currentTimestamp.getDay() >= dates.fromDay) && (currentTimestamp.getDay() <= dates.untilDay)) { // Check Day
+          // console.log("Pass 3");
+          if((currentTimestamp.getHours() >= dates.fromTime) && (currentTimestamp.getHours() <= dates.untilTime)){ // Check Check Time
+            // console.log("Pass 4");
+            rangedLocations.push(query[i]);
+          }
+        }
+      }
+    }
+  }
+  
+  var objectTobeSendToFrontEnd  = convertQuerryToHeatmapObject(rangedLocations);
+
+  res.send(objectTobeSendToFrontEnd);
+
 
 })
 
@@ -732,14 +901,14 @@ router.post('/radarRangeDates', async function (req, res) {
   var rangedDates = await db.query('SELECT type, activity1.timestampMs FROM entry INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1 WHERE activity1.timestampMs > ' + dateForm.since + ' AND activity1.timestampMs < ' + dateForm.until + ' AND userId = \'' + userObject.userId + '\'')
 
   var i;
-  
+
   var statsObject;
   var statsObjectAr = [];
- 
- 
+
+
   var type = {
     vehicle: 0,
-   feet: 0,
+    feet: 0,
     tilting: 0,
     still: 0,
     bicycle: 0,
@@ -798,62 +967,62 @@ router.post('/radarRangeDates', async function (req, res) {
     return statData;
   }
   for (i = 0; i < rangedDates.length; i++) {
-    
+
     statsObject = {
       type: rangedDates[i].type,
       time: rangedDates[i].timestampMs,
       confidence: rangedDates[i].confidence
     }
-    
+
     statsObjectAr.push(statsObject)
     switch (statsObject.type) {
       case 'IN_VEHICLE':
-        type.vehicle ++;
+        type.vehicle++;
         break;
       case 'ON_FOOT':
-        type.foot ++;
+        type.foot++;
         break;
       case 'TILTING':
-        type.tilting ++;
+        type.tilting++;
         break;
       case 'STILL':
-        type.still ++;
+        type.still++;
         break;
       case 'ON_BICYCLE':
-        type.bicycle ++;
+        type.bicycle++;
         break;
       case 'UNKNOWN':
-        type.unknown  ++;
+        type.unknown++;
         break;
     }
   }
   let finalObject = {
-    vehicle:{
+    vehicle: {
       type: 'IN_VEHICLE',
       date: calcDays(statsObjectAr, 'IN_VEHICLE').day,
       hours: calcDays(statsObjectAr, 'IN_VEHICLE').hour
     },
-   foot:{
+    foot: {
       type: 'ON_FOOT',
       date: calcDays(statsObjectAr, 'ON_FOOT').day,
       hours: calcDays(statsObjectAr, 'ON_FOOT').hour
     },
-    tilting:{
+    tilting: {
       type: 'TILTING',
       date: calcDays(statsObjectAr, 'TILTING').day,
       hours: calcDays(statsObjectAr, 'TILTING').hour
     },
-    still:{
+    still: {
       type: 'STILL',
       date: calcDays(statsObjectAr, 'STILL').day,
       hours: calcDays(statsObjectAr, 'STILL').hour
     },
-    bicycle:{
+    bicycle: {
       type: 'ON_BICYCLE',
       date: calcDays(statsObjectAr, 'ON_BICYCLE').day,
       hours: calcDays(statsObjectAr, 'ON_BICYCLE').hour
     },
-    unknown:{
+    unknown: {
       type: 'UNKNOWN',
       date: calcDays(statsObjectAr, 'UNKNOWN').day,
       hours: calcDays(statsObjectAr, 'UNKNOWN').hour
@@ -867,8 +1036,8 @@ router.post('/radarRangeDates', async function (req, res) {
 
 
   //console.log(type);
-  
- 
+
+
   res.send(finalObject);
 })
 
@@ -879,26 +1048,25 @@ router.post('/rangeDates', async function (req, res) {
   const db = makeDb();
 
   console.log(dateForm.until, "  ", dateForm.since, "--", userObject.userId)
-  var rangedDates = await db.query('SELECT latitudeE7, longitudeE7 FROM entry  WHERE activity1.timestampMs > ' + dateForm.since + ' AND activity1.timestampMs < ' + dateForm.until + ' AND userId = \'' + userObject.userId + '\'')
+  var rangedDates = await db.query('SELECT latitudeE7, longitudeE7 FROM entry  INNER JOIN locationconnectactivity ON userId=entryId INNER JOIN activity1 ON a1=aa1 WHERE activity1.timestampMs > ' + dateForm.since + ' AND activity1.timestampMs < ' + dateForm.until + ' AND userId = \'' + userObject.userId + '\'')
 
   var i;
   var locationsObject;
   var objectForHeatmap //This is a javascript object that HeatmapJs understands and translate it into colors
   var locationsObjectArr = [];
-  
+
   for (i = 0; i < rangedDates.length; i++) {
     locationsObject = {
       lat: rangedDates[i].latitudeE7 * Math.pow(10, -7),
       lng: rangedDates[i].longitudeE7 * Math.pow(10, -7),
       count: 1
     }
-   objectForHeatmap = convertQuerryToHeatmapObject(rangedDates);
 
     locationsObjectArr.push(locationsObject)
-    
-    
+
+
   }
-  
+
   //console.log(locationsObjectArr)
 
 
@@ -906,7 +1074,7 @@ router.post('/rangeDates', async function (req, res) {
 
 
   //console.log(type);
-  
+
   objectForHeatmap = {
     data: locationsObjectArr,
     max: locationsObjectArr.length

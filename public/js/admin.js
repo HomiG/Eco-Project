@@ -180,28 +180,52 @@ function rangedHeatmap() {
 
   var mode = -1;
 
-  if (noDateChoosed(dateArr) && noCheckboxChoosed()) {
+  if (noDateChoosed(dateArr) && noCheckboxChoosed()) { // NO DATE, NO CHEKCBOX
     mode = 1;
     showFullHeatmap();
     return;
   }
 
-  else if (!noDateChoosed(dateArr) && noCheckboxChoosed()) {
+  else if (!noDateChoosed(dateArr) && noCheckboxChoosed()) { // YES DATE, NO CHEKCBOX
     mode = 2;
   }
 
-  else if(noDateChoosed(dateArr) && !noCheckboxChoosed()){
+  else if (noDateChoosed(dateArr) && !noCheckboxChoosed()) { //NO DATE, YES CHECKBOX
     mode = 3;
   }
 
-  else if(!noDateChoosed(dateArr) && !noCheckboxChoosed()){
+  else if (!noDateChoosed(dateArr) && !noCheckboxChoosed()) { //YES DATE, YES CHECKBOX
     mode = 4;
   }
 
   console.log('mode');
 
+
+  var checkBoxObject = {
+    IN_VEHICLE: document.getElementById('IN_VEHICLE').checked,
+    ON_BICYCLE: document.getElementById('ON_BICYCLE').checked,
+    ON_FOOT: document.getElementById('ON_FOOT').checked,
+    STILL: document.getElementById('STILL').checked,
+    TILTING: document.getElementById('TILTING').checked,
+    UNKNOWN: document.getElementById('UNKNOWN').checked
+  }
+
+  var datesObject = {
+    fromDate: document.getElementById('fromDate').value,
+    untilDate: document.getElementById('untilDate').value,
+    fromMonth: document.getElementById('fromMonth').value,
+    untilMonth: document.getElementById('untilMonth').value,
+    fromDay: document.getElementById('fromDay').value,
+    untilDay: document.getElementById('untilDay').value,
+    fromTime: document.getElementById('fromTime').value,
+    untilTime: document.getElementById('untilTime').value
+  }
+
+
   var formFile = new FormData();
   formFile.append('mode', mode);
+  formFile.append('checkboxes', JSON.stringify(checkBoxObject))
+  formFile.append('dates', JSON.stringify(datesObject))
 
   $.ajax({
     url: "/drawSpecifiedHeatmap",

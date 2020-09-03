@@ -59,21 +59,11 @@
             <h2>Leaderboard.</h2>
             <hr style="width:50px; border:5px solid #945f90; margin-top:35px; border-radius: 100px;">
             <p style="margin-top:35px">ΟΙ 3 ΚΑΛΥΤΕΡΟΙ!</p>
-            <p>Δεν εισαι μεσα σε αυτους, try harder! Γραφω διαφορα για να δω την διαφορα! Δεν εχει νοημα
-                τιποτα πια!
-                Πενηντάρικα (πενηντάρικα)
-                Απ' τα πενηντάρικα
-                Έσκασε το πορτοφόλι απ' τα πενηντάρικα
-                Έχω κάνει τα κιλά να κάνουν ακροβατικά
-                Μια ζωή ήμουνα dealer είχα γούστα ακριβά
-                Από πιτσιρικάς ήξερα τι ήθελα
+            <input type="date" id="datePicker" onblur="dateChoosed(event)">
+            <label id="label">When is the beginning of the month?</label>
+            <canvas id="goodCanvas1" width="400" height="100" aria-label="Hello ARIA World" role="img"></canvas>
+            <script type="text/javascript" src="public/js/leaderboard.js"></script>
 
-                Θέλω κότερα, ελικόπτερα, θέλω οικόπεδα
-                Γούστα ακριβά, έχω γούστα ακριβά
-                Θέλω κότερα, ελικόπτερα, θέλω οικόπεδα
-                Γούστα ακριβά, έχω γούστα ακριβά
-
-            </p>
         </div>
 
         <div id="heatmap" style="margin-top: 75px">
@@ -122,6 +112,27 @@
                 }
             </style>
             <script type="text/javascript" src="../public/js/upload.js"></script>
+
+
+            <canvas id="myChart" width="300" height="100"  aria-label="Hello ARIA World" role="img"></canvas>
+            <script type="text/javascript" src="/public/js/radar.js"></script>
+            <input type="date" id="startDate" name="From">
+            <input type="date" id="endDate" name="Until">
+            <button id="submitDatesButton" onclick="dateChoosed()">Range Dates</button>
+            <input type="checkbox" onchange="toggleChart()" id="cheese">Choose hours of the day or Day of the week
+            <script>
+        
+            var start = document.getElementById('startDate')
+            var end = document.getElementById('endDate')
+            var today= new Date().toISOString().slice(0, 10); // get Today
+            var last = new Date('05 October 2019 14:48 UTC').toISOString().slice(0, 10);
+            start.value = last;
+            end.value=today;
+            </script>
+        
+
+
+
 
         </div>
 
