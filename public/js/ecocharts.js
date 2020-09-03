@@ -16,14 +16,15 @@ function calculate() {
             console.log("RESPONSED")
             console.log(response)
             allData = response;
-            ecoscoreTag.innerHTML = 'Your ecoscore is: ' + allData.ecoscore + " %"
+            ecoscoreTag.innerHTML = 'Your ecoscore is: ' + allData.ecoscore + " % <br> The dates you have uploaded are between "+allData['firstdate'].slice(0, 10) 
+            +' and ' +allData.lastdate.slice(0, 10) ;
             dtst = [JSON.stringify( allData.walking), JSON.stringify(allData.bicycle), JSON.stringify(allData.vehicle)];;
 
-        }
-    });
 
+
+            
     let ChartOfTransportations = document.getElementById('PieChartOfTransportations').getContext('2d');
-    let BarLeaderBoard = document.getElementById('LeaderBoard').getContext('2d');
+    
     // Global Options
     Chart.defaults.global.defaultFontFamily = 'Lato';
     Chart.defaults.global.defaultFontSize = 18;
@@ -40,8 +41,8 @@ function calculate() {
           data: dtst,
           //backgroundColor:'green',
           backgroundColor: [
-            'rgba(255, 99, 132, 0.6)',
-            'rgba(54, 162, 235, 0.6)',
+            'rgba(102,255,153,1) ' ,
+            'rgba(204,153,204,1)',
             '#777'
           ],
           borderWidth: 1,
@@ -79,7 +80,12 @@ function calculate() {
     });
 
 
+        }
+    });
+
     
     
 
 }
+
+//module.exports = calculate;

@@ -1,60 +1,61 @@
 var ctx = document.getElementById('myChart').getContext('2d');
 var startDate = document.getElementById('startDate');
 var endDate = document.getElementById('endDate');
-var label = document.getElementById('label');
-let leaderboardNames;
-let leaderboardData=[];
+//var label = document.getElementById('label');
+var date='date'
+
 var myChart
 function createNewBarChart() {
     myChart = new Chart(ctx, {
-        type: 'radar',
+        type: 'bar',
         data: {
             datasets: [{
                 data: [],
                 label: 'Vehicle',
-                backgroundColor: 
+                backgroundColor:
                     'rgba(255, 99, 132, 0.2)'
-                   ,
-                
+                ,
+
             }, {
                 data: [],
                 label: 'Walking',
-                backgroundColor: 
+                backgroundColor:
                     'rgba(54, 162, 235, 0.2)',
-                    
-                },
-                {
-                    data: [],
-                    label: 'Bicycle',
-                    backgroundColor: 
-                        'rgba(255, 206, 86, 0.2)',
-                                      
-                    
-                },{
-                    data: [],
-                    label: 'Still',
-                    backgroundColor:
-                        'rgba(153, 102, 255, 0.2)',
-                    
-                    
-                },{
-                    data: [],
-                    label: 'Tilting',
-                    backgroundColor: 
-                        'rgba(255, 159, 64, 0.2)',
-                      
+
+            },
+            {
+                data: [],
+                label: 'Bicycle',
+                backgroundColor:
+                    'rgba(255, 206, 86, 0.2)',
+
+
+            }, {
+                data: [],
+                label: 'Still',
+                backgroundColor:
+                    'rgba(153, 102, 255, 0.2)',
+
+
+            }, {
+                data: [],
+                label: 'Tilting',
+                backgroundColor:
+                   'rgba(153,51,0,0.2)'
+                    ,
+
+
+            }, {
+                data: [],
+                label: 'Unknown',
+                backgroundColor: 'rgba(102,0,102,0.2)'
+
                 
-                },{
-                    data: [],
-                    label: 'Unknown',
-                    backgroundColor: [
-                       
-                    ],
-                    
-                }
+
+            }
             ]
-    }
-    ,    options: {
+        }
+        , options: {
             title: {
                 display: true,
                 text: 'Your Transportations per Day of the Week or Hour of the Day',
@@ -85,11 +86,12 @@ function createNewBarChart() {
 myChart = createNewBarChart();
 
 // ADD DATA TO A CHART 
-function addData(chart, label, data) {
-    var i, j;
-    for (j = 0; j < data.length; j++) {
-        for (i = 0; i < data[j].length; i++) {
-            chart.data.datasets[j].data.push(data[j][i]);
+function addData(chart, label, newData) {
+    var i = 0, j = 0;
+    i = 0; j = 0;
+    for (j = 0; j < newData.length; j++) {
+        for (i = 0; i < newData[j].length; i++) {
+            chart.data.datasets[j].data.push(newData[j][i]);
         }
     };
 
@@ -121,7 +123,7 @@ function dateChoosed(event) {
     //     return;
     // }
 
-    submitCurrentMonth()
+    submitDates();
 
 }
 
@@ -130,16 +132,26 @@ function onloadBody() {
 
 }
 
-
-
-
-function submitCurrentMonth() {
+function toggleChart(){
+    var checkbox=document.getElementById('cheese');
+    if (checkbox.checked){
+        date='hours';
+    }
+    else{
+        date='date'
+    }
     submitDates();
 }
 
+
+
 function submitDates() {
+    let leaderboardNames;
+    let leaderboardData = [];
     startDate = document.getElementById('startDate');
     endDate = document.getElementById('endDate');
+
+
 
     var dateForm = new FormData();
     dateForm.append('since', startDate.valueAsNumber)
@@ -155,10 +167,10 @@ function submitDates() {
         processData: false,
         data: dateForm,
         success: function (response) {
-            if (response.length == 0) {
-                label.innerHTML = "NO DATA AVAILABLE FOR SELECTED MONTH"
-            }
-            date='hours';
+            // if (response.length == 0) {
+            //     label.innerHTML = "NO DATA AVAILABLE FOR SELECTED MONTH"
+            // }
+            //date = 'hours';
             leaderboardNames = Object.keys(response['vehicle'][date]);
             //leaderboardData = [Object.values(response['vehicle']['date']), Object.values(response['foot']['date'])];
             leaderboardData.push(Object.values(response['vehicle'][date]));
@@ -167,11 +179,12 @@ function submitDates() {
             leaderboardData.push(Object.values(response['still'][date]));
             leaderboardData.push(Object.values(response['tilting'][date]));
             leaderboardData.push(Object.values(response['unknown'][date]));
-            console.log(response)
+            //console.log(response)
             myChart = resetChart(myChart); // RESET THE CHART
             var i = 0;
 
 
+            // console.log(leaderboardData);
             // ADD NEW VALUES (THE ONES RETURNED FROM THE SERVER) TO THE CHART
             addData(myChart, leaderboardNames, leaderboardData)
 

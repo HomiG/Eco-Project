@@ -111,6 +111,7 @@ function submitCurrentMonth() {
             console.log(response)
             leaderboardNames = response['names']
             leaderboardData = response['scores']
+            
             myChart = resetChart(myChart); // RESET THE CHART 
             for (var i in leaderboardNames) { // ADD NEW VALUES (THE ONES RETURNED FROM THE SERVER) TO THE CHART
                 addData(myChart, leaderboardNames[i], leaderboardData[i])

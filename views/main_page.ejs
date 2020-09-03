@@ -8,11 +8,12 @@
     <link rel="stylesheet" href="/public/css/main_page.css">
 
     <link href="https://fonts.googleapis.com/css?family=Muli|Raleway&display=swap" rel="stylesheet">
-
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
 
 </head>
 
-<body>
+<body onload='runOnload()'>
 
     <div class="header">
         <h1>ECO PROJECT</h1>
@@ -44,49 +45,14 @@
             <p style="margin-top:35px">ΚΑΤΑΠΛΗΚΤΙΚΑ!</p>
 
 
-            <p>Το γραφημα θα μπει εδω</p>
-            Πρώτη σου φορά μου λες πως σου συμβαίνει αυτό
-            Πως τρελαίνεσαι και δεν μπορείς ούτε λεπτό
-            Μακριά από τη δική μου αγκαλιά
-            Τα δικά μου τα φιλιά
-            Δε κοιμάσαι
-            Λες παντού με βλέπεις, πως φοβάσαι
-            Μην χαθεί όλο αυτό
-            Εγώ
-            Στη ζωή σου λες πως φέρνω πανικό
-            Εγώ
-            Αχ και να ξέρες ακόμα τι μπορώ
-            Εγώ
-            Κι ότι είχες παλιό
-            Πλέον ζει στο κενό
-            Sorry αν φταίω μα έτσι απλά είμαι εγώ
+            <div id='ecoscoreTag'>Your ecoscore is: </div>
+            <!-- <button onclick='calculate()'>REFRESH</button> -->
 
-            Πρώτη σου φορά μου λες πως τόσο αγαπάς
-            Είχες μάθει στο να φεύγεις να τα παράτας
-            Μα μη με συγκρίνεις με τα χθεσινά
-            Εδώ δεν περνούν αυτά
+            <div class="container">
+                <canvas id="PieChartOfTransportations" width="400" height="100" aria-label="Hello ARIA World"
+                    role="img"></canvas>
+            </div>
 
-            Δε κοιμάσαι
-            Λες παντού με βλέπεις, πως φοβάσαι
-            Μην χαθεί όλο αυτό
-
-            Εγώ
-            Στη ζωή σου λες πως φέρνω πανικό
-            Εγώ
-            Αχ και να ξέρες ακόμα τι μπορώ
-            Εγώ
-            Κι ότι είχες παλιό
-            Πλέον ζει στο κενό
-            Sorry αν φταίω μα έτσι απλά είμαι εγώ
-
-            Εγώ
-            Στη ζωή σου λες πως φέρνω πανικό
-            Εγώ
-            Αχ και να ξέρες ακόμα τι μπορώ
-            Εγώ
-            Κι ότι είχες παλιό
-            Πλέον ζει στο κενό
-            Sorry αν φταίω μα έτσι απλά είμαι εγώ
         </div>
 
         <div id="leaderboard" style="margin-top: 75px">
@@ -136,8 +102,7 @@
                 integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
                 crossorigin="" />
 
-            <script type="text/javascript"
-                src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
             <script type="text/javascript" src="../public/js/heatmap.js-2.0.5/build/heatmap.js"></script>
             <script type="text/javascript"
                 src="../public/js/heatmap.js-2.0.5/plugins/leaflet-heatmap/leaflet-heatmap.js"></script>
@@ -190,6 +155,7 @@
 
 
 
+    <script type="text/javascript" src="../public/js/ecocharts.js"></script>
 
     <script src="/public/js/main_page.js"></script>
 
