@@ -899,18 +899,18 @@ router.post('/statistics', async function (req, res) {
   const db = makeDb();
 
   // console.log(dateForm.until, "  ", dateForm.since, "--", userObject.userId)
-  var data = await db.query('SELECT type, entry.username ,activity1.timestampMs FROM entry INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1 ')
+  var data = await db.query('SELECT type, entry.username , userId ,activity1.timestampMs FROM entry INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1 ')
 
   var i, j, k;
 
-  var statsObject;
+  var usersObject;
   var statsObjectAr = [];
 
   var users = {};
 
   var tipos = {
     vehicle: 0,
-    foot: 0,
+    feet: 0,
     tilting: 0,
     still: 0,
     bicycle: 0,
@@ -1004,64 +1004,34 @@ router.post('/statistics', async function (req, res) {
   }
   for (i = 0; i < rangedDates.length; i++) {
 
-    statsObject = {
-      type: rangedDates[i].type,
-      time: rangedDates[i].timestampMs,
-    }
-
-    statsObjectAr.push(statsObject)
-    switch (statsObject.type) {
+      
+    switch (rangedDates[i].type) {
       case 'IN_VEHICLE':
-        type.vehicle++;
+        tipos.vehicle++;
         break;
       case 'ON_FOOT':
-        type.foot++;
+        tipos.foot++;
         break;
       case 'TILTING':
-        type.tilting++;
+        tipos.tilting++;
         break;
       case 'STILL':
-        type.still++;
+        tipos.still++;
         break;
       case 'ON_BICYCLE':
-        type.bicycle++;
+        tipos.bicycle++;
         break;
       case 'UNKNOWN':
-        type.unknown++;
+        tipos.unknown++;
         break;
     }
   }
   let finalObject = {
-    vehicle: {
-      type: tipos.vehicle,
-      date: calcDays(statsObjectAr, 'IN_VEHICLE').day,
-      hours: calcDays(statsObjectAr, 'IN_VEHICLE').hour
-    },
-    foot: {
-      type: tipos.foot,
-      date: calcDays(statsObjectAr, 'ON_FOOT').day,
-      hours: calcDays(statsObjectAr, 'ON_FOOT').hour
-    },
-    tilting: {
-      type: tipos.tilting,
-      date: calcDays(statsObjectAr, 'TILTING').day,
-      hours: calcDays(statsObjectAr, 'TILTING').hour
-    },
-    still: {
-      type: tipos.still,
-      date: calcDays(statsObjectAr, 'STILL').day,
-      hours: calcDays(statsObjectAr, 'STILL').hour
-    },
-    bicycle: {
-      type: tipos.bicycle,
-      date: calcDays(statsObjectAr, 'ON_BICYCLE').day,
-      hours: calcDays(statsObjectAr, 'ON_BICYCLE').hour
-    },
-    unknown: {
-      type: tipos.unknown,
-      date: calcDays(statsObjectAr, 'UNKNOWN').day,
-      hours: calcDays(statsObjectAr, 'UNKNOWN').hour
-    },
+    type:tipos,
+    days:day,
+    hours:hour,
+    months:month,
+    years:year
 
   }
   //console.log(locationsObjectArr)
