@@ -1,12 +1,12 @@
 
-var ctx = document.getElementById('myChart').getContext('2d');
+var radarctx = document.getElementById('myRadar').getContext('2d');
 var pie = document.getElementById('pieChart').getContext('2d');
 var startDate = document.getElementById('startDate');
 var endDate = document.getElementById('endDate');
 //var label = document.getElementById('label');
 var date='date'
 
-var myChart
+var myRadar
 var pieChart
 function createNewPieChart() {
     pieChart=new Chart(pie,{
@@ -53,8 +53,8 @@ function createNewPieChart() {
     return pieChart;
 }
     
-function createNewBarChart() {
-    myChart = new Chart(ctx, {
+function radracreateNewBarChart() {
+    myRadar = new Chart(radarctx, {
         type: 'bar',
         data: {
             datasets: [{
@@ -129,9 +129,9 @@ function createNewBarChart() {
             }
         }
     });
-    return myChart;
+    return myRadar;
 }
-myChart = createNewBarChart();
+myRadar = radracreateNewBarChart();
 pieChart=createNewPieChart();
 
 // ADD DATA TO A CHART 
@@ -149,7 +149,7 @@ function addPie(chart,label,Bdata) {
     chart.update();
 
 }
-function addData(chart, label, newData) {
+function radarAddData(chart, label, newData) {
     var i = 0, j = 0;
     i = 0; j = 0;
     for (j = 0; j < newData.length; j++) {
@@ -172,10 +172,10 @@ function resetPie(chart){
 }
 
 // DELETE ALL DATA OF THE CHART PASSED INTO
-function resetChart(chart) {
+function radarResetChart(chart) {
     chart.destroy();
 
-    return newChart = createNewBarChart();
+    return newChart = radracreateNewBarChart();
 }
 // ---------------------- CHART FUNCTIONS ---------------------- //
 
@@ -188,7 +188,7 @@ function dateChoosedforCharts(event) {
     //     return;
     // }
 
-    submitDates();
+    sradarSubmitDates();
 
 }
 
@@ -197,7 +197,7 @@ function onloadBody() {
 
 }
 
-function toggleChart(){
+function radarToggleChart(){
     var checkbox=document.getElementById('cheese');
     if (checkbox.checked){
         date='hours';
@@ -205,18 +205,18 @@ function toggleChart(){
     else{
         date='date'
     }
-    submitDates();
+    sradarSubmitDates();
 }
 
 
 
-function submitDates() {
-    let leaderboardNames;
-    let leaderboardData = [];
+function sradarSubmitDates() {
+    let radarNames;
+    let radarData = [];
     let pieData=[];
     startDate = document.getElementById('startDate');
     endDate = document.getElementById('endDate');
-    // var myChart
+    // var myRadar
     // var pieChart
 
 
@@ -238,14 +238,14 @@ function submitDates() {
             //     label.innerHTML = "NO DATA AVAILABLE FOR SELECTED MONTH"
             // }
             //date = 'hours';
-            leaderboardNames = Object.keys(response['vehicle'][date]);
-            //leaderboardData = [Object.values(response['vehicle']['date']), Object.values(response['foot']['date'])];
-            leaderboardData.push(Object.values(response['vehicle'][date]));
-            leaderboardData.push(Object.values(response['foot'][date]));
-            leaderboardData.push(Object.values(response['bicycle'][date]));
-            leaderboardData.push(Object.values(response['still'][date]));
-            leaderboardData.push(Object.values(response['tilting'][date]));
-            leaderboardData.push(Object.values(response['unknown'][date]));
+            radarNames = Object.keys(response['vehicle'][date]);
+            //radarData = [Object.values(response['vehicle']['date']), Object.values(response['foot']['date'])];
+            radarData.push(Object.values(response['vehicle'][date]));
+            radarData.push(Object.values(response['foot'][date]));
+            radarData.push(Object.values(response['bicycle'][date]));
+            radarData.push(Object.values(response['still'][date]));
+            radarData.push(Object.values(response['tilting'][date]));
+            radarData.push(Object.values(response['unknown'][date]));
             pieData.push(response.vehicle.type);
             pieData.push(response.foot.type);
             pieData.push(response.bicycle.type);
@@ -254,18 +254,18 @@ function submitDates() {
             pieData.push(response.unknown.type);
             console.log(response)
             console.log(pieData)
-            myChart = resetChart(myChart); // RESET THE CHART
+            myRadar = radarResetChart(myRadar); // RESET THE CHART
             pieChart=resetPie(pieChart);
             names=['Vehicle','Walking','Bicycle','Still','Tilting', 'Unknown']
             var i = 0;
             for(i=0; i<pieData.length;i++){
             addPie(pieChart,names[i],pieData[i])}
             
-            // console.log(leaderboardData);
+            // console.log(radarData);
             // ADD NEW VALUES (THE ONES RETURNED FROM THE SERVER) TO THE CHART
-            addData(myChart, leaderboardNames, leaderboardData)
+            radarAddData(myRadar, radarNames, radarData)
             pieChart.update();
-            myChart.update();
+            myRadar.update();
         }
     })
 

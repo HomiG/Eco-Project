@@ -28,6 +28,7 @@ const { timeStamp } = require('console');
 const { stringify } = require('querystring');
 const { type, data } = require('jquery');
 const { parse } = require('path');
+const { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } = require('constants');
 
 
 
@@ -218,7 +219,7 @@ router.post('/leaderboard', async function (req, res) {
   // GET CURRENT USER'S ECOSCORE
   var currentUserEcoscore = await db.query('SELECT user.username, ecoscore FROM userEcoscore INNER JOIN user ON user.userId = userEcoscore.userId WHERE user.userId = \'' + userObject.userId + '\'')
 
-
+  
   console.log(getEcoscores)
   console.log(currentUserEcoscore)
 
@@ -705,7 +706,7 @@ router.post('/radarRangeDates', async function (req, res) {
   const db = makeDb();
 
   console.log(dateForm.until, "  ", dateForm.since, "--", userObject.userId)
-  var rangedDates = await db.query('SELECT type, activity1.timestampMs FROM entry INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1 WHERE activity1.timestampMs > ' + dateForm.since + ' AND activity1.timestampMs < ' + dateForm.until + ' AND userId = \'' + userObject.userId + '\'')
+  var radarDates = await db.query('SELECT type, activity1.timestampMs FROM entry INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1 WHERE activity1.timestampMs > ' + dateForm.since + ' AND activity1.timestampMs < ' + dateForm.until + ' AND userId = \'' + userObject.userId + '\'')
 
   var i;
 
@@ -773,11 +774,11 @@ router.post('/radarRangeDates', async function (req, res) {
     }
     return statData;
   }
-  for (i = 0; i < rangedDates.length; i++) {
+  for (i = 0; i < radarDates.length; i++) {
 
     statsObject = {
-      type: rangedDates[i].type,
-      time: rangedDates[i].timestampMs
+      type: radarDates[i].type,
+      time: radarDates[i].timestampMs
     }
 
     statsObjectAr.push(statsObject)
@@ -839,7 +840,7 @@ router.post('/radarRangeDates', async function (req, res) {
   console.log(finalObject['bicycle']['hours']);
 
 
-  var objectForHeatmap = convertQuerryToHeatmapObject(rangedDates);
+  var objectForHeatmap = convertQuerryToHeatmapObject(radarDates);
 
 
   //console.log(type);
