@@ -219,6 +219,9 @@ router.post('/leaderboard', async function (req, res) {
   var currentUserEcoscore = await db.query('SELECT user.username, ecoscore FROM userEcoscore INNER JOIN user ON user.userId = userEcoscore.userId WHERE user.userId = \'' + userObject.userId + '\'')
 
 
+  console.log(getEcoscores)
+  console.log(currentUserEcoscore)
+
   const arrayColumn = (arr, n) => arr.map(x => x[n]); // Function to get Column N of 2D array.
 
   var outputData = getEcoscores.map(Object.values); // Converting Array of Objects into Array of Arrays
