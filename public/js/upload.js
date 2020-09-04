@@ -71,7 +71,7 @@ function uploadJSONFiltered() {
 
   var statusDiv = document.getElementById('status')
   var docPicker = document.getElementById('docpicker');
-  //console.log(docPicker.files[0])
+  console.log(docPicker.files[0])
 
 
 

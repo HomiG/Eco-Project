@@ -101,7 +101,7 @@
   )  ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-  -- INSERT INTO lastMonth(startingDate) VALUES (1543668339001)
+  INSERT INTO lastMonth(startingDate) VALUES (1543668339001)
   -- UPDATE lastMonth set startingDate = 1513551020885
 
 
@@ -177,28 +177,28 @@ DELIMITER ;
 
 -- 1
 
- SELECT latitudeE7m, longitudeE7 FROM entry;
+--  SELECT latitudeE7m, longitudeE7 FROM entry;
 
--- 2 ANALYZE LOCALLY 
-  SELECT latitudeE7m, longitudeE7, activity1.timestampMs FROM entry
-  INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId 
-  INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1;
+-- -- 2 ANALYZE LOCALLY 
+--   SELECT latitudeE7m, longitudeE7, activity1.timestampMs FROM entry
+--   INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId 
+--   INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1;
 
--- 3
-SELECT entry.latitudeE7, entry.longitudeE7 FROM `entry` 
-INNER JOIN activity1 on activity1.aa1=entry.entryId 
-WHERE type = ... 
+-- -- 3
+-- SELECT entry.latitudeE7, entry.longitudeE7 FROM `entry` 
+-- INNER JOIN activity1 on activity1.aa1=entry.entryId 
+-- WHERE type = ... 
 
--- 4 // ANALYZE LOCALLY CAUSE OF TIMESTAMP 
-SELECT entry.latitudeE7, entry.longitudeE7, activity1.timestampMs FROM `entry` 
-INNER JOIN activity1 on activity1.aa1=entry.entryId 
-WHERE type = ... 
+-- -- 4 // ANALYZE LOCALLY CAUSE OF TIMESTAMP 
+-- SELECT entry.latitudeE7, entry.longitudeE7, activity1.timestampMs FROM `entry` 
+-- INNER JOIN activity1 on activity1.aa1=entry.entryId 
+-- WHERE type = ... 
 
 
 
--- 1a  Την κατανομή των δραστηριοτήτων των χρηστών (ποσοστό εγγραφών ανά τύπο δραστηριότητας
-SELECT entry.latitudeE7, entry.longitudeE7, activity2.type, COUNT(activity2.confidence) from entry 
-INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId 
-INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1 
-INNER JOIN activity1connectactivity2 on activity1.aa1=activity1connectactivity2.a1 
-INNER JOIN activity2 on activity2.aa2=activity1connectactivity2.a2 GROUP BY activity2.type 
+-- -- 1a  Την κατανομή των δραστηριοτήτων των χρηστών (ποσοστό εγγραφών ανά τύπο δραστηριότητας
+-- SELECT entry.latitudeE7, entry.longitudeE7, activity2.type, COUNT(activity2.confidence) from entry 
+-- INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId 
+-- INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1 
+-- INNER JOIN activity1connectactivity2 on activity1.aa1=activity1connectactivity2.a1 
+-- INNER JOIN activity2 on activity2.aa2=activity1connectactivity2.a2 GROUP BY activity2.type 

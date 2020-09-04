@@ -76,7 +76,7 @@ function resetChart(chart) {
 
 
 // EXECUTES WHEN Datepicker LOSES FOCUS
-function dateChoosed(event) {
+function dateChoosedLeaderboard() {
     // if (event.keyCode === 13) {
     //     submitCurrentMonth()
     //     return;
