@@ -912,7 +912,7 @@ router.post('/getHeatmap', async function (req, res) {
 
   var rangedDates = await db.query('SELECT latitudeE7, longitudeE7 FROM `entry` WHERE userId = \'' + userObject.userId + '\'')
 
-  objectForHeatmap = convertQuerryToHeatmapObject(rangedDates)
+  var objectForHeatmap = convertQuerryToHeatmapObject(rangedDates)
 
 
   res.send(objectForHeatmap);

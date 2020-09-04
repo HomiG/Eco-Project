@@ -29,7 +29,7 @@
     FOREIGN KEY (`userId`) REFERENCES `user`(`userId`)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-  DROP TABLE IF EXISTS `activity`;
+  DROP TABLE IF EXISTS `activity1`;
   CREATE TABLE `activity1`(
     `aa1` int(11) NOT NULL AUTO_INCREMENT,
     `timestampMs` varchar(20) NOT NULL,
