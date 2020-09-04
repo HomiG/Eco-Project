@@ -28,9 +28,6 @@ function openNav() {
   }
 
   
-var uplodBtn=document.getElementById("uploadBtn");
-uplodBtn.addEventListener("click",uploadFile());
-
 function uploadFile(){
   
   window.location.href="/upload"

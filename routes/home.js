@@ -55,6 +55,9 @@ router.get('/upload', checkAuth, function (req, res) {
 });
 
 
+router.get('/admin', function (req, res) {
+  res.render('../views/admin.ejs')
+});
 
 
 
@@ -101,19 +104,10 @@ var userObject = {
   username: '',
   email: '',
   userId: 0,
-  ecoscore: 0,
-  admin:0
+  ecoscore: 0
 }
 
-function checkAdmin(req, res, next) {
-  if (!userObject.admin) {
-    
-      res.send('You are not authorised to view this page');
-    
-  } else {
-    next();
-  }
-}
+
 function checkAuth(req, res, next) {
   if (!req.session.userId) {
     res.send('You are not logged in, please login first in order to view this page');
@@ -152,7 +146,6 @@ router.post('/login', function (req, res) {
       userObject.email = loginData.email;
       console.log(userObject.userId);
       if (admin) {
-        userObject.admin=1;
         res.redirect('/admin')
       }
       else {
@@ -165,9 +158,8 @@ router.post('/login', function (req, res) {
 
 });
 
-router.get('/admin', checkAuth, checkAdmin,function (req, res) {
+router.get('/admin', checkAuth, function (req, res) {
   res.render('../views/admin.ejs')
-  
 });
 
 router.get('/mainPage', checkAuth, function (req, res) {
@@ -175,7 +167,7 @@ router.get('/mainPage', checkAuth, function (req, res) {
 });
 
 
-router.post('/uploadJson',checkAuth, function (req, res) {
+router.post('/uploadJson', function (req, res) {
 
 
   console.log("Entered api/pupload.")
@@ -199,11 +191,11 @@ router.post('/uploadJson',checkAuth, function (req, res) {
 
 })
 
-router.get('/leaderboard', checkAuth, function (req, res) {
+router.get('/leaderboard', function (req, res) {
   res.render('../views/leaderboard.ejs')
 });
 
-router.post('/leaderboard', checkAuth, async function (req, res) {
+router.post('/leaderboard', async function (req, res) {
   const db = makeDb();
   var todayMonth = req.body.todayMonth;
 
@@ -244,7 +236,7 @@ router.post('/leaderboard', checkAuth, async function (req, res) {
 
 })
 
-router.post('/ecocharts', checkAuth, async function (req, res) {
+router.post('/ecocharts', /*checkAuth,*/async function (req, res) {
   var result;
 
   const db = makeDb();
@@ -363,11 +355,11 @@ router.post('/ecocharts', checkAuth, async function (req, res) {
 
 });
 
-router.get('/radar', checkAuth,function (req, res) {
+router.get('/radar', /*checkAuth,*/ function (req, res) {
   res.render('../views/radar.ejs')
 });
 
-router.get('/charts', checkAuth, function (req, res) {
+router.get('/charts', /*checkAuth,*/ function (req, res) {
   res.render('../views/ecocharts.ejs')
 });
 
@@ -377,179 +369,10 @@ router.post('/upload', checkAuth, function (req, res) {
 
 })
 
-router.get('/adminstats', checkAuth, checkAdmin, function (req, res) {
-  res.render('../views/adminstats.ejs')
-});
-
-router.post('/statistics', async function (req, res) {
-
-  //var dateForm = req.body
-
-  //This is for Running the Code Async
-  const db = makeDb();
-
- // console.log(dateForm.until, "  ", dateForm.since, "--", userObject.userId)
-  var data = await db.query('SELECT type, entry.username ,activity1.timestampMs FROM entry INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1 ')
-
-  var i,j,k;
-  
-  var statsObject;
-  var statsObjectAr = [];
- 
- var users={};
-
-  var tipos = {
-    vehicle: 0,
-    foot: 0,
-    tilting: 0,
-    still: 0,
-    bicycle: 0,
-    unknown: 0,
-  }
-  data[timestampMs].forEach(function(date) {
-    var year = new Date(date).getFullYear();
-  
-    if (typeof counts[year] == 'undefined') {
-      counts[year] = {};
-    }
-  
-    if (typeof counts[dateS][hour] == 'undefined') {
-      counts[dateS][hour] = 0;
-    }
-  
-    counts[dateS][hour] += 1;
-  });
-  
-  function calcDays(Object, type) {
-    let days = [0, 0, 0, 0, 0, 0, 0];
-    let hours = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    let years=[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-    var i;
-    for (i = 0; i < Object.length; i++) {
-      if (Object[i].type == type) {
-        var d = new Date(parseInt(Object[i].time));
-        days[d.getDay()]++;
-        hours[d.getHours()]++;
-        years[d.getFullYear()]++;
-      }
-    }
-    var day = {
-      Sunday: days[0],
-      Monday: days[1],
-      Tuesday: days[2],
-      Wednesday: days[3],
-      Thursday: days[4],
-      Friday: days[5],
-      Saturday: days[6]
-    }
-    var hour = {
-      '00:00': hours[0],
-      '01:00': hours[1],
-      '02:00': hours[2],
-      '03:00': hours[3],
-      '04:00': hours[4],
-      '05:00': hours[5],
-      '06:00': hours[6],
-      '07:00': hours[7],
-      '08:00': hours[8],
-      '09:00': hours[9],
-      '10:00': hours[10],
-      '11:00': hours[11],
-      '12:00': hours[12],
-      '13:00': hours[13],
-      '14:00': hours[14],
-      '15:00': hours[15],
-      '16:00': hours[16],
-      '17:00': hours[17],
-      '18:00': hours[18],
-      '19:00': hours[19],
-      '20:00': hours[20],
-      '21:00': hours[21],
-      '22:00': hours[22],
-      '23:00': hours[23]
-    }
-    var statData = {
-      day: day,
-      hour: hour
-    }
-    return statData;
-  }
-  for (i = 0; i < rangedDates.length; i++) {
-    
-    statsObject = {
-      type: rangedDates[i].type,
-      time: rangedDates[i].timestampMs,
-    }
-    
-    statsObjectAr.push(statsObject)
-    switch (statsObject.type) {
-      case 'IN_VEHICLE':
-        type.vehicle ++;
-        break;
-      case 'ON_FOOT':
-        type.foot ++;
-        break;
-      case 'TILTING':
-        type.tilting ++;
-        break;
-      case 'STILL':
-        type.still ++;
-        break;
-      case 'ON_BICYCLE':
-        type.bicycle ++;
-        break;
-      case 'UNKNOWN':
-        type.unknown  ++;
-        break;
-    }
-  }
-  let finalObject = {
-    vehicle:{
-      type: tipos.vehicle,
-      date: calcDays(statsObjectAr, 'IN_VEHICLE').day,
-      hours: calcDays(statsObjectAr, 'IN_VEHICLE').hour
-    },
-   foot:{
-      type: tipos.foot,
-      date: calcDays(statsObjectAr, 'ON_FOOT').day,
-      hours: calcDays(statsObjectAr, 'ON_FOOT').hour
-    },
-    tilting:{
-      type: tipos.tilting,
-      date: calcDays(statsObjectAr, 'TILTING').day,
-      hours: calcDays(statsObjectAr, 'TILTING').hour
-    },
-    still:{
-      type: tipos.still,
-      date: calcDays(statsObjectAr, 'STILL').day,
-      hours: calcDays(statsObjectAr, 'STILL').hour
-    },
-    bicycle:{
-      type: tipos.bicycle,
-      date: calcDays(statsObjectAr, 'ON_BICYCLE').day,
-      hours: calcDays(statsObjectAr, 'ON_BICYCLE').hour
-    },
-    unknown:{
-      type: tipos.unknown,
-      date: calcDays(statsObjectAr, 'UNKNOWN').day,
-      hours: calcDays(statsObjectAr, 'UNKNOWN').hour
-    }, 
-    
-  }
-  //console.log(locationsObjectArr)
-  console.log(finalObject['bicycle']['hours']);
 
 
-  
 
-
-  //console.log(type);
-  
- 
-  res.send(finalObject);
-})
-
-router.get('/troll',checkAuth, async function (req, res) {
+router.get('/troll', async function (req, res) {
 
   // Sensitive Rectangular sent with the Ajax Post 
   var sensitiveRect = {
@@ -671,7 +494,7 @@ router.get('/troll',checkAuth, async function (req, res) {
 
 
 
-router.get('/drawfullheatmap', checkAuth,async function (req, res) {
+router.get('/drawfullheatmap', async function (req, res) {
   var db = makeDb();
 
   var allHeatmapData = await db.query('SELECT latitudeE7, longitudeE7 FROM `entry` ');
@@ -881,11 +704,12 @@ router.post('/drawSpecifiedHeatmap', async function (req, res) {
 
 
 
-router.post('/deleteData', checkAuth,checkAdmin, async function (req, res) {
+router.post('/deleteData', async function (req, res) {
   let db = makeDb();
 
   console.log("HERE!")
-  var deleteData = db.query('CALL  deleteData()');
+  var deleteData = await db.query('CALL deleteData()');
+  console.log(deleteData)
 
   res.send("Database data Deleted!");
 
@@ -906,12 +730,12 @@ router.post('/radarRangeDates', async function (req, res) {
   var statsObjectAr = [];
 
 
-  var tipos = {
+  var type = {
     vehicle: 0,
-    foot: 0,
-    bicycle: 0,
-    still: 0,
+    feet: 0,
     tilting: 0,
+    still: 0,
+    bicycle: 0,
     unknown: 0,
   }
   function calcDays(Object, type) {
@@ -971,68 +795,68 @@ router.post('/radarRangeDates', async function (req, res) {
     statsObject = {
       type: rangedDates[i].type,
       time: rangedDates[i].timestampMs,
+      confidence: rangedDates[i].confidence
     }
 
     statsObjectAr.push(statsObject)
     switch (statsObject.type) {
       case 'IN_VEHICLE':
-        tipos.vehicle++;
+        type.vehicle++;
         break;
       case 'ON_FOOT':
-        tipos.foot++;
+        type.foot++;
         break;
       case 'TILTING':
-        tipos.tilting++;
+        type.tilting++;
         break;
       case 'STILL':
-        tipos.still++;
+        type.still++;
         break;
       case 'ON_BICYCLE':
-        tipos.bicycle++;
+        type.bicycle++;
         break;
       case 'UNKNOWN':
-        tipos.unknown++;
+        type.unknown++;
         break;
     }
   }
   let finalObject = {
-    vehicle:{
-      type: tipos.vehicle,
+    vehicle: {
+      type: 'IN_VEHICLE',
       date: calcDays(statsObjectAr, 'IN_VEHICLE').day,
       hours: calcDays(statsObjectAr, 'IN_VEHICLE').hour
     },
-   foot:{
-      type: tipos.foot,
+    foot: {
+      type: 'ON_FOOT',
       date: calcDays(statsObjectAr, 'ON_FOOT').day,
       hours: calcDays(statsObjectAr, 'ON_FOOT').hour
     },
-    tilting:{
-      type: tipos.tilting,
+    tilting: {
+      type: 'TILTING',
       date: calcDays(statsObjectAr, 'TILTING').day,
       hours: calcDays(statsObjectAr, 'TILTING').hour
     },
-    still:{
-      type: tipos.still,
+    still: {
+      type: 'STILL',
       date: calcDays(statsObjectAr, 'STILL').day,
       hours: calcDays(statsObjectAr, 'STILL').hour
     },
-    bicycle:{
-      type: tipos.bicycle,
+    bicycle: {
+      type: 'ON_BICYCLE',
       date: calcDays(statsObjectAr, 'ON_BICYCLE').day,
       hours: calcDays(statsObjectAr, 'ON_BICYCLE').hour
     },
-    unknown:{
-      type: tipos.unknown,
+    unknown: {
+      type: 'UNKNOWN',
       date: calcDays(statsObjectAr, 'UNKNOWN').day,
       hours: calcDays(statsObjectAr, 'UNKNOWN').hour
-    }, 
-    
+    }
   }
   //console.log(locationsObjectArr)
   console.log(finalObject['bicycle']['hours']);
 
 
-  
+  var objectForHeatmap = convertQuerryToHeatmapObject(rangedDates);
 
 
   //console.log(type);
@@ -1048,10 +872,11 @@ router.post('/rangeDates', async function (req, res) {
   const db = makeDb();
 
   console.log(dateForm.until, "  ", dateForm.since, "--", userObject.userId)
-  var rangedDates = await db.query('SELECT latitudeE7, longitudeE7 FROM entry  INNER JOIN locationconnectactivity ON userId=entryId INNER JOIN activity1 ON a1=aa1 WHERE activity1.timestampMs > ' + dateForm.since + ' AND activity1.timestampMs < ' + dateForm.until + ' AND userId = \'' + userObject.userId + '\'')
+  var rangedDates = await db.query('SELECT latitudeE7, longitudeE7 FROM entry INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1 WHERE activity1.timestampMs > ' + dateForm.since + ' AND activity1.timestampMs < ' + dateForm.until + ' AND userId = \'' + userObject.userId + '\'')
 
   var i;
   var locationsObject;
+
   var objectForHeatmap //This is a javascript object that HeatmapJs understands and translate it into colors
   var locationsObjectArr = [];
 
@@ -1067,8 +892,8 @@ router.post('/rangeDates', async function (req, res) {
 
   }
 
-  //console.log(locationsObjectArr)
-
+  // //console.log(locationsObjectArr)
+  // console.log(finalObject['bicycle']['hours']);
 
 
 
