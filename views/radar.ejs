@@ -15,18 +15,19 @@
 
 <body onload="onloadBody()">
     
-    <label id="label">When is the beginning of the month?</label>
-    <canvas id="myChart" aria-label="Hello ARIA World" role="img"></canvas>
+   
+    <canvas id="myChart" width="300" height="100"  aria-label="Hello ARIA World" role="img"></canvas>
     <script type="text/javascript" src="../public/js/radar.js"></script>
     <input type="date" id="startDate" name="From">
     <input type="date" id="endDate" name="Until">
     <button id="submitDatesButton" onclick="dateChoosed()">Range Dates</button>
-    
+    <input type="checkbox" onchange="toggleChart()" id="cheese">Choose hours of the day or Day of the week
     <script>
+
     var start = document.getElementById('startDate')
     var end = document.getElementById('endDate')
     var today= new Date().toISOString().slice(0, 10); // get Today
-    var last = '2010-1-1';
+    var last = new Date('05 October 2019 14:48 UTC').toISOString().slice(0, 10);
     start.value = last;
     end.value=today;
     </script>
