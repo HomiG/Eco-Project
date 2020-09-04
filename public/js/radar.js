@@ -256,7 +256,7 @@ function submitDates() {
             console.log(pieData)
             myChart = resetChart(myChart); // RESET THE CHART
             pieChart=resetPie(pieChart);
-            names=['Vehicle','Foot','Bicycle','Still','Tilting', 'Unknown']
+            names=['Vehicle','Walking','Bicycle','Still','Tilting', 'Unknown']
             var i = 0;
             for(i=0; i<pieData.length;i++){
             addPie(pieChart,names[i],pieData[i])}

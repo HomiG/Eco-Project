@@ -938,31 +938,35 @@ router.post('/statistics', async function (req, res) {
     bicycle: 0,
     unknown: 0,
   }
+  var counts={}
+  var usercount={}
   data[timestampMs].forEach(function(date) {
     var year = new Date(date).getFullYear();
+    if (typeof counts['year'] == 'undefined') {
+      counts['year'] = 0;
+    }   
 
-    if (typeof counts[year] == 'undefined') {
-      counts[year] = {};
-    }
-
-    if (typeof counts[dateS][hour] == 'undefined') {
-      counts[dateS][hour] = 0;
-    }
-
-    counts[dateS][hour] += 1;
+    counts.year += 1;
   });
+  data[username].forEach(function(username) {
+   // var year = new Date(date).getFullYear();
+    if (typeof counts[username] == 'undefined') {
+      counts['year'] = 0;
+    }   
 
+    counts.year += 1;
+  });
   function calcDays(Object, type) {
     let days = [0, 0, 0, 0, 0, 0, 0];
     let hours = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    let years=[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    let months=[0,0,0,0,0,0,0,0,0,0,0,0]
     var i;
     for (i = 0; i < Object.length; i++) {
       if (Object[i].type == type) {
         var d = new Date(parseInt(Object[i].time));
         days[d.getDay()]++;
         hours[d.getHours()]++;
-        years[d.getFullYear()]++;
+        months[d.getMonth()];
       }
     }
     var day = {
@@ -999,6 +1003,20 @@ router.post('/statistics', async function (req, res) {
       '21:00': hours[21],
       '22:00': hours[22],
       '23:00': hours[23]
+    }
+    var month={
+      January:months[0],
+      February:months[1],
+      March:months[2],
+      April:months[3],
+      May:months[4],
+      June:months[5],
+      July:months[6],
+      August:months[7],
+      September:months[8],
+      October:months[9],
+      November:months[10],
+      December:months[11]
     }
     var statData = {
       day: day,
