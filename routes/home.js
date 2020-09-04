@@ -880,7 +880,7 @@ router.post('/rangeDates', async function (req, res) {
 
   console.log(dateForm.until, "  ", dateForm.since, "--", userObject.userId)
   console.log(dateForm)
-  var rangedDates = await db.query('SELECT latitudeE7, longitudeE7 FROM entry INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1 WHERE activity1.timestampMs > ' + dateForm.since + ' AND activity1.timestampMs < ' + dateForm.until + ' AND userId = \'' + userObject.userId + '\'')
+  var rangedDates = await db.query('SELECT latitudeE7, longitudeE7 FROM entry  WHERE entry.timestampMs > ' + dateForm.since + ' AND entry.timestampMs < ' + dateForm.until + ' AND userId = \'' + userObject.userId + '\'')
 
   var i;
   var locationsObject;
