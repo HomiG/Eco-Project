@@ -71,7 +71,7 @@ function uploadJSONFiltered() {
 
   var statusDiv = document.getElementById('status')
   var docPicker = document.getElementById('docpicker');
-  //console.log(docPicker.files[0])
+  console.log(docPicker.files[0])
 
 
 
@@ -150,7 +150,7 @@ function submitDatesHeatmapCharts() {
     success: function (response) {
       console.log(response)
       heatmapLayer.setData(response)
-      //dateChoosedforCharts()
+      dateChoosedforCharts()
     }
   })
  
