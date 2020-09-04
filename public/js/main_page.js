@@ -77,9 +77,9 @@ function runOnload() {
               data: dtst,
               //backgroundColor:'green',
               backgroundColor: [
-                'rgba(255, 99, 132, 0.6)',
-                'rgba(54, 162, 235, 0.6)',
-                '#777'
+                'rgba(76, 239, 35, 0.6)',
+                'rgba(47, 234, 238, 0.6)',
+                'rgba(238, 131, 16,0.6)'
               ],
               borderWidth: 1,
               borderColor: '#777',

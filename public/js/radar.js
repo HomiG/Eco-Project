@@ -16,12 +16,20 @@ function createNewPieChart() {
                 data:[],
                 label:'type',
                 backgroundColor:[
-                    'rgba(255, 99, 132, 0.2)' ,
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(153,51,0,0.2)',
-                    'rgba(102,0,102,0.2)'
+                    'rgba(54, 162, 235, 0.6)',
+                    'rgba(16, 238, 131, 0.6)',
+                    'rgba(255, 206, 86, 0.6)',
+                    'rgba(165, 160, 160, 0.6)',
+                    'rgba(153,51,0,0.6)',
+                    'rgba(102,0,102,0.6)'
+                ],
+                borderColor:[
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(16, 238, 131, 1)' ,
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(165, 160, 160, 1)',
+                    'rgba(153,51,0,1)',
+                    'rgba(102,0,102,1)'
                 ]
             }]
         },options: {
@@ -61,43 +69,53 @@ function radracreateNewBarChart() {
                 data: [],
                 label: 'Vehicle',
                 backgroundColor:
-                    'rgba(255, 99, 132, 0.2)'
-                ,
-
+                'rgba(54, 162, 235, 0.6)',
+                    
+               
+                borderColor:
+                'rgba(54, 162, 235, 1)',
+            
             }, {
                 data: [],
                 label: 'Walking',
                 backgroundColor:
-                    'rgba(54, 162, 235, 0.2)',
-
+                     'rgba(16, 238, 131, 0.6)',
+                     
+                borderColor:
+                'rgba(16, 238, 131, 1)'        
+                        ,
             },
             {
                 data: [],
                 label: 'Bicycle',
                 backgroundColor:
-                    'rgba(255, 206, 86, 0.2)',
-
+                    'rgba(255, 206, 86, 0.6)',
+                borderColor:
+                'rgba(255, 206, 86, 1)'
 
             }, {
                 data: [],
                 label: 'Still',
                 backgroundColor:
-                    'rgba(153, 102, 255, 0.2)',
-
-
+                'rgba(165, 160, 160, 0.6)',
+                
+                   
+                borderColor:
+                'rgba(165, 160, 160, 1)',
             }, {
                 data: [],
                 label: 'Tilting',
                 backgroundColor:
-                   'rgba(153,51,0,0.2)'
+                   'rgba(153,51,0,0.6)'
                     ,
-
+                borderColor:
+                'rgba(153,51,0, 1)'
 
             }, {
                 data: [],
                 label: 'Unknown',
-                backgroundColor: 'rgba(102,0,102,0.2)'
-
+                backgroundColor: 'rgba(102,0,102,0.6)',
+                borderColor:'rgba(102,0,102,1)'
                 
 
             }
