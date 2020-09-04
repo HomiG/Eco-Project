@@ -150,7 +150,7 @@ function submitDatesHeatmapCharts() {
     success: function (response) {
       console.log(response)
       heatmapLayer.setData(response)
-      dateChoosedforCharts()
+      //dateChoosedforCharts()
     }
   })
  
