@@ -50,8 +50,8 @@ var circle = L.circle(patrasLatLng, {
 
 map.selectArea.enable();
 map.on('areaselected', (e) => {
-  sensitiveRectCord.innerHTML = counter++ + ") Area(s) Selected: NorthEast: lat " + e.bounds._northEast.lat + ", lng " + e.bounds._northEast.lng +
-    " \nSouthWest: lat " + e.bounds._southWest.lat + ", lng " + e.bounds._southWest.lng;
+  sensitiveRectCord.innerHTML = counter++ + ") Area(s) Selected: <br> NorthEast: lat " + e.bounds._northEast.lat + ", lng " + e.bounds._northEast.lng +
+    " <br> SouthWest: lat " + e.bounds._southWest.lat + ", lng " + e.bounds._southWest.lng;
   //  console.log(e.bounds.toBBoxString()); // lon, lat, lon, lat
 
   sensitiveRect = {
@@ -130,7 +130,7 @@ function showFullHeatmap() {
 }
 
 
-function submitDates() {
+function submitDatesHeatmapCharts() {
   startDate = document.getElementById('startDate');
   endDate = document.getElementById('endDate');
 
@@ -150,6 +150,7 @@ function submitDates() {
     success: function (response) {
       console.log(response)
       heatmapLayer.setData(response)
+      dateChoosedforCharts()
     }
   })
  
