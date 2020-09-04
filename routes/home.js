@@ -55,10 +55,6 @@ router.get('/upload', checkAuth, function (req, res) {
 });
 
 
-router.get('/admin', function (req, res) {
-  res.render('../views/admin.ejs')
-});
-
 
 
 //accepts the username and the password from the user, with the POST method.
@@ -105,7 +101,7 @@ var userObject = {
   email: '',
   userId: 0,
   ecoscore: 0,
-  admin:0
+  admin: 0
 }
 
 
@@ -117,15 +113,15 @@ function checkAuth(req, res, next) {
   }
 }
 
-function checkAdmin(req, res, next){
-  if(!userObject.admin){
-    res.send('You are not authorised to view this page');
-  }
-else 
-{ 
-  next();
-}
+function checkAdmin(req, res, next) {
 
+  if (!userObject.admin) {
+
+      res.send('You are not authorised to view this page');
+
+  } else {
+    next();
+  }
 }
 router.post('/login', function (req, res) {
 
@@ -170,7 +166,7 @@ router.post('/login', function (req, res) {
 
 });
 
-router.get('/admin', checkAdmin ,checkAuth, function (req, res) {
+router.get('/admin', checkAuth, checkAdmin , function (req, res) {
   res.render('../views/admin.ejs')
 });
 
