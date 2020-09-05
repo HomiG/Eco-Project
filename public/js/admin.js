@@ -288,6 +288,13 @@ span.onclick = function() {
   modal.style.display = "none";
 }
 
+var backbtn = document.getElementById("goback");
+// When the user clicks on <span> (x), close the modal
+backbtn.onclick = function() {
+  modal.style.display = "none";
+}
+
+
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
   if (event.target == modal) {
