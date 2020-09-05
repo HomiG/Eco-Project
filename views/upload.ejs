@@ -46,7 +46,7 @@
       margin: auto;
       /* border-radius: 200px; */
       /* width: 400px; */
-      height: 400px;
+      height: 500px;
       position: relative;
       z-index: 500
     }
@@ -55,12 +55,12 @@
 
 <body>
 
-  <div class="text">
+  <div class="text" style="text-align:center" >
     <p>Select Area by pressing Ctrl key and move the mouse around the sensitive areas.</p>
 
 
-    <input type="file" id="docpicker" accept=".json" name="file" value="Import" />
-    <button type="button" onclick="uploadJSONFiltered()" id="uploadButton" value="Upload"> Upload Json
+    <input style="margin:0px auto; " type="file" id="docpicker" accept=".json" name="file" value="Import" style="text-align: center; align-content: center;"/>
+    <button type="button" onclick="uploadJSONFiltered()" id="uploadButton" value="Upload" style="color: black;"> Upload Json
       (Covered)</button>
     <div id="status"> ... </div>
 
