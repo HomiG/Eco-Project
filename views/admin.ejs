@@ -75,10 +75,10 @@
             <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
             <div class="year">
-                <p>From:
+                From:
                     <input type="text" id="fromDate" data-format="YYYY" data-template="YYYY" name="date" value="2015">
 
-                <p> Until:
+                Until:
                     <input type="text" id="untilDate" data-format="YYYY" data-template="YYYY" name="date" value="2025">
 
                     <script>
@@ -88,16 +88,16 @@
                         });
                     </script>
             </div>
-
+            <p></p>
 
 
 
             <div class="month">
 
-                <p>From:
+                From:
                     <input type="text" id="fromMonth" data-format="MM" data-template="MMM" name="date" value="01">
 
-                <p> Until:
+                Until:
                     <input type="text" id="untilMonth" data-format="MM" data-template="MMM" name="date" value="12">
                     <script>
                         $(function () {
@@ -107,10 +107,10 @@
                     </script>
 
             </div>
-
+            <p></p>
 
             <div class="day">
-                <p>From:
+                From:
                     <select name="fromDay" id="fromDay">
                         <option value="Sunday">Sunday</option>
                         <option value=""></option>
@@ -122,7 +122,7 @@
                         <option value="Saturday">Saturday</option>
                     </select>
 
-                <p> Until:
+                Until:
                     <select name="untilDay" id="untilDay">
                         <option value="Saturday">Saturday</option>
                         <option value=""></option>
@@ -135,12 +135,12 @@
                     </select>
 
             </div>
-
+            <p></p>
             <div class="theTime">
 
-                <p> From:
+                From:
                     <input type="text" id="fromTime" data-format="HH" data-template="HH" name="datetime">
-                <p> Until:
+                Until:
                     <input type="text" id="untilTime" data-format="HH" data-template="HH" name="datetime">
                     <script>
 
@@ -158,27 +158,24 @@
                         });
                     </script>
             </div>
-
+            <p></p>
 
 
             <div id="checkboxes">
                 <label>Activity Type</label>
                 <ul>
-                    <li><input type="checkbox" onchange="run()" id="IN_VEHICLE"> IN_VEHICLE</li>
-                    <li><input type="checkbox" id="ON_BICYCLE"> ON_BICYCLE</li>
-                    <li><input type="checkbox" id="ON_FOOT"> ON_FOOT </li>
-                    <li><input type="checkbox" id="STILL"> STILL </li>
-                    <li><input type="checkbox" id="TILTING"> TILTING </li>
-                    <li><input type="checkbox" id="UNKNOWN"> UNKNOWN</li>
+                    <input type="checkbox" onchange="run()" id="IN_VEHICLE"> IN_VEHICLE
+                    <input type="checkbox" id="ON_BICYCLE"> ON_BICYCLE
+                    <input type="checkbox" id="ON_FOOT"> ON_FOOT 
+                    <input type="checkbox" id="STILL"> STILL 
+                    <input type="checkbox" id="TILTING"> TILTING 
+                    <input type="checkbox" id="UNKNOWN"> UNKNOWN
                 </ul>
-                <button onclick="toggleCheckboxed()">Select All/None</button>
+                <button id="selectall" onclick="toggleCheckboxed()">Select All/None</button>
 
             </div>
 
-
-
-
-
+            
 
             <button id="rangedHeatmap" onclick="rangedHeatmap()">Range Dates</button>
             <button id="showFullHeatmapButton" onclick="showFullHeatmap()">Draw Whole Heatmap</button>
@@ -216,6 +213,19 @@
             <p>ΔΕΝ ΥΠΑΡΧΕΙ ΓΥΡΙΣΜΟΣ! </p>
             <button id="delete_btn" onclick="deleteAllData()">DELETE</button>
         </div>
+
+        <!-- The modal=pop up window -->
+        <div id="myModal" class="modal" style="text-align: center;">
+
+            <!-- Modal content -->
+            <div class="modal-content">
+              <span class="close">&times;</span>
+              <p>Δεν υπάρχει γυρισμός..Πάτα το Κιμ..</p>
+              <button id="okdelete">OK</button>
+              <button class="back" id="goback">GO BACK</button>
+            </div>
+          
+          </div>
 
         <div id="upload" style="margin-top: 75px">
             <h2>Upload.</h2>

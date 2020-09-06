@@ -266,3 +266,42 @@ height: 40px; */
 background-color:  rgba(0, 0, 0, 0.6);
 color: white;
 }
+
+#submitDatesButton{
+    width: 150px;
+    height: 40px;
+   background-color:  #945f90;
+   /* border-radius: 10px; */
+   bottom: 20px;
+   /* padding: 10px 15px 7px; */
+   margin-top: 20px;
+   margin-bottom: 20px;
+   color:white;
+   cursor: pointer;
+   outline: medium none;
+     
+   } 
+   
+   #submitDatesButton:hover {
+   background-color:  rgba(0, 0, 0, 0.6);
+   color: white;
+   }
+
+   #showFullHeatmapButton{
+    width: 200px;
+    height: 40px;
+   background-color:  #945f90;
+   /* border-radius: 10px; */
+   bottom: 20px;
+   /* padding: 10px 15px 7px; */
+   margin-top: 20px;
+   margin-bottom: 20px;
+   color:white;
+   cursor: pointer;
+   outline: medium none;
+   }
+
+   #showFullHeatmapButton:hover {
+    background-color:  rgba(0, 0, 0, 0.6);
+    color: white;
+    }
