@@ -30,7 +30,20 @@ function uploadFile() {
 
 }
 
-
+function logout(){
+   $.ajax({
+    url: "/logout",
+    type: "post",
+    cache: false,
+    contentType: false,
+    processData: false,
+    data: false,
+    success:function(){
+      console.log("Logged out")
+      
+  }})
+ 
+}
 
 
 

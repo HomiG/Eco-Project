@@ -101,7 +101,7 @@
   )  ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-  INSERT INTO lastMonth(startingDate) VALUES (1543668339001)
+  -- INSERT INTO lastMonth(startingDate) VALUES (1543668339001)
   -- UPDATE lastMonth set startingDate = 1513551020885
 
 

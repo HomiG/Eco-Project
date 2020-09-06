@@ -55,7 +55,10 @@ router.get('/upload', checkAuth, function (req, res) {
   res.render('../views/upload.ejs')
 });
 
-
+router.post('/logout', checkAuth, function (req, res){
+  req.session.destroy();
+  res.redirect('/');
+} )
 
 
 //accepts the username and the password from the user, with the POST method.
@@ -106,10 +109,10 @@ var userObject = {
 }
 
 
-function checkAuth(req, res, next) {
+async function checkAuth(req, res, next) {
   if (!req.session.userId) {
     res.send('You are not logged in, please login first in order to view this page');
-  } else {
+    } else {
     next();
   }
 }
@@ -124,6 +127,7 @@ function checkAdmin(req, res, next) {
     next();
   }
 }
+
 router.post('/login', function (req, res) {
 
 
@@ -174,6 +178,7 @@ router.get('/admin', checkAuth, checkAdmin, function (req, res) {
 router.get('/mainPage', checkAuth, function (req, res) {
   res.render('../views/main_page.ejs', { x: userObject.username })
 });
+
 router.get('/statistics', function (req, res) {
   res.render('../views/statistics.ejs')
 });
@@ -908,10 +913,9 @@ router.post('/statistics', async function (req, res) {
   const db = makeDb();
   var users = await db.query('SELECT userId, username from user where admin=0')
   // console.log(dateForm.until, "  ", dateForm.since, "--", userObject.userId)
-  var data = await db.query('SELECT type , entry.userId as id , activity1.timestampMs as time FROM user INNER JOIN entry ON user.userId=entry.userId INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1 ')
+  var allthedata = await db.query('SELECT type , entry.userId as id , activity1.timestampMs as time FROM user INNER JOIN entry ON user.userId=entry.userId INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1 ')
   // console.log(data);
   var i, j, k;
-
 
 
   var tipos = {
@@ -926,21 +930,17 @@ router.post('/statistics', async function (req, res) {
   var counts = {}
   var usercounts = {}
   for (j = 0; j < users.length; j++) {
-    usercounts[users[j].userId] = {
+    usercounts[JSON.stringify(users[j].userId)] = {
       username: users[j].username,
       count: 0
     }
   }
-  // console.log(usercounts);
+  console.log(usercounts);
+  console.log(allthedata)
 
-
-
-
-
-
-  for (i = 0; i < data.length; i++) {
-    usercounts[data[i].id].count++;
-    let date = data[i].time;
+  for (i = 0; i < allthedata.length; i++) {
+    usercounts[JSON.stringify(allthedata[i].id)].count++;
+    let date = allthedata[i].time;
     var year = new Date(parseInt(date)).getFullYear();
     counts[year] = 0;
   }
@@ -1017,13 +1017,13 @@ router.post('/statistics', async function (req, res) {
     }
     return statData;
   }
-  for (i = 0; i < data.length; i++) {
+  for (i = 0; i < allthedata.length; i++) {
     userObject = {
-      name: data[i].username,
-      id: data[i].userId
+      name: allthedata[i].username,
+      id: allthedata[i].userId
     }
 
-    switch (data[i].type) {
+    switch (allthedata[i].type) {
       case 'IN_VEHICLE':
         tipos.vehicle++;
         break;
@@ -1044,7 +1044,7 @@ router.post('/statistics', async function (req, res) {
         break;
     }
   }
-  var statData = calcDays(data);
+  var statData = calcDays(allthedata);
   let finalObject = {
     type: tipos,
     days: statData.day,
