@@ -3,7 +3,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-size: 25px;
+    font-size: 15px;
 
 }
 
@@ -27,7 +27,7 @@ body  {
     background-image:  url("../img/patras6_f.png") ;  
     background-size: cover;
     color: white;
-    font-size: 30px;
+    font-size: 20px;
     padding-left: 0px;
 
   }
@@ -42,7 +42,7 @@ body  {
  
 
   h1 {
-    font-size: 45px;
+    font-size: 35px;
     color: rgb(255, 255, 255);
     text-align: center;
     margin-top: 30px;
@@ -51,7 +51,7 @@ body  {
   h2 {
     /* text-align: center; */
     color: black;
-    font-size: 35px;
+    font-size: 20px;
     margin-top: 100px;
     font-weight: bold;
     /* 2863CA */
@@ -205,7 +205,7 @@ body  {
 #delete_btn{
     background-color:  red;
     border: medium none;
-    border-radius: 20px;
+    border-radius: 10px;
     bottom: 20px;
     color:white;
     cursor: pointer;
@@ -214,7 +214,7 @@ body  {
     /* position: fixed; */
     /* right: 20px; */
     /* z-index: 99; */
-    font-size: 35px;
+    font-size: 20px;
     /* width: 40px;
     height: 40px; */
 }
@@ -228,7 +228,7 @@ body  {
 #download_btn{
     background-color:  #945f90;
     border: medium none;
-    border-radius: 20px;
+    border-radius: 10px;
     bottom: 20px;
     color:white;
     cursor: pointer;
@@ -237,7 +237,7 @@ body  {
     /* position: fixed; */
     /* right: 20px; */
     /* z-index: 99; */
-    font-size: 35px;
+    font-size: 20px;
     /* width: 40px;
     height: 40px; */
 }
