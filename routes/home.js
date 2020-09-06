@@ -242,12 +242,12 @@ router.post('/leaderboard', async function (req, res) {
       // currentUserEcoscore[0].ecoscore=0;
       // currentUserEcoscore[0].username = userObject.username;
     }
-      // CHECK IF USER IS IN THE TOP 3, IF NOT ADD HIM AS THE EXTRA ELEMENT
-      if (!ecoscoreObject['names'].includes(currentUserEcoscore[0].username)) {
-        ecoscoreObject['names'].push(currentUserEcoscore[0].username);
-        ecoscoreObject['scores'].push(currentUserEcoscore[0].ecoscore);
-      }
-    
+    // CHECK IF USER IS IN THE TOP 3, IF NOT ADD HIM AS THE EXTRA ELEMENT
+    if (!ecoscoreObject['names'].includes(currentUserEcoscore[0].username)) {
+      ecoscoreObject['names'].push(currentUserEcoscore[0].username);
+      ecoscoreObject['scores'].push(currentUserEcoscore[0].ecoscore);
+    }
+
   }
   console.log(ecoscoreObject)
 
@@ -906,16 +906,13 @@ router.post('/statistics', async function (req, res) {
 
   //This is for Running the Code Async
   const db = makeDb();
-
+  var users = await db.query('SELECT userId, username from user where admin=0')
   // console.log(dateForm.until, "  ", dateForm.since, "--", userObject.userId)
-  var data = await db.query('SELECT type, username , user.userId as id ,activity1.timestampMs as time FROM user INNER JOIN entry ON user.userId=entry.userId INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1 ')
-
+  var data = await db.query('SELECT type , entry.userId as id , activity1.timestampMs as time FROM user INNER JOIN entry ON user.userId=entry.userId INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1 ')
+  // console.log(data);
   var i, j, k;
 
-  var usersObject;
-  var usersObjectAr = [];
 
-  var users = {};
 
   var tipos = {
     vehicle: 0,
@@ -928,41 +925,41 @@ router.post('/statistics', async function (req, res) {
 
   var counts = {}
   var usercounts = {}
-  for (i = 0; i < data['time'].length; i++) {
-    date = data['time'][i]
-    var year = new Date(date).getFullYear();
-    if (typeof counts['year'] == 'undefined') {
-      counts['year'] = 0;
+  for (j = 0; j < users.length; j++) {
+    usercounts[users[j].userId] = {
+      username: users[j].username,
+      count: 0
     }
+  }
+  // console.log(usercounts);
 
-    counts.year += 1;
+
+
+
+
+
+  for (i = 0; i < data.length; i++) {
+    usercounts[data[i].id].count++;
+    let date = data[i].time;
+    var year = new Date(parseInt(date)).getFullYear();
+    counts[year] = 0;
   }
 
-  for (i = 0; i < data['time'].length; i++) {
-    // var year = new Date(date).getFullYear();
-    if (typeof usercounts.userId == 'undefined') {
-      usercounts[userId] = {};
-    }
-    if (typeof usercounts.userId.number == 'undefined') {
-      usercounts.userId.number = 0;
-      usercounts.userId.username = username;
-    }
 
-    usercounts.userId.number += 1;
-  }
 
-  function calcDays(Object, type) {
+  function calcDays(Object) {
     let days = [0, 0, 0, 0, 0, 0, 0];
     let hours = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     let months = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     var i;
     for (i = 0; i < Object.length; i++) {
-      if (Object[i].type == type) {
-        var d = new Date(parseInt(Object[i].time));
-        days[d.getDay()]++;
-        hours[d.getHours()]++;
-        months[d.getMonth()];
-      }
+
+      var d = new Date(parseInt(Object[i].time));
+      days[d.getDay()]++;
+      hours[d.getHours()]++;
+      months[d.getMonth()]++;
+      counts[d.getFullYear()]++;
+
     }
     var day = {
       Sunday: days[0],
@@ -1015,22 +1012,23 @@ router.post('/statistics', async function (req, res) {
     }
     var statData = {
       day: day,
-      hour: hour
+      hour: hour,
+      month: month
     }
     return statData;
   }
-  for (i = 0; i < rangedDates.length; i++) {
+  for (i = 0; i < data.length; i++) {
     userObject = {
-      name: rangedDates[i].username,
-      id: rangedDates[i].userId
+      name: data[i].username,
+      id: data[i].userId
     }
 
-    switch (rangedDates[i].type) {
+    switch (data[i].type) {
       case 'IN_VEHICLE':
         tipos.vehicle++;
         break;
       case 'ON_FOOT':
-        tipos.foot++;
+        tipos.feet++;
         break;
       case 'TILTING':
         tipos.tilting++;
@@ -1046,16 +1044,17 @@ router.post('/statistics', async function (req, res) {
         break;
     }
   }
+  var statData = calcDays(data);
   let finalObject = {
     type: tipos,
-    days: day,
-    hours: hour,
-    months: month,
-    years: year,
-    username: usercounts
+    days: statData.day,
+    hours: statData.hour,
+    months: statData.month,
+    years: counts,
+    users: usercounts
   }
   //console.log(locationsObjectArr)
-  console.log(finalObject['bicycle']['hours']);
+  console.log(finalObject);
   res.send(finalObject);
 });
 
