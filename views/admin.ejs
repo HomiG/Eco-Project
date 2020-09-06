@@ -8,13 +8,18 @@
 
     <link href="https://fonts.googleapis.com/css?family=Muli|Raleway&display=swap" rel="stylesheet">
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
     <script type="text/javascript" src="/public/js/combodate.js"></script>
     <script type="text/javascript" src="/public/js/moment.min.js"></script>
 
 </head>
 
-<body>
+<body onload="onloadBody()">
 
     <div class="header">
         <h1>ECO PROJECT</h1>
@@ -41,50 +46,23 @@
             <h2>Απεικόνιση κατάστασης ΒΔ(dashboard).</h2>
             <hr style="width:50px; border:5px solid #945f90; margin-top:35px; border-radius: 100px;">
             <p style="margin-top:35px">ΚΑΤΑΠΛΗΚΤΙΚΑ!</p>
-            <p>Το γραφημα θα μπει εδω</p>
-            Πρώτη σου φορά μου λες πως σου συμβαίνει αυτό
-            Πως τρελαίνεσαι και δεν μπορείς ούτε λεπτό
-            Μακριά από τη δική μου αγκαλιά
-            Τα δικά μου τα φιλιά
-            Δε κοιμάσαι
-            Λες παντού με βλέπεις, πως φοβάσαι
-            Μην χαθεί όλο αυτό
-            Εγώ
-            Στη ζωή σου λες πως φέρνω πανικό
-            Εγώ
-            Αχ και να ξέρες ακόμα τι μπορώ
-            Εγώ
-            Κι ότι είχες παλιό
-            Πλέον ζει στο κενό
-            Sorry αν φταίω μα έτσι απλά είμαι εγώ
+            <canvas id="statChart" width="300" height="100"  aria-label="Hello ARIA World" role="img"></canvas>
+    <script type="text/javascript" src="../public/js/statistics.js"></script>
+    <div id="checkbox">
+        <label>Choose which chart you want:  </label>
+        
+            <select name="chart" id="chartpicker" onchange=changeChart()>
+                <option selected='selected' value="type">Activity</option>
+                <option value="hour">Hour of the Day</option>
+                <option value="day">Day of the Week</option>
+                <option value="month">Month of the Year</option>
+                <option value="year">Year</option>
+                <option value="user">Users</option>
+               
+            </select>
+       
 
-            Πρώτη σου φορά μου λες πως τόσο αγαπάς
-            Είχες μάθει στο να φεύγεις να τα παράτας
-            Μα μη με συγκρίνεις με τα χθεσινά
-            Εδώ δεν περνούν αυτά
-
-            Δε κοιμάσαι
-            Λες παντού με βλέπεις, πως φοβάσαι
-            Μην χαθεί όλο αυτό
-
-            Εγώ
-            Στη ζωή σου λες πως φέρνω πανικό
-            Εγώ
-            Αχ και να ξέρες ακόμα τι μπορώ
-            Εγώ
-            Κι ότι είχες παλιό
-            Πλέον ζει στο κενό
-            Sorry αν φταίω μα έτσι απλά είμαι εγώ
-
-            Εγώ
-            Στη ζωή σου λες πως φέρνω πανικό
-            Εγώ
-            Αχ και να ξέρες ακόμα τι μπορώ
-            Εγώ
-            Κι ότι είχες παλιό
-            Πλέον ζει στο κενό
-            Sorry αν φταίω μα έτσι απλά είμαι εγώ
-        </div>
+    </div>
 
         <div id="data" style="margin-top: 75px">
             <h2>Απεικόνιση στοιχείων σε χάρτη.</h2>

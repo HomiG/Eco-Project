@@ -15,9 +15,23 @@
 
 <body onload="onloadBody()">
     
-   
+    <canvas id="statChart" width="300" height="100"  aria-label="Hello ARIA World" role="img"></canvas>
     <script type="text/javascript" src="../public/js/statistics.js"></script>
-   
+    <div id="checkbox">
+        <label>Choose which chart you want:  </label>
+        
+            <select name="chart" id="chartpicker" onchange=changeChart()>
+                <option selected='selected' value="type">Activity</option>
+                <option value="hour">Hour of the Day</option>
+                <option value="day">Day of the Week</option>
+                <option value="month">Month of the Year</option>
+                <option value="year">Year</option>
+                <option value="user">Users</option>
+               
+            </select>
+       
+
+    </div>
     
 
 </body>

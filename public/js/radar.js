@@ -10,7 +10,7 @@ var myRadar
 var pieChart
 function createNewPieChart() {
     pieChart=new Chart(pie,{
-        type:'pie',
+        type:'doughnut',
         data:{
             datasets:[{
                 data:[],
