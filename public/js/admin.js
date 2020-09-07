@@ -301,3 +301,25 @@ window.onclick = function(event) {
     modal.style.display = "none";
   }
 }
+
+
+
+let mainNav = document.getElementById("js-menu");
+let navBarToggle = document.getElementById("js-navbar-toggle");
+
+navBarToggle.addEventListener("click", function() {
+  mainNav.classList.toggle("active");
+});
+
+window.onscroll = function() {myFunction()};
+
+var navbar = document.getElementById("navigationbar");
+var sticky = navbar.offsetTop;
+
+function myFunction() {
+  if (window.pageYOffset >= sticky) {
+    navbar.classList.add("sticky")
+  } else {
+    navbar.classList.remove("sticky");
+  }
+}

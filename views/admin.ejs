@@ -12,7 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
 
     <script type="text/javascript" src="/public/js/combodate.js"></script>
     <script type="text/javascript" src="/public/js/moment.min.js"></script>
@@ -21,22 +21,32 @@
 
 <body onload="onloadBody()">
 
-    <div class="header">
-        <h1>ECO PROJECT</h1>
-        <p>Every moment is a fresh beginning. </p>
-        <p style="font-size: 15px;">– T.S Eliot </p>
-    </div>
-
-    <span class="colapsed_menu" onclick="openNav() ">&#9776; </span>
-
-    <!-- The sidebar -->
-    <div id="mySidenav" class="sidebar">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-        <a class="active" href="#dashboard">Απεικόνιση κατάστασης ΒΔ(dashboard)</a>
-        <a href="#data">Απεικόνιση στοιχείων σε χάρτη</a>
-        <a href="#delete">Διαγραφή δεδομένων</a>
-        <a href="#download">Εξαγωγή δεδομένων</a>
-    </div>
+<nav class="navbar" id="navigationbar">
+    <a href="#" class="logo">ECO PROJECT</a>
+     <span class="navbar-toggle" id="js-navbar-toggle">&#9776; 
+     
+        <i class="fas fa-bars"></i>
+    </span>
+    <ul class="main-nav" id="js-menu">
+        <li>
+            <a href="#dashboard" class="nav-links">Απεικόνιση κατάστασης ΒΔ(dashboard)</a>
+        </li>
+        <li>
+            <a href="#data" class="nav-links">Απεικόνιση στοιχείων σε χάρτη</a>
+        </li>
+        <li>
+            <a href="#delete" class="nav-links">Διαγραφή δεδομένων</a>
+        </li>
+        <li>
+            <a href="#download" class="nav-links">Εξαγωγή δεδομένων</a>
+        </li>
+        <li>
+            <p></p>
+            <button class="nav-links" id="logout">Έξοδος</button>
+        </li>
+        
+    </ul>
+</nav>
 
 
 
@@ -72,7 +82,7 @@
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <meta http-equiv="X-UA-Compatible" content="ie=edge">
             <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
-            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+            <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
 
             <div class="year">
                 From:
@@ -199,9 +209,10 @@
 
             <style>
                 #mapid {
-                    width: 1300px;
-                    height: 600px;
+                    width: 1000px;
+                    height: 500px;
                     position: relative;
+                    z-index:1;
                 }
             </style>
         </div>
