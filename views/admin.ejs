@@ -244,19 +244,22 @@
             <h2 style=" font-size: 20px;">Εξαγωγή δεδομένων.</h2>
             <hr style="width:50px; border:5px solid #945f90; margin-top:35px; border-radius: 100px; ">
             <p style="margin-top:35px">Κανε κι εσυ download!</p>
-            <a href="path/to/file.txt" download="example.json">
-                Download as JSON
-            </a>
+
             <button style="margin-bottom: 25px" id="download_btn" onclick="exportData()">Download</button>
+            <label for="fileType">Choose a File-Type:</label>
+            <select name="fileType" id="fileType">
+              <option value="JSON">JSON</option>
+              <option value="CSV">CSV</option>
+              <option value="XML">XML</option>
+            </select>
+            <br>
+            <label id="labelWait">Press To Download</label>
 
         </div>
 
 
 
     </div>
-
-    <!-- <button id="myBtn"><a href="#top" style="color: blue">Top</a></button> -->
-    <!-- <a id="back2Top" title="Back to top" href="#">&#10148;</a> -->
 
     <button onclick="scrollToTop()" id="myBtn" title="Go to top">^</button>
 

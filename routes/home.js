@@ -1,4 +1,4 @@
-'use strict'
+
 const GeoPoint = require('geopoint')
 const { inRangeOfRect, geopointToMyPoint } = require('../public/js/myGeographicalModules')
 const convertQuerryToHeatmapObject = require('../public/js/convertQuerryToHeatmapObject')
@@ -20,6 +20,7 @@ const doAsync = require('doasync')
 const fs = require('fs');
 const ejs = require('ejs');
 const util = require('util');
+var objToXml = require('obj-to-xml');
 
 const upload = require('express-fileupload')
 
@@ -30,7 +31,7 @@ const { type, data } = require('jquery');
 const { parse } = require('path');
 const { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } = require('constants');
 
-
+var rimraf = require("rimraf");
 
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
@@ -55,10 +56,26 @@ router.get('/upload', checkAuth, function (req, res) {
   res.render('../views/upload.ejs')
 });
 
-router.post('/logout', checkAuth, function (req, res){
+router.post('/logout', checkAuth, function (req, res) {
   req.session.destroy();
+  try {
+    patha=(__dirname+"/../public/downloads")
+    rimraf.sync(patha)
+    fs.mkdir(patha, function(err) {
+      if (err) {
+        console.log(err)
+      } else {
+        console.log("New directory successfully created.")
+      }
+    })
+    // fs.unlinkSync(path.resolve(__dirname, "../public/downloads"))
+    console.log('removed!!')
+    //file removed
+  } catch (err) {
+    console.error(err)
+  }
   res.redirect('/');
-} )
+})
 
 
 //accepts the username and the password from the user, with the POST method.
@@ -96,7 +113,7 @@ router.post('/signup', async function (req, res) {
       });
   }
 
-  catch{
+  catch {
     res.status(500)
   }
 });
@@ -112,8 +129,8 @@ var userObject = {
 async function checkAuth(req, res, next) {
   if (!req.session.userId) {
     res.send('You are not logged in, please login first in order to view this page');
-    
-    } else {
+
+  } else {
     next();
   }
 }
@@ -128,6 +145,12 @@ function checkAdmin(req, res, next) {
     next();
   }
 }
+router.get('/download/:type', function (req, res) {
+
+  var typeParam = req.params.type.toLowerCase();;
+
+  res.download(__dirname + "/../public/downloads/hey." + typeParam, "hey." + typeParam)
+})
 
 router.post('/login', function (req, res) {
 
@@ -183,10 +206,6 @@ router.get('/statistics', function (req, res) {
 });
 
 router.post('/uploadJson', function (req, res) {
-
-
-  console.log("Entered api/pupload.")
-
 
 
   if (req.files) {
@@ -260,7 +279,7 @@ router.post('/leaderboard', async function (req, res) {
 
 })
 
-router.post('/ecocharts', checkAuth,async function (req, res) {
+router.post('/ecocharts', checkAuth, async function (req, res) {
   var result;
 
   const db = makeDb();
@@ -365,7 +384,7 @@ router.post('/upload', checkAuth, function (req, res) {
 
 })
 
-router.post('/export', async function(req, res){
+router.post('/export', async function (req, res) {
   // const db = makeDb();
   // var dateForm = req.body;
   // // console.log(dateForm.until, "  ", dateForm.since, "--", userObject.userId)
@@ -375,7 +394,6 @@ router.post('/export', async function(req, res){
   function getKeyByValue(object, value) {
     return Object.keys(object).filter(key => object[key] === value);
   }
-
 
   function dayStringToNumber(dayString) {
     let weekday = ['Sunday',
@@ -397,11 +415,11 @@ router.post('/export', async function(req, res){
   var checkboxes = JSON.parse(req.body.checkboxes)
 
   var tickedCheckboxes = getKeyByValue(checkboxes, true)
-  var choices=req.body.choices;
-
+  var choices = req.body.choices;
+  console.log('chose:', choices)
   // console.log(mode);
   console.log(dates);
-  
+
 
 
 
@@ -475,8 +493,40 @@ router.post('/export', async function(req, res){
   calibrateDatesForDatabaseFiltering(dates, emptyFields);
   console.log(dates)
 
+  function JsonToCsv(jsonData) {
+    var items = jsonData;
+    var replacer = (key, value) => value === null ? ' ' : value; // specify how you want to handle null values here
+    var header = Object.keys(items[0]);
+    var csv = items.map(row => header.map(fieldName => JSON.stringify(row[fieldName], replacer)).join(','))
+    csv.unshift(header.join(','));
+    csv = csv.join('\r\n');
 
+    return csv;
+  }
 
+  function OBJtoXML(obj) {
+    var xml = '';
+    for (var prop in obj) {
+      xml += "<" + prop + ">";
+      if (Array.isArray(obj[prop])) {
+        for (var array of obj[prop]) {
+
+          // A real botch fix here
+          xml += "</" + prop + ">";
+          xml += "<" + prop + ">";
+
+          xml += OBJtoXML(new Object(array));
+        }
+      } else if (typeof obj[prop] == "object") {
+        xml += OBJtoXML(new Object(obj[prop]));
+      } else {
+        xml += obj[prop];
+      }
+      xml += "</" + prop + ">";
+    }
+    var xml = xml.replace(/<\/?[0-9]{1,}>/g, '');
+    return xml
+  }
 
 
 
@@ -498,18 +548,20 @@ router.post('/export', async function(req, res){
 
   switch (parseInt(mode)) {
     case 2: // YES Date , NO Checkbox
-      query = await db.query(' SELECT heading, activity1.type, activity1.timestampMs, verticalAccuracy, velocity, accuracy, longitudeE7, latitudeE7, altitude, entry.timestampMs, entry.userId as id FROM entry ' +
+      query = await db.query(' SELECT heading, activity1.type, entry.timestampMs, verticalAccuracy, velocity, accuracy, longitudeE7, latitudeE7, altitude, entry.timestampMs, entry.userId as id FROM entry ' +
         'INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId ' +
         'INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1');
       break;
     case 3: // NO Date, YES Checkbox
-      query = await db.query('SELECT heading, activity1.type, activity1.timestampMs, verticalAccuracy, velocity, accuracy, longitudeE7, latitudeE7, altitude, entry.timestampMs, entry.userId as id   FROM `entry` ' +
-        'INNER JOIN activity1 on activity1.aa1=entry.entryId ' +
+      query = await db.query('SELECT heading, activity1.type, entry.timestampMs, verticalAccuracy, velocity, accuracy, longitudeE7, latitudeE7, altitude, entry.timestampMs, entry.userId as id   FROM `entry` ' +
+       'INNER JOIN locationconnectactivity on locationconnectactivity.entryId =entry.entryId ' +
+       'INNER JOIN activity1 on activity1.aa1=a1 ' +
         'WHERE type = ' + stringForSQLQuery); // Includes only the places the person have been on a spefic catagory of movement
       break;
     case 4: // YES Date, YES Checbox
-      query = await db.query('SELECT heading, activity1.type, activity1.timestampMs, verticalAccuracy, velocity, accuracy, longitudeE7, latitudeE7, altitude, entry.timestampMs, entry.userId as id  FROM `entry` ' +
-        'INNER JOIN activity1 on activity1.aa1=entry.entryId ' +
+      query = await db.query('SELECT heading, activity1.type, entry.timestampMs, verticalAccuracy, velocity, accuracy, longitudeE7, latitudeE7, altitude, entry.timestampMs, entry.userId as id  FROM `entry` ' +
+      'INNER JOIN locationconnectactivity on locationconnectactivity.entryId =entry.entryId ' +
+      'INNER JOIN activity1 on activity1.aa1=a1 ' +
         'WHERE type = ' + stringForSQLQuery);
       break;
     default:
@@ -536,8 +588,23 @@ router.post('/export', async function(req, res){
       }
     }
   }
-  fs.write()
-  res.send(dataset);
+  var obje = { data: dataset }
+  //console.log(JSON.parse(JSON.stringify(obje)))
+  switch (choices) {
+    case 'JSON':
+      console.log("JSON")
+      //fs.writeFileSync(__dirname + "/../public/downloads/hey.json", JSON.stringify({ A: 1, b: 2 }))
+      fs.writeFileSync(__dirname + "/../public/downloads/hey.json", JSON.stringify(obje))
+      break;
+    case "CSV":
+      var csv = JsonToCsv(dataset);
+      fs.writeFileSync(__dirname + "/../public/downloads/hey.csv", csv)
+      break;
+    case "XML":
+      var xml = OBJtoXML(dataset);
+      fs.writeFileSync(__dirname + "/../public/downloads/hey.xml", xml)
+  }
+  res.send('Done');
 })
 
 
@@ -706,7 +773,7 @@ router.post('/drawSpecifiedHeatmap', async function (req, res) {
   var checkboxes = JSON.parse(req.body.checkboxes)
 
   var tickedCheckboxes = getKeyByValue(checkboxes, true)
-  var choices=req.body.choices;
+  var choices = req.body.choices;
 
   // console.log(mode);
   console.log(dates);
@@ -819,18 +886,21 @@ router.post('/drawSpecifiedHeatmap', async function (req, res) {
 
   switch (parseInt(mode)) {
     case 2: // YES Date , NO Checkbox
-      query = await db.query(' SELECT latitudeE7, longitudeE7, activity1.timestampMs FROM entry ' +
+      query = await db.query(' SELECT latitudeE7, longitudeE7, entry.timestampMs FROM entry ' +
         'INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId ' +
         'INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1');
       break;
     case 3: // NO Date, YES Checkbox
       query = await db.query('SELECT entry.latitudeE7, entry.longitudeE7 FROM `entry` ' +
-        'INNER JOIN activity1 on activity1.aa1=entry.entryId ' +
+      'INNER JOIN locationconnectactivity on locationconnectactivity.entryId =entry.entryId ' +
+      'INNER JOIN activity1 on activity1.aa1=a1 ' +
         'WHERE type = ' + stringForSQLQuery); // Includes only the places the person have been on a spefic catagory of movement
       break;
     case 4: // YES Date, YES Checbox
-      query = await db.query('SELECT entry.latitudeE7, entry.longitudeE7, activity1.timestampMs FROM `entry` ' +
-        'INNER JOIN activity1 on activity1.aa1=entry.entryId ' +
+
+      query = await db.query('SELECT entry.latitudeE7, entry.longitudeE7, entry.timestampMs FROM `entry` ' +
+      'INNER JOIN locationconnectactivity on locationconnectactivity.entryId =entry.entryId ' +
+      'INNER JOIN activity1 on activity1.aa1=a1 ' +
         'WHERE type = ' + stringForSQLQuery);
       break;
     default:
@@ -1023,7 +1093,7 @@ router.post('/radarRangeDates', async function (req, res) {
 
   }
   //console.log(locationsObjectArr)
- // console.log(finalObject['bicycle']['hours']);
+  // console.log(finalObject['bicycle']['hours']);
 
 
   var objectForHeatmap = convertQuerryToHeatmapObject(radarDates);
@@ -1226,7 +1296,7 @@ router.post('/statistics', async function (req, res) {
     users: usercounts
   }
   //console.log(locationsObjectArr)
- // console.log(finalObject);
+  // console.log(finalObject);
   res.send(finalObject);
 });
 
@@ -1330,6 +1400,16 @@ router.post('/test', async function (req, res) {
   }
 
   let lastFileUpload = await db.query("INSERT INTO `userLastUpload`(`date`,`userId`) VALUES('" + timestamp + "', '" + userObject.userId + "')")
+
+
+
+  try {
+    fs.unlinkSync(path.resolve(__dirname, "../public/uploads/1.json"))
+    console.log('removed!!')
+    //file removed
+  } catch (err) {
+    console.error(err)
+  }
   res.send("Upload Succefully");
   console.log("The End!");
 })
