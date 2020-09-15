@@ -143,6 +143,7 @@ var circle = L.circle(patrasLatLng, {
 
 // Database Delete All Data, by sending post
 function deleteAllData() {
+  console.log('front end delete func')
   $.ajax({
     url: "/deleteData",
     type: "post",
@@ -294,6 +295,10 @@ backbtn.onclick = function() {
   modal.style.display = "none";
 }
 
+var okdelete = document.getElementById("okdelete");
+okdelete.onclick = function() {
+  deleteAllData();
+}
 
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
@@ -322,4 +327,132 @@ function myFunction() {
   } else {
     navbar.classList.remove("sticky");
   }
+}
+
+let choices="JSON"
+
+function exportData(){
+  var mode = -1;
+
+  if (noDateChoosed(dateArr) && noCheckboxChoosed()) { // NO DATE, NO CHEKCBOX
+    mode = 1;
+    showFullHeatmap();
+    return;
+  }
+
+  else if (!noDateChoosed(dateArr) && noCheckboxChoosed()) { // YES DATE, NO CHEKCBOX
+    mode = 2;
+  }
+
+  else if (noDateChoosed(dateArr) && !noCheckboxChoosed()) { //NO DATE, YES CHECKBOX
+    mode = 3;
+  }
+
+  else if (!noDateChoosed(dateArr) && !noCheckboxChoosed()) { //YES DATE, YES CHECKBOX
+    mode = 4;
+  }
+
+  console.log('mode');
+
+
+  var checkBoxObject = {
+    IN_VEHICLE: document.getElementById('IN_VEHICLE').checked,
+    ON_BICYCLE: document.getElementById('ON_BICYCLE').checked,
+    ON_FOOT: document.getElementById('ON_FOOT').checked,
+    STILL: document.getElementById('STILL').checked,
+    TILTING: document.getElementById('TILTING').checked,
+    UNKNOWN: document.getElementById('UNKNOWN').checked
+  }
+
+  var datesObject = {
+    fromDate: document.getElementById('fromDate').value,
+    untilDate: document.getElementById('untilDate').value,
+    fromMonth: document.getElementById('fromMonth').value,
+    untilMonth: document.getElementById('untilMonth').value,
+    fromDay: document.getElementById('fromDay').value,
+    untilDay: document.getElementById('untilDay').value,
+    fromTime: document.getElementById('fromTime').value,
+    untilTime: document.getElementById('untilTime').value
+  }
+
+
+  var forms = new FormData();
+  forms.append('mode', mode);
+  forms.append('checkboxes', JSON.stringify(checkBoxObject))
+  forms.append('dates', JSON.stringify(datesObject))
+  forms.append('choices', choices)
+   
+
+    $.ajax({
+        url: "/export",
+        type: "POST",
+        cache: false,
+        contentType: false,
+        processData: false,
+        data: forms,
+        success: function (response) {
+       switch(choices){
+            case "JSON":
+              var txtFile = "test.txt";
+              var file = new File(txtFile);
+              var str = JSON.stringify(JsonExport);
+             
+              //Save the file contents as a DataURI
+              var dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(str);
+             
+              //Write it as the href for the link
+              var link = document.getElementById('link').href = dataUri;
+                break;
+        }
+
+        }})
+}
+
+function logout(){
+  $.ajax({
+   url: "/logout",
+   type: "post",
+   cache: false,
+   contentType: false,
+   processData: false,
+   data: false,
+   success:function(){
+     console.log("Logged out")
+     window.location.href = "/"
+
+   }})
+
+}
+
+function JsonToCsv(jsonData)
+{
+  var items = jsonData;
+  var replacer = (key, value) => value === null ? ' ' : value; // specify how you want to handle null values here
+  var header = Object.keys(items[0]);
+  var csv = items.map(row => header.map(fieldName => JSON.stringify(row[fieldName], replacer)).join(','))
+  csv.unshift(header.join(','));
+  csv = csv.join('\r\n');
+
+  return csv;
+}
+
+function JSONtoXML(obj) {
+  var xml = '';
+  for (var prop in obj) {
+    xml += obj[prop] instanceof Array ? '' : "<" + prop + ">";
+    if (obj[prop] instanceof Array) {
+      for (var array in obj[prop]) {
+        xml += "<" + prop + ">";
+        xml += OBJtoXML(new Object(obj[prop][array]));
+        xml += "</" + prop + ">";
+      }
+    } else if (typeof obj[prop] == "object") {
+      xml += OBJtoXML(new Object(obj[prop]));
+    } else {
+      xml += obj[prop];
+    }
+    xml += obj[prop] instanceof Array ? '' : "</" + prop + ">";
+  }
+  var xml = xml.replace(/<\/?[0-9]{1,}>/g, '');
+  return xml
 }

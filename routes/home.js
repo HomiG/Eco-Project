@@ -112,6 +112,7 @@ var userObject = {
 async function checkAuth(req, res, next) {
   if (!req.session.userId) {
     res.send('You are not logged in, please login first in order to view this page');
+    
     } else {
     next();
   }
@@ -149,8 +150,6 @@ router.post('/login', function (req, res) {
       console.log(result);
     }
     else {
-
-
       console.log(result[0].username)
       userObject.username = result[0].username;
       var admin = result[0].admin;
@@ -220,7 +219,6 @@ router.post('/leaderboard', async function (req, res) {
   eareseCurrentLeaderBoard = await db.query('truncate table userecoscore');
 
   var updateCurrentMonth = await db.query('UPDATE lastMonth set startingDate = ' + todayMonth);
-
   // GET GENERAL TOP 3 ECOSCORES
   var getEcoscores = await db.query('SELECT user.username, ecoscore FROM userEcoscore INNER JOIN user ON user.userId = userEcoscore.userId ORDER BY ecoscore DESC LIMIT 3')
   // GET CURRENT USER'S ECOSCORE
@@ -262,7 +260,7 @@ router.post('/leaderboard', async function (req, res) {
 
 })
 
-router.post('/ecocharts', /*checkAuth,*/async function (req, res) {
+router.post('/ecocharts', checkAuth,async function (req, res) {
   var result;
 
   const db = makeDb();
@@ -353,11 +351,11 @@ router.post('/ecocharts', /*checkAuth,*/async function (req, res) {
 
 });
 
-router.get('/radar', /*checkAuth,*/ function (req, res) {
+router.get('/radar', checkAuth, function (req, res) {
   res.render('../views/radar.ejs')
 });
 
-router.get('/charts', /*checkAuth,*/ function (req, res) {
+router.get('/charts', checkAuth, function (req, res) {
   res.render('../views/ecocharts.ejs')
 });
 
@@ -367,7 +365,180 @@ router.post('/upload', checkAuth, function (req, res) {
 
 })
 
+router.post('/export', async function(req, res){
+  // const db = makeDb();
+  // var dateForm = req.body;
+  // // console.log(dateForm.until, "  ", dateForm.since, "--", userObject.userId)
+  // var data2export = await db.query('SELECT heading, activity1.type, activity1.timestampMs, verticalAccuracy, velocity, accuracy, longitudeE7, latitudeE7, altitude, entry.timestampMs, entry.userId as id  FROM entry INNER JOIN locationconnectactivity ON entry.entryId=locationconnectactivity.entryId INNER JOIN activity1 ON activity1.aa1=locationconnectactivity.a1 WHERE activity1.timestampMs > ' + dateForm.since + ' AND activity1.timestampMs < ' + dateForm.until)
+  //  console.log(dateForm);
+  // res.send(data2export)
+  function getKeyByValue(object, value) {
+    return Object.keys(object).filter(key => object[key] === value);
+  }
 
+
+  function dayStringToNumber(dayString) {
+    let weekday = ['Sunday',
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday']
+
+    return (weekday.indexOf(dayString));
+  }
+
+
+  var mode = req.body.mode;
+
+  var dates = JSON.parse(req.body.dates)
+
+  var checkboxes = JSON.parse(req.body.checkboxes)
+
+  var tickedCheckboxes = getKeyByValue(checkboxes, true)
+  var choices=req.body.choices;
+
+  // console.log(mode);
+  console.log(dates);
+  
+
+
+
+  // Get the fields from the Date object, that have to value
+  var emptyFields = getKeyByValue(dates, '');
+
+
+
+  // Checks if what has came into the database is empty and if so
+  // Substracts 1 on MONTHS AND DAYS(Monday, Tuesday...)
+  // Parse Strings into integes for later comparison
+  //
+  function calibrateDatesForDatabaseFiltering(dates, emptyFields) {
+
+    for (var i = 0; i < emptyFields.length; i++) {
+      if (emptyFields[i] == 'fromDate') { // check if from is empty
+        dates[emptyFields[i]] = 1900
+      }
+      else if (emptyFields[i] == 'untilDate') { // check if until date is empty 
+        dates[emptyFields[i]] = 2200;
+      }
+      else if (emptyFields[i] == 'fromMonth') { // check if from month is empty 
+        dates[emptyFields[i]] = 0;
+      }
+      else if (emptyFields[i] == 'untilMonth') { // check if until Month is empty 
+        dates[emptyFields[i]] = 11;
+      }
+      else if (emptyFields[i] == 'fromDay') { // check if from day is empty 
+        dates[emptyFields[i]] = 0;
+      }
+      else if (emptyFields[i] == 'untilDay') { // check if until day is empty 
+        dates[emptyFields[i]] = 6;
+      }
+      else if (emptyFields[i] == 'fromTime') { // check if from time is empty 
+        dates[emptyFields[i]] = 0;
+      }
+      else if (emptyFields[i] == 'untilTime') { // check if until time is empty 
+        dates[emptyFields[i]] = 23;
+      }
+    }
+
+
+    if (!emptyFields.includes('fromDate')) {
+      dates['fromDate'] = parseInt(dates['fromDate'])
+    }
+    if (!emptyFields.includes('untilDate')) {
+      dates['untilDate'] = parseInt(dates['untilDate'])
+    }
+    if (!emptyFields.includes('fromMonth')) {
+      dates['fromMonth'] = dates['fromMonth'] - 1;
+    }
+    if (!emptyFields.includes('untilMonth')) {
+      dates['untilMonth'] = dates['untilMonth'] - 1;
+    }
+    if (!emptyFields.includes('fromDay')) {
+      dates['fromDay'] = dayStringToNumber(dates['fromDay'])
+    }
+    if (!emptyFields.includes('untilDay')) {
+      dates['untilDay'] = dayStringToNumber(dates['untilDay'])
+    }
+    if (!emptyFields.includes('fromTime')) {
+      dates['fromTime'] = parseInt(dates['fromTime'])
+    }
+    if (!emptyFields.includes('untilTime')) {
+      dates['untilTime'] = parseInt(dates['untilTime'])
+    }
+
+
+  }
+
+  calibrateDatesForDatabaseFiltering(dates, emptyFields);
+  console.log(dates)
+
+
+
+
+
+
+
+
+
+  // ----- CONVERTING THE ARRAY OF CHECKBOXES INTO WHAT TYPES TO CALL FROM THE DATABASE! ----- //
+  var encloseWithinQuotes = "'" + tickedCheckboxes.join("','") + "'";
+  var stringForSQLQuery = encloseWithinQuotes.replace(/,/g, ' OR TYPE = ');
+  // ----- CONVERTING THE ARRAY OF CHECKBOXES INTO WHAT TYPES TO CALL FROM THE DATABASE! ----- //
+
+
+
+  var db = makeDb();
+
+
+  var query;
+
+
+  switch (parseInt(mode)) {
+    case 2: // YES Date , NO Checkbox
+      query = await db.query(' SELECT heading, activity1.type, activity1.timestampMs, verticalAccuracy, velocity, accuracy, longitudeE7, latitudeE7, altitude, entry.timestampMs, entry.userId as id FROM entry ' +
+        'INNER JOIN locationconnectactivity on entry.entryId=locationconnectactivity.entryId ' +
+        'INNER JOIN activity1 on activity1.aa1=locationconnectactivity.a1');
+      break;
+    case 3: // NO Date, YES Checkbox
+      query = await db.query('SELECT heading, activity1.type, activity1.timestampMs, verticalAccuracy, velocity, accuracy, longitudeE7, latitudeE7, altitude, entry.timestampMs, entry.userId as id   FROM `entry` ' +
+        'INNER JOIN activity1 on activity1.aa1=entry.entryId ' +
+        'WHERE type = ' + stringForSQLQuery); // Includes only the places the person have been on a spefic catagory of movement
+      break;
+    case 4: // YES Date, YES Checbox
+      query = await db.query('SELECT heading, activity1.type, activity1.timestampMs, verticalAccuracy, velocity, accuracy, longitudeE7, latitudeE7, altitude, entry.timestampMs, entry.userId as id  FROM `entry` ' +
+        'INNER JOIN activity1 on activity1.aa1=entry.entryId ' +
+        'WHERE type = ' + stringForSQLQuery);
+      break;
+    default:
+    // code block
+  }
+  var i;
+  var dataset = [];
+  for (i = 0; i < query.length; i++) {
+    var currentTimestamp = new Date(parseInt(query[i].timestampMs));
+    //console.log(currentTimestamp.getYear() + 1900 + ' >= ' + dates.dateForm + "   " + (currentTimestamp.getYear() + 1900) + '  <=  ' + dates.untilDate);
+
+    if ((currentTimestamp.getYear() + 1900 >= dates.fromDate) && (currentTimestamp.getYear() + 1900) <= dates.untilDate) { // Check Year
+      // console.log("Pass 1");
+      // console.log((currentTimestamp.getMonth()) +'  >=  '+ dates.fromMonth  + "  ++  " + (currentTimestamp.getMonth()) + '  <=  ' + dates.untilMonth);
+      if ((currentTimestamp.getMonth() >= dates.fromMonth) && (currentTimestamp.getMonth() <= dates.untilMonth)) { // Check Month
+        // console.log("Pass 2");
+        if ((currentTimestamp.getDay() >= dates.fromDay) && (currentTimestamp.getDay() <= dates.untilDay)) { // Check Day
+          // console.log("Pass 3");
+          if ((currentTimestamp.getHours() >= dates.fromTime) && (currentTimestamp.getHours() <= dates.untilTime)) { // Check Check Time
+            // console.log("Pass 4");
+            dataset.push(query[i]);
+          }
+        }
+      }
+    }
+  }
+  fs.write()
+  res.send(dataset);
+})
 
 
 router.get('/troll', async function (req, res) {
@@ -535,6 +706,7 @@ router.post('/drawSpecifiedHeatmap', async function (req, res) {
   var checkboxes = JSON.parse(req.body.checkboxes)
 
   var tickedCheckboxes = getKeyByValue(checkboxes, true)
+  var choices=req.body.choices;
 
   // console.log(mode);
   console.log(dates);
@@ -702,7 +874,7 @@ router.post('/drawSpecifiedHeatmap', async function (req, res) {
 
 
 
-router.post('/deleteData', checkAuth, checkAdmin, async function (req, res) {
+router.post('/deleteData', async function (req, res) {
   let db = makeDb();
 
   console.log("HERE!")
@@ -851,7 +1023,7 @@ router.post('/radarRangeDates', async function (req, res) {
 
   }
   //console.log(locationsObjectArr)
-  console.log(finalObject['bicycle']['hours']);
+ // console.log(finalObject['bicycle']['hours']);
 
 
   var objectForHeatmap = convertQuerryToHeatmapObject(radarDates);
@@ -935,8 +1107,8 @@ router.post('/statistics', async function (req, res) {
       count: 0
     }
   }
-  console.log(usercounts);
-  console.log(allthedata)
+  // console.log(usercounts);
+  // console.log(allthedata)
 
   for (i = 0; i < allthedata.length; i++) {
     usercounts[JSON.stringify(allthedata[i].id)].count++;
@@ -1054,7 +1226,7 @@ router.post('/statistics', async function (req, res) {
     users: usercounts
   }
   //console.log(locationsObjectArr)
-  console.log(finalObject);
+ // console.log(finalObject);
   res.send(finalObject);
 });
 

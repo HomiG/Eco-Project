@@ -114,7 +114,7 @@ function submitObject() {
         processData: false,
         data: false,
         success: function (response) {
-            console.log(response)
+            //console.log(response)
             var data = response;
             var i = 0;
             switch (thischart) {

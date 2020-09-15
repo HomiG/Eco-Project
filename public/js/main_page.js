@@ -40,8 +40,9 @@ function logout(){
     data: false,
     success:function(){
       console.log("Logged out")
-      
-  }})
+      window.location.href = "/"
+
+    }})
  
 }
 
