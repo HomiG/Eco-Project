@@ -25,7 +25,7 @@
     <a href="#" class="logo">ECO PROJECT</a>
      <span class="navbar-toggle" id="js-navbar-toggle">&#9776; 
      
-        <i class="fas fa-bars"></i>
+        <i class="fas fa-bars"></i> 
     </span>
     <ul class="main-nav" id="js-menu">
         <li>
@@ -209,7 +209,7 @@
 
             <style>
                 #mapid {
-                    width: 1000px;
+                    width: 1500px;
                     height: 500px;
                     position: relative;
                     z-index:1;
@@ -220,8 +220,9 @@
         <div id="delete" style="margin-top: 75px">
             <h2 style=" font-size: 20px;">Διαγραφή δεδομένων.</h2>
             <hr style="width:50px; border:5px solid #945f90; margin-top:35px; border-radius: 100px; ">
-            <p style="margin-top:35px"></p>
-            <button id="delete_btn" >DELETE</button>
+            <p style="margin-top:35px">ΠΡΟΣΟΧΗ!</p>
+            <p>ΔΕΝ ΥΠΑΡΧΕΙ ΓΥΡΙΣΜΟΣ! </p>
+            <button id="delete_btn" style="margin-top:25px" onclick="deleteAllData()">DELETE</button>
         </div>
 
         <!-- The modal=pop up window -->
@@ -230,16 +231,14 @@
             <!-- Modal content -->
             <div class="modal-content">
               <span class="close">&times;</span>
-              <p>Are you sure you want to delete all data from the Database?</p>
-              <button id="okdelete" onclick="deleteAllData()">YES</button>
+              <p>Δεν υπάρχει γυρισμός..Πάτα το Κιμ..</p>
+              <button id="okdelete">OK</button>
               <button class="back" id="goback">GO BACK</button>
             </div>
           
           </div>
 
-        
-        </div> 
-
+    
         <div id="download" style="margin-top: 75px">
             <h2 style=" font-size: 20px;">Εξαγωγή δεδομένων.</h2>
             <hr style="width:50px; border:5px solid #945f90; margin-top:35px; border-radius: 100px; ">
@@ -261,7 +260,7 @@
 
     </div>
 
-    <button onclick="scrollToTop()" id="myBtn" title="Go to top">^</button>
+    <!-- <button onclick="scrollToTop()" id="myBtn" title="Go to top">^</button> -->
 
 
 
