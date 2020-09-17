@@ -11,13 +11,7 @@
 
 
 body  {
-    background: rgb(58,146,180);
-    background: linear-gradient(90deg, rgba(58,146,180,1) 0%, rgba(29,75,253,1) 50%, rgba(105,69,252,1) 100%); 
-    /* background-image: linear-gradient(to right,rgb(0, 217, 255), rgb(91, 122, 223)); */
-    /* background: rgb(0,212,255);
-    background: linear-gradient(90deg, rgba(0,212,255,1) 0%, rgba(9,9,121,1) 64%, rgba(2,0,36,1) 97%); */
-     /* background-color: #945f90;
-     background: url("/public/img/back1.png") no-repeat center center fixed;  */
+    background: linear-gradient(90deg, #3a8ec5 0%, #aa6da5 100%); 
 }
 
  #docpicker{

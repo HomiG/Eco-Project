@@ -8,7 +8,7 @@
 
     <link href="https://fonts.googleapis.com/css?family=Muli|Raleway&display=swap" rel="stylesheet">
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
@@ -21,74 +21,73 @@
 
 <body onload="onloadBody()">
 
-<nav class="navbar" id="navigationbar">
-    <a href="#" class="logo">ECO PROJECT</a>
-     <span class="navbar-toggle" id="js-navbar-toggle">&#9776; 
-     
-        <i class="fas fa-bars"></i> 
-    </span>
-    <ul class="main-nav" id="js-menu">
-        <li>
-            <a href="#dashboard" class="nav-links">Απεικόνιση κατάστασης ΒΔ(dashboard)</a>
-        </li>
-        <li>
-            <a href="#data" class="nav-links">Απεικόνιση στοιχείων σε χάρτη</a>
-        </li>
-        <li>
-            <a href="#delete" class="nav-links">Διαγραφή δεδομένων</a>
-        </li>
-        <li>
-            <a href="#download" class="nav-links">Εξαγωγή δεδομένων</a>
-        </li>
-        <li>
-            <p></p>
-            <button class="nav-links" id="logout" onclick="logout()">Έξοδος</button>
-        </li>
-        
-    </ul>
-</nav>
+    <nav class="navbar" id="navigationbar">
+        <a href="#" class="logo">ECO PROJECT</a>
+        <span class="navbar-toggle" id="js-navbar-toggle">&#9776;
+
+            <!-- <i class="fas fa-bars"></i>  -->
+        </span>
+        <ul class="navmenu" id="js-menu">
+            <li>
+                <a href="#dashboard" class="nav-links">Dashboard</a>
+            </li>
+            <li>
+                <a href="#data" class="nav-links">Heatmap</a>
+            </li>
+            <li>
+                <a href="#delete" class="nav-links">Clear data</a>
+            </li>
+            <li>
+                <a href="#download" class="nav-links">Download data</a>
+            </li>
+            <li>
+                <a href="#" class="nav-links" onclick="logout()">Log out</a>
+            </li>
+
+        </ul>
+    </nav>
 
 
 
     <div class="main">
 
         <div id="dashboard" style="margin-top: 0px">
-            <h2 style=" font-size: 20px;">Απεικόνιση κατάστασης ΒΔ(dashboard).</h2>
-            <hr style="width:50px; border:5px solid #945f90; margin-top:35px; border-radius: 100px;">
-            <p style="margin-top:35px">ΚΑΤΑΠΛΗΚΤΙΚΑ!</p>
-            <canvas id="statChart" width="300" height="100"  aria-label="Hello ARIA World" role="img"></canvas>
-    <script type="text/javascript" src="../public/js/statistics.js"></script>
-    <div id="checkbox">
-        <label>Choose which chart you want:  </label>
-        
-            <select name="chart" id="chartpicker" onchange=changeChart()>
-                <option selected='selected' value="type">Activity</option>
-                <option value="hour">Hour of the Day</option>
-                <option value="day">Day of the Week</option>
-                <option value="month">Month of the Year</option>
-                <option value="year">Year</option>
-                <option value="user">Users</option>
-               
-            </select>
-       
+            <h2 style=" font-size: 20px;">Dashboard</h2>
+            <hr style="width:50px; border:5px solid #945f90; margin-top:10px; border-radius: 100px;">
+            <!-- <p style="margin-top:35px"></p> -->
+            <canvas id="statChart" width="300" height="100" aria-label="Hello ARIA World" role="img"></canvas>
+            <script type="text/javascript" src="../public/js/statistics.js"></script>
+            <div id="checkbox">
+                <label>Choose which chart you want: </label>
 
-    </div>
+                <select name="chart" id="chartpicker" onchange=changeChart()>
+                    <option selected='selected' value="type">Activity</option>
+                    <option value="hour">Hour of the Day</option>
+                    <option value="day">Day of the Week</option>
+                    <option value="month">Month of the Year</option>
+                    <option value="year">Year</option>
+                    <option value="user">Users</option>
 
-        <div id="data" style="margin-top: 75px">
-            <h2 style=" font-size: 20px;">Απεικόνιση στοιχείων σε χάρτη.</h2>
-            <hr style="width:50px; border:5px solid #945f90; margin-top:35px; border-radius: 100px;">
-            <p style="margin-top:35px">ΟΙ 3 ΚΑΛΥΤΕΡΟΙ!</p>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <meta http-equiv="X-UA-Compatible" content="ie=edge">
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
-            <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
+                </select>
 
-            <div class="year" style="line-height: 30px;">
-                From:
+
+            </div>
+
+            <div id="data" style="margin-top: 75px">
+                <h2 style=" font-size: 20px;">Heatmap</h2>
+                <hr style="width:50px; border:5px solid #945f90; margin-top:10px; border-radius: 100px;">
+                <!-- <p style="margin-top:35px">ΟΙ 3 ΚΑΛΥΤΕΡΟΙ!</p> -->
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <meta http-equiv="X-UA-Compatible" content="ie=edge">
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+                <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
+
+                <div class="year" style="line-height: 30px;">
+                    From:
                     <input type="text" id="fromDate" data-format="YYYY" data-template="YYYY" name="date" value="2015">
 
-                Until:
+                    Until:
                     <input type="text" id="untilDate" data-format="YYYY" data-template="YYYY" name="date" value="2025">
 
                     <script>
@@ -97,17 +96,17 @@
                             $('#untilDate').combodate();
                         });
                     </script>
-            </div>
-            <p></p>
+                </div>
+                <p></p>
 
 
 
-            <div class="month" style="line-height: 30px;">
+                <div class="month" style="line-height: 30px;">
 
-                From:
+                    From:
                     <input type="text" id="fromMonth" data-format="MM" data-template="MMM" name="date" value="01">
 
-                Until:
+                    Until:
                     <input type="text" id="untilMonth" data-format="MM" data-template="MMM" name="date" value="12">
                     <script>
                         $(function () {
@@ -116,11 +115,11 @@
                         });
                     </script>
 
-            </div>
-            <p></p>
+                </div>
+                <p></p>
 
-            <div class="day" style="line-height: 30px;">
-                From:
+                <div class="day" style="line-height: 30px;">
+                    From:
                     <select name="fromDay" id="fromDay">
                         <option value="Sunday">Sunday</option>
                         <option value=""></option>
@@ -132,7 +131,7 @@
                         <option value="Saturday">Saturday</option>
                     </select>
 
-                Until:
+                    Until:
                     <select name="untilDay" id="untilDay">
                         <option value="Saturday">Saturday</option>
                         <option value=""></option>
@@ -144,13 +143,13 @@
                         <option value="Friday">Friday</option>
                     </select>
 
-            </div>
-            <p></p>
-            <div class="theTime" style="line-height: 30px;">
+                </div>
+                <p></p>
+                <div class="theTime" style="line-height: 30px;">
 
-                From:
+                    From:
                     <input type="text" id="fromTime" data-format="HH" data-template="HH" name="datetime">
-                Until:
+                    Until:
                     <input type="text" id="untilTime" data-format="HH" data-template="HH" name="datetime">
                     <script>
 
@@ -167,91 +166,93 @@
                             });
                         });
                     </script>
+                </div>
+                <p></p>
+
+
+                <div id="checkboxes">
+                    <label>Activity Type</label>
+                    <ul>
+                        <input type="checkbox" onchange="run()" id="IN_VEHICLE"> IN_VEHICLE
+                        <input type="checkbox" id="ON_BICYCLE"> ON_BICYCLE
+                        <input type="checkbox" id="ON_FOOT"> ON_FOOT
+                        <input type="checkbox" id="STILL"> STILL
+                        <input type="checkbox" id="TILTING"> TILTING
+                        <input type="checkbox" id="UNKNOWN"> UNKNOWN
+                    </ul>
+                    <button id="selectall" onclick="toggleCheckboxed()">Select All/None</button>
+
+                </div>
+
+
+
+                <button id="rangedHeatmap" onclick="rangedHeatmap()">Range Dates</button>
+                <button id="showFullHeatmapButton" onclick="showFullHeatmap()">Draw Whole Heatmap</button>
+                <div id="mapid"></div>
+
+
+                <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+                    integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+                    crossorigin="">
+                    </script>
+                <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+                    integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+                    crossorigin="" />
+
+                <script type="text/javascript" src="../public/js/heatmap.js-2.0.5/build/heatmap.js"></script>
+                <script type="text/javascript"
+                    src="../public/js/heatmap.js-2.0.5/plugins/leaflet-heatmap/leaflet-heatmap.js"></script>
+                <script type="text/javascript" src="../public/js/staticVariables.js"></script>
+<!-- 
+
+
+                <style>
+                    #mapid {
+                        width: 1200px;
+                        height: 500px;
+                        position: relative;
+                        z-index: 1;
+                    }
+                </style> -->
             </div>
-            <p></p>
 
+            <div id="delete" style="margin-top: 75px">
+                <h2 style=" font-size: 20px;">Clear data</h2>
+                <hr style="width:50px; border:5px solid #945f90; margin-top:10px; border-radius: 100px; ">
+                <p style="margin-top:35px">If you want to delete everything in the database click the button below!</p>
+                <button id="delete_btn" style="margin-top:25px" onclick="deleteAllData()">DELETE</button>
+            </div>
 
-            <div id="checkboxes">
-                <label>Activity Type</label>
-                <ul>
-                    <input type="checkbox" onchange="run()" id="IN_VEHICLE"> IN_VEHICLE
-                    <input type="checkbox" id="ON_BICYCLE"> ON_BICYCLE
-                    <input type="checkbox" id="ON_FOOT"> ON_FOOT 
-                    <input type="checkbox" id="STILL"> STILL 
-                    <input type="checkbox" id="TILTING"> TILTING 
-                    <input type="checkbox" id="UNKNOWN"> UNKNOWN
-                </ul>
-                <button id="selectall" onclick="toggleCheckboxed()">Select All/None</button>
+            <!-- The modal=pop up window -->
+            <div id="myModal" class="modal" style="text-align: center;">
+
+                <!-- Modal content -->
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <p>Do you want to delete the database?</p>
+                    <button id="okdelete">OK</button>
+                    <button class="back" id="goback">GO BACK</button>
+                </div>
 
             </div>
 
-            
 
-            <button id="rangedHeatmap" onclick="rangedHeatmap()">Range Dates</button>
-            <button id="showFullHeatmapButton" onclick="showFullHeatmap()">Draw Whole Heatmap</button>
-            <div id="mapid"></div>
+            <div id="download" style="margin-top: 75px">
+                <h2 style=" font-size: 20px;">Download data</h2>
+                <hr style="width:50px; border:5px solid #945f90; margin-top:10px; border-radius: 100px; ">
+                <p style="margin-top:35px">After selecting some query criteria for mapping, 
+                    you can export the relevant returned data, in CSV, XML or JSON format. Each record contains all the 
+                    fields listed in the table in the appendix, plus an additional 
+                    column AT THE END which is the userid of the user to whom the data belongs</p>
 
+                <button style="margin-bottom: 25px; margin-top:25px" id="download_btn">Download</button>
 
-            <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
-                integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
-                crossorigin="">
-                </script>
-            <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
-                integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
-                crossorigin="" />
-
-            <script type="text/javascript" src="../public/js/heatmap.js-2.0.5/build/heatmap.js"></script>
-            <script type="text/javascript"
-                src="../public/js/heatmap.js-2.0.5/plugins/leaflet-heatmap/leaflet-heatmap.js"></script>
-            <script type="text/javascript" src="../public/js/staticVariables.js"></script>
-
-
-
-            <style>
-                #mapid {
-                    width: 1500px;
-                    height: 500px;
-                    position: relative;
-                    z-index:1;
-                }
-            </style>
-        </div>
-
-        <div id="delete" style="margin-top: 75px">
-            <h2 style=" font-size: 20px;">Διαγραφή δεδομένων.</h2>
-            <hr style="width:50px; border:5px solid #945f90; margin-top:35px; border-radius: 100px; ">
-            <p style="margin-top:35px">ΠΡΟΣΟΧΗ!</p>
-            <p>ΔΕΝ ΥΠΑΡΧΕΙ ΓΥΡΙΣΜΟΣ! </p>
-            <button id="delete_btn" style="margin-top:25px" onclick="deleteAllData()">DELETE</button>
-        </div>
-
-        <!-- The modal=pop up window -->
-        <div id="myModal" class="modal" style="text-align: center;">
-
-            <!-- Modal content -->
-            <div class="modal-content">
-              <span class="close">&times;</span>
-              <p>Δεν υπάρχει γυρισμός..Πάτα το Κιμ..</p>
-              <button id="okdelete">OK</button>
-              <button class="back" id="goback">GO BACK</button>
             </div>
-          
-          </div>
 
-    
-        <div id="download" style="margin-top: 75px">
-            <h2 style=" font-size: 20px;">Εξαγωγή δεδομένων.</h2>
-            <hr style="width:50px; border:5px solid #945f90; margin-top:35px; border-radius: 100px; ">
-            <p style="margin-top:35px">Κανε κι εσυ download!</p>
-           
-            <button style="margin-bottom: 25px; margin-top:25px" id="download_btn">Download</button>
+
 
         </div>
-
-
-
-    </div>
-    <script src="../public/js/admin.js"></script>
+        <script src="../public/js/admin.js"></script>
 
 </body>
 

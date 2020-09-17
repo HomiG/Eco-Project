@@ -28,25 +28,29 @@
         <a href="#" class="logo">ECO PROJECT</a>
          <span class="navbar-toggle" id="js-navbar-toggle">&#9776; 
          
-            <i class="fas fa-bars"></i> 
+            <!-- <i class="fas fa-bars"></i>  -->
         </span>
-        <ul class="main-nav" id="js-menu">
+        <ul class="navmenu" id="js-menu">
             <li>
-                <a href="#score" class="nav-links">Score οικολογικής μετακίνησης</a>
+                <a href="#score" class="nav-links">ECO-Score</a>
             </li>
             <li>
                 <a href="#leaderboard" class="nav-links">Leaderboard</a>
             </li>
             <li>
-                <a href="#heatmap" class="nav-links">Γράφημα-Heatmap</a>
+                <a href="#heatmap" class="nav-links">Chrats - Heatmap</a>
             </li>
             <li>
                 <a href="#upload" class="nav-links">Upload</a>
             </li>
             <li>
+                <a href="#" class="nav-links" onclick="logout()">Log out</a>
+            </li>
+
+            <!-- <li>
                 <p></p>
                 <button class="nav-links" id="logout" onclick="logout()">Έξοδος</button>
-            </li>
+            </li> -->
             
         </ul>
     </nav>
@@ -54,15 +58,15 @@
 
     <div class="main">
 
-        <h1 >Welcome, <%=x%> </h1>
+        <h1 style="font-size: 20px;   color: black; margin-top: 100px;" >Welcome, <%=x%> </h1>
         
         <div id="score" style="margin-top: 0px">
-            <h2>Score οικολογικής μετακίνησης.</h2>
-            <hr style="width:50px; border:5px solid #945f90; margin-top:35px; border-radius: 100px;">
-            <p style="margin-top:35px">ΚΑΤΑΠΛΗΚΤΙΚΑ!</p>
+            <h2>ECO-Score</h2>
+            <hr style="width:50px; border:5px solid #945f90; margin-top:10px; border-radius: 100px;">
+            <!-- <p style="margin-top:35px"></p> -->
 
 
-            <div id='ecoscoreTag'>Your ecoscore is: </div>
+            <div style="margin-top: 10px;" id='ecoscoreTag'>Your ecoscore is: </div>
             <!-- <button onclick='calculate()'>REFRESH</button> -->
 
             <div class="container">
@@ -74,8 +78,9 @@
 
         <div id="leaderboard" style="margin-top: 75px">
             <h2>Leaderboard.</h2>
-            <hr style="width:50px; border:5px solid #945f90; margin-top:35px; border-radius: 100px;">
-            <p style="margin-top:35px">ΟΙ 3 ΚΑΛΥΤΕΡΟΙ!</p>
+            <hr style="width:50px; border:5px solid #945f90; margin-top:10px; border-radius: 100px;">
+            <p style="margin-top:35px; margin-bottom: 10px;">TOP 3! Are you one of them?</p>
+            <p></p>
             <input type="date" id="datePicker" onblur="dateChoosedLeaderboard()">
             <label id="label">When is the beginning of the month?</label>
             <canvas id="goodCanvas1" width="400" height="100" aria-label="Hello ARIA World" role="img"></canvas>
@@ -84,10 +89,8 @@
         </div>
 
         <div id="heatmap" style="margin-top: 75px">
-            <h2>Γράφημα - Heatmap.</h2>
-            <hr style="width:50px; border:5px solid #945f90; margin-top:35px; border-radius: 100px; ">
-            <p style="margin-top:35px">Επέλεξε φιλτρα!</p>
-
+            <h2>Chrats - Heatmap</h2>
+            <hr style="width:50px; border:5px solid #945f90; margin-top:10px; border-radius: 100px; ">
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -123,7 +126,7 @@
 
             <style>
                 #mapid {
-                    width: 1500px;
+                    width: 1000px;
                     height: 500px;
                     position: relative;
                     z-index:1;
@@ -157,8 +160,8 @@
 
         <div id="upload" style="margin-top: 75px">
             <h2>Upload.</h2>
-            <hr style="width:50px; border:5px solid #945f90; margin-top:35px; border-radius: 100px; ">
-            <p style="margin-top:35px">Κανε κι εσυ upload!</p>
+            <hr style="width:50px; border:5px solid #945f90; margin-top:10px; border-radius: 100px; ">
+            <p style="margin-top:35px">You can select a data file to upload to the database!</p>
 
             <button class="upload_btn" style="margin-top:25px" onclick="uploadFile()" id="UploadButton"
                 title="Upload your files">Upload</button>
