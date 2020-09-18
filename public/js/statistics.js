@@ -117,12 +117,18 @@ function submitObject() {
             //console.log(response)
             var data = response;
             var i = 0;
+            var j=0;
             switch (thischart) {
                 case 'type':
+                    let summer=0;;
+                    for (j = 0; j < Object.values(data.type).length; j++) {
+                        summer=summer+Object.values(data['type'])[j];                       
+
+                    }
                     for (i = 0; i < Object.values(data.type).length; i++) {
 
                         statLabels.push(Object.keys(data['type'])[i]);
-                        statData.push(Object.values(data['type'])[i]);
+                        statData.push((Object.values(data['type'])[i]*100/summer).toFixed(3));
                     }
                     break;
                 case 'user':
