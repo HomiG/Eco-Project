@@ -149,7 +149,7 @@ router.get('/download/:type', function (req, res) {
 
   var typeParam = req.params.type.toLowerCase();;
 
-  res.download(__dirname + "/../public/downloads/hey." + typeParam, "hey." + typeParam)
+  res.download(__dirname + "/../public/downloads/EcoData." + typeParam, "EcoData." + typeParam)
 })
 
 router.post('/login', function (req, res) {
@@ -593,16 +593,16 @@ router.post('/export', async function (req, res) {
   switch (choices) {
     case 'JSON':
       console.log("JSON")
-      //fs.writeFileSync(__dirname + "/../public/downloads/hey.json", JSON.stringify({ A: 1, b: 2 }))
-      fs.writeFileSync(__dirname + "/../public/downloads/hey.json", JSON.stringify(obje))
+      //fs.writeFileSync(__dirname + "/../public/downloads/EcoData.json", JSON.stringify({ A: 1, b: 2 }))
+      fs.writeFileSync(__dirname + "/../public/downloads/EcoData.json", JSON.stringify(obje))
       break;
     case "CSV":
       var csv = JsonToCsv(dataset);
-      fs.writeFileSync(__dirname + "/../public/downloads/hey.csv", csv)
+      fs.writeFileSync(__dirname + "/../public/downloads/EcoData.csv", csv)
       break;
     case "XML":
       var xml = OBJtoXML(dataset);
-      fs.writeFileSync(__dirname + "/../public/downloads/hey.xml", xml)
+      fs.writeFileSync(__dirname + "/../public/downloads/EcoData.xml", xml)
   }
   res.send('Done');
 })
