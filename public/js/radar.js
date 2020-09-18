@@ -35,7 +35,7 @@ function createNewPieChart() {
         },options: {
             title: {
                 display: true,
-                text: 'The distribution of your types of transportation',
+                text: 'The distribution of your types of transportation (%)',
                 fontSize: 25
             },
             legend: {
@@ -264,12 +264,13 @@ function sradarSubmitDates() {
             radarData.push(Object.values(response['still'][date]));
             radarData.push(Object.values(response['tilting'][date]));
             radarData.push(Object.values(response['unknown'][date]));
-            pieData.push(response.vehicle.type);
-            pieData.push(response.foot.type);
-            pieData.push(response.bicycle.type);
-            pieData.push(response.still.type);
-            pieData.push(response.tilting.type);
-            pieData.push(response.unknown.type);
+            let sum=response.vehicle.type+response.foot.type+response.bicycle.type+response.still.type+response.tilting.type+response.unknown.type;
+            pieData.push((response.vehicle.type*100/sum).toFixed(3));
+            pieData.push((response.foot.type*100/sum).toFixed(3));
+            pieData.push((response.bicycle.type*100/sum).toFixed(3));
+            pieData.push((response.still.type*100/sum).toFixed(3));
+            pieData.push((response.tilting.type*100/sum).toFixed(3));
+            pieData.push((response.unknown.type*100/sum).toFixed(3));
             console.log(response)
             console.log(pieData)
             myRadar = radarResetChart(myRadar); // RESET THE CHART

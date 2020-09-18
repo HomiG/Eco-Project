@@ -18,7 +18,12 @@ function calculate() {
             allData = response;
             ecoscoreTag.innerHTML = 'Your ecoscore is: ' + (allData.ecoscore*100).toFixed(3) + " % <br> The dates you have uploaded are between "+allData['firstdate'].slice(0, 10) 
             +' and ' +allData.lastdate.slice(0, 10) ;
-            dtst = [JSON.stringify( allData.walking), JSON.stringify(allData.bicycle), JSON.stringify(allData.vehicle)];;
+            let all=allData.walking+allData.bicycle+ allData.vehicle
+            let walking=(allData.walking/all)*100;
+            let bicycle=(allData.bicycle/all)*100;
+            let other=(allData.vehicle/all)*100;
+            dtst = [JSON.stringify(walking), JSON.stringify(bicycle), JSON.stringify(other)];;
+  
 
 
 
@@ -35,7 +40,7 @@ function calculate() {
       type: 'pie', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
       data: {
         
-        labels: ['Walking', 'Bicycle', 'Vehicle'],
+        labels: ['Walking', 'Bicycle', 'Other'],
         datasets: [{
           label: 'Ways Of Transportation',
           data: dtst,
