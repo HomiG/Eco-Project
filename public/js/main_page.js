@@ -43,7 +43,7 @@ function runOnload() {
         console.log("RESPONSED")
         console.log(response)
         allData = response;
-        ecoscoreTag.innerHTML = 'Your ecoscore is: ' + allData.ecoscore + " % <br> The dates you have uploaded are between " + allData['firstdate'].slice(0, 10)
+        ecoscoreTag.innerHTML = 'Your ecoscore is: ' + (allData.ecoscore*100).toFixed(3) + " % <br> The dates you have uploaded are between " + allData['firstdate'].slice(0, 10)
           + ' and ' + allData.lastdate.slice(0, 10) + " <br> Last file uploaded: " + new Date(parseInt(allData.lastFileUpload)).toISOString().slice(0, 10);;
         dtst = [JSON.stringify(allData.walking), JSON.stringify(allData.bicycle), JSON.stringify(allData.vehicle)];;
 
