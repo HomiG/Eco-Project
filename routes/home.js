@@ -59,9 +59,9 @@ router.get('/upload', checkAuth, function (req, res) {
 router.post('/logout', checkAuth, function (req, res) {
   req.session.destroy();
   try {
-    patha=(__dirname+"/../public/downloads")
+    patha = (__dirname + "/../public/downloads")
     rimraf.sync(patha)
-    fs.mkdir(patha, function(err) {
+    fs.mkdir(patha, function (err) {
       if (err) {
         console.log(err)
       } else {
@@ -243,6 +243,12 @@ router.post('/leaderboard', async function (req, res) {
   // GET CURRENT USER'S ECOSCORE
   var currentUserEcoscore = await db.query('SELECT user.username, ecoscore FROM userEcoscore INNER JOIN user ON user.userId = userEcoscore.userId WHERE user.userId = \'' + userObject.userId + '\'')
 
+  var j=0;
+
+  for (j=0; j < getEcoscores.length; j++) {
+    getEcoscores[j]['username'] = getEcoscores[j]['username'].substring(0, getEcoscores[j]['username'].indexOf(' ') + 2) + '.';
+    console.log('INSIDE FOR', getEcoscores[j]['username'])
+  }
 
   console.log(getEcoscores)
   console.log(currentUserEcoscore)
@@ -260,7 +266,7 @@ router.post('/leaderboard', async function (req, res) {
   if (!getEcoscores.length == 0) {
     if (!currentUserEcoscore[0]) {
       var currentUserEcoscore = [];
-      currentUserEcoscore.push({ username: userObject.username, ecoscore: 0 })
+      currentUserEcoscore.push({ username: userObject.username.substring(0, userObject.username.indexOf(' ') + 2) + '.', ecoscore: 0 })
       // currentUserEcoscore[0].ecoscore=0;
       // currentUserEcoscore[0].username = userObject.username;
     }
@@ -554,14 +560,14 @@ router.post('/export', async function (req, res) {
       break;
     case 3: // NO Date, YES Checkbox
       query = await db.query('SELECT heading, activity1.type, entry.timestampMs, verticalAccuracy, velocity, accuracy, longitudeE7, latitudeE7, altitude, entry.timestampMs, entry.userId as id   FROM `entry` ' +
-       'INNER JOIN locationconnectactivity on locationconnectactivity.entryId =entry.entryId ' +
-       'INNER JOIN activity1 on activity1.aa1=a1 ' +
+        'INNER JOIN locationconnectactivity on locationconnectactivity.entryId =entry.entryId ' +
+        'INNER JOIN activity1 on activity1.aa1=a1 ' +
         'WHERE type = ' + stringForSQLQuery); // Includes only the places the person have been on a spefic catagory of movement
       break;
     case 4: // YES Date, YES Checbox
       query = await db.query('SELECT heading, activity1.type, entry.timestampMs, verticalAccuracy, velocity, accuracy, longitudeE7, latitudeE7, altitude, entry.timestampMs, entry.userId as id  FROM `entry` ' +
-      'INNER JOIN locationconnectactivity on locationconnectactivity.entryId =entry.entryId ' +
-      'INNER JOIN activity1 on activity1.aa1=a1 ' +
+        'INNER JOIN locationconnectactivity on locationconnectactivity.entryId =entry.entryId ' +
+        'INNER JOIN activity1 on activity1.aa1=a1 ' +
         'WHERE type = ' + stringForSQLQuery);
       break;
     default:
@@ -607,125 +613,6 @@ router.post('/export', async function (req, res) {
   res.send('Done');
 })
 
-
-router.get('/troll', async function (req, res) {
-
-  // Sensitive Rectangular sent with the Ajax Post 
-  var sensitiveRect = {
-    _northEastLat: req.body._northEastLat,
-    _northEastLng: req.body._northEastLng,
-    _southWestLat: req.body._southWestLat,
-    _southWestLng: req.body._southWestLng
-  }
-
-
-
-
-
-
-
-  //This is for Running the Code Async
-  const db = makeDb();
-
-
-  function bulkInsert(db, table, objectArray) {
-    let keys = Object.keys(objectArray[0]);
-    if (keys.includes("activity")) { // Checking if 
-      keys.splice(keys.indexOf('activity'), 1);
-    }
-    let values = objectArray.map(obj => keys.map(key => obj[key]));
-    let sql = 'INSERT INTO ' + table + ' (' + keys.join(',') + ') VALUES ?';
-    return db.query(sql, [values]);
-  }
-
-  var user = {
-    _id: null,
-    _data: null,
-    createUser: function (id, data) {
-      this._id = id;
-      this._data = data;
-    }
-
-  }
-
-  var userArray = [];
-  //userArray.push(new user.createUser('07b04ece12bb92f3ccd70e07d0c0741ded0eeee605db11171f20d85d40ab9461',require('../Data/Doug/Location History.json')));
-  // userArray.push(new user.createUser('0a67a1689bfd43a6d940e9a5ff12cda762b3ef30c952fd097ca39deb6216e93f',require('../Data/Paros/Loc_History.json')));
-  // userArray.push(new user.createUser('0a67a1689bfd43a6d940e9a5ff12cda762b3ef30c952fd097ca39deb6216e93f',require('../Data/Paros/Istoriko.json')));
-  // userArray.push(new user.createUser('915aa500f53a47939496877e265227ad743222b4b5176856bd4a315f9c030fd2',require('../Data/Lee/locationHistory.json')));
-  // userArray.push(new user.createUser('d24aa26db1bcb7b2b10e9fcc0d59025f9f892c34d89775d1f88cc7ffdb563826',require('../Data/Mimi Brown/Location History(chris).json')));
-  // userArray.push(new user.createUser('d24aa26db1bcb7b2b10e9fcc0d59025f9f892c34d89775d1f88cc7ffdb563826',require('../Data/Mimi Brown/Ιστορικό τοποθεσίας(georgia).json')));
-  // userArray.push(new user.createUser('d24aa26db1bcb7b2b10e9fcc0d59025f9f892c34d89775d1f88cc7ffdb563826',require('../Data/Mimi Brown/Ιστορικό τοποθεσίας(vagg).json')));
-  //userArray.push(new user.createUser('fe1f5a595fa60f4218ca5f9b05c806c57e5f419837b153bc641edd53e505997b',require('../Data/Tamila/Location History.json')));
-
-  // let h;
-  // for(h=0; h<userArray.length; h++){
-  //   userArray[h]._data.locations.forEach(v => {v.userId = userArray[h]._id;});
-
-  // }
-
-  let entryId;
-  let activity1Id;
-  let activity2Id;
-
-  let i, j, k, n;
-
-  let patrasCenter = new GeoPoint(38.230462, 21.753150);
-  let pointToBeInserted;
-
-  // Checking Sensitive Rectangular
-  let upperleftBound;
-  let lowerDownBound;
-  let insertedPoint
-
-
-  for (n = 0; n < userArray.length; n++) {
-    //userArray[n]._data.locations.forEach(v => {v.userId = userArray[n]._id;}); 
-    for (i = 0; i < userArray[n]._data.locations.length; i++) {
-
-
-      pointToBeInserted = new GeoPoint(userArray[n]._data.locations[i].latitudeE7 * (Math.pow(10, -7)),
-        userArray[n]._data.locations[i].longitudeE7 * (Math.pow(10, -7)));
-
-      // If the point to be inserted out of 10Km Patras Cetner, Skip this Spot
-      if (patrasCenter.distanceTo(pointToBeInserted, true) > 10) {
-        //console.log("Out Of Patras")
-        continue;
-      }
-
-      // If point is inside the sensitive Area, Skip This Point
-      if (inRangeOfRect(sensitiveRect, geopointToMyPoint(pointToBeInserted))) {
-        //console.log("POINT IS INSIDE SENSITIVE AREA ")
-        continue;
-      }
-      userArray[n]._data.locations[i].userId = userArray[n]._id;
-      entryId = await bulkInsert(db, 'entry', [userArray[n]._data.locations[i]])
-
-
-      //console.log("Entry ID: ", entryId.insertId);
-
-
-      if ('activity' in userArray[n]._data.locations[i]) {
-        for (j = 0; j < userArray[n]._data.locations[i].activity.length; j++) {
-          activity1Id = await bulkInsert(db, 'activity1', [userArray[n]._data.locations[i].activity[j]])
-          //console.log("\tActivity1 ID: ", activity1Id.insertId)
-          let insertActivity1ConnectAcitivity2 = db.query('INSERT INTO LocationConnectActivity(`entryId`, `a1`) VALUES(' + entryId.insertId + ',' + activity1Id.insertId + ')')
-
-
-          if ('activity' in userArray[n]._data.locations[i].activity[j]) {
-            for (k = 0; k < userArray[n]._data.locations[i].activity[j].activity.length; k++) {
-              activity2Id = await bulkInsert(db, 'activity2', [userArray[n]._data.locations[i].activity[j].activity[k]])
-              //console.log("\t\tActivity2 ID: ", activity2Id.insertId)
-              let insertActivity1ConnectAcitivity2 = db.query('INSERT INTO Activity1ConnectActivity2(`a1`, `a2`) VALUES(' + activity1Id.insertId + ',' + activity2Id.insertId + ')')
-
-            }
-          }
-        }
-      }
-
-    }
-  }
-})
 
 
 
@@ -892,15 +779,15 @@ router.post('/drawSpecifiedHeatmap', async function (req, res) {
       break;
     case 3: // NO Date, YES Checkbox
       query = await db.query('SELECT entry.latitudeE7, entry.longitudeE7 FROM `entry` ' +
-      'INNER JOIN locationconnectactivity on locationconnectactivity.entryId =entry.entryId ' +
-      'INNER JOIN activity1 on activity1.aa1=a1 ' +
+        'INNER JOIN locationconnectactivity on locationconnectactivity.entryId =entry.entryId ' +
+        'INNER JOIN activity1 on activity1.aa1=a1 ' +
         'WHERE type = ' + stringForSQLQuery); // Includes only the places the person have been on a spefic catagory of movement
       break;
     case 4: // YES Date, YES Checbox
 
       query = await db.query('SELECT entry.latitudeE7, entry.longitudeE7, entry.timestampMs FROM `entry` ' +
-      'INNER JOIN locationconnectactivity on locationconnectactivity.entryId =entry.entryId ' +
-      'INNER JOIN activity1 on activity1.aa1=a1 ' +
+        'INNER JOIN locationconnectactivity on locationconnectactivity.entryId =entry.entryId ' +
+        'INNER JOIN activity1 on activity1.aa1=a1 ' +
         'WHERE type = ' + stringForSQLQuery);
       break;
     default:
