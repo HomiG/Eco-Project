@@ -44,7 +44,7 @@ h2 {
   /* για να μην φανεί η λίστα */
 }
 
-.nav-links, .logo {
+.links, .logo {
   text-decoration: none;
   color: rgba(255, 255, 255, 0.801);
 }
@@ -62,7 +62,7 @@ h2 {
   
 }
 
-.navbar-toggle { 
+.responsive { 
     position: absolute;
     top: 10px;
     right: 20px;
@@ -84,7 +84,7 @@ h2 {
   color: rgba(255, 255, 255, 1);
 }
 
-.nav-links:hover {
+.links:hover {
     color: rgba(255, 255, 255, 1);
     text-decoration: underline;
 
@@ -124,7 +124,7 @@ h2 {
     margin: 0;
 }    
 
-  .nav-links {
+  .links {
     margin-left: 40px;
 }    
 
@@ -132,7 +132,7 @@ h2 {
     margin-top: 0;
 }   
 
-  .navbar-toggle {
+  .responsive {
    display: none;
 }  
 
@@ -140,7 +140,7 @@ h2 {
   color: rgba(255, 255, 255, 1);
 }
 
-  .nav-links:hover {
+  .links:hover {
     color: rgba(255, 255, 255, 1);
     text-decoration: underline;
 }
