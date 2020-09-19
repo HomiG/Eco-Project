@@ -261,6 +261,8 @@ router.post('/leaderboard', async function (req, res) {
     names: arrayColumn(outputData, 0), //Get the names 
     scores: arrayColumn(outputData, 1) //Get the Scores Coresponding
   }
+  console.log(ecoscoreObject)
+
 
   // CHECK IF ECOSCORE RESULT IS EMPTY
   if (!getEcoscores.length == 0) {
@@ -270,8 +272,9 @@ router.post('/leaderboard', async function (req, res) {
       // currentUserEcoscore[0].ecoscore=0;
       // currentUserEcoscore[0].username = userObject.username;
     }
+
     // CHECK IF USER IS IN THE TOP 3, IF NOT ADD HIM AS THE EXTRA ELEMENT
-    if (!ecoscoreObject['names'].includes(currentUserEcoscore[0].username)) {
+    if (!ecoscoreObject['names'].includes(currentUserEcoscore[0].username.substring(0, currentUserEcoscore[0].username.indexOf(' ') + 2) + '.')) {
       ecoscoreObject['names'].push(currentUserEcoscore[0].username);
       ecoscoreObject['scores'].push(currentUserEcoscore[0].ecoscore);
     }
