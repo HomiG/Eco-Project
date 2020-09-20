@@ -44,17 +44,20 @@ h2 {
   /* για να μην φανεί η λίστα */
 }
 
-.links, .logo {
-  text-decoration: none;
-  color: rgba(255, 255, 255, 0.801);
-}
-
 .navmenu li {
     text-align: center;
     margin: 15px auto;
 }
 
+.links {
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.801);
+}    
+
+  
 .logo {
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.801);
   margin-left: 20px;
   display: inline-block;
   font-size: 20px;
@@ -136,32 +139,7 @@ h2 {
    display: none;
 }  
 
-  .logo:hover{
-  color: rgba(255, 255, 255, 1);
 }
-
-  .links:hover {
-    color: rgba(255, 255, 255, 1);
-    text-decoration: underline;
-}
-
-}
-/*   
-  @media screen and (max-width: 700px) {
-    *{font-size: 15px; }
-
-   
-    .main {
-      padding-left: 8px;
-      padding: 1px 16px;
-      height: 1000px;
-    }
-
-    h1{font-size: 2px;     text-align: auto;   }
-
-    h2{font-size: 2px;     text-align: auto;   }
-
-  } */
 
 
 #delete_btn{
@@ -211,12 +189,12 @@ h2 {
    outline: medium none;
    }
 
-   #rangedHeatmap:hover {
+#rangedHeatmap:hover {
     background-color:  rgba(0, 0, 0, 0.6);
     color: white;
-  }
+}
 
-  #showFullHeatmapButton{  
+#showFullHeatmapButton{  
     width: 250px;
     height: 40px;
    background-color:  #945f90;
@@ -226,14 +204,14 @@ h2 {
    color:white;
    cursor: pointer;
    outline: medium none;
-   }
+}
 
-   #showFullHeatmapButton:hover {
+#showFullHeatmapButton:hover {
     background-color:  rgba(0, 0, 0, 0.6);
     color: white;
-  }
+}
 
-  #selectall{  
+#selectall{  
     width: 200px;
     height: 40px;
    background-color:  #945f90;
@@ -243,14 +221,14 @@ h2 {
    color:white;
    cursor: pointer;
    outline: medium none;
-   }
+}
 
-   #selectall:hover {
+#selectall:hover {
     background-color:  rgba(0, 0, 0, 0.6);
     color: white;
-  }
+}
 
-  .modal {
+.modal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
     z-index: 1; /* Sit on top */
@@ -262,52 +240,48 @@ h2 {
     overflow: auto; /* Enable scroll if needed */
     background-color: rgb(0,0,0); /* Fallback color */
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-  }
+}
   
-  /* Modal Content */
-  .modal-content {
+.modal-content {
     background-color: #fefefe;
     margin: auto;
     padding: 20px;
     border: 1px solid #888;
     width: 80%;
-  }
+}
   
-  /* The Close Button */
-  .close {
+.close {
     color: #aaaaaa;
     float: right;
     font-size: 28px;
     font-weight: bold;
-  }
+}
   
-  .close:hover,
-  .close:focus {
+.close:hover,
+.close:focus {
     color: #000;
     text-decoration: none;
     cursor: pointer;
-  }
+}
 
-  #okdelete {  
+#okdelete {  
     width: 150px;
     height: 40px;
    background-color:  red;
-   /* border-radius: 10px; */
    bottom: 20px;
-   /* padding: 10px 15px 7px; */
    margin-top: 20px;
    margin-bottom: 20px;
    color:white;
    cursor: pointer;
    outline: medium none;
-   }
+}
 
-   #okdelete:hover {
+#okdelete:hover {
     background-color:  yellow;
     color: black;
-  }
+}
 
-  #goback {  
+#goback {  
     width: 150px;
     height: 40px;
    background-color:  green;
@@ -319,25 +293,12 @@ h2 {
    color:white;
    cursor: pointer;
    outline: medium none;
-   }
+}
 
-   #goback:hover {
+#goback:hover {
     background-color:  greenyellow;
     color: black;
    
-  }
-
- #logout{
-  background-color:  rgb(72, 73, 72);
-  color: white;
-  width: 80px;
-  height: 30px;
-  cursor: pointer;
-  outline: none;
- }
-
- #logout:hover {
-  background-color:  rgb(43, 28, 180);
-  color: rgb(255, 255, 255);
 }
+
 
