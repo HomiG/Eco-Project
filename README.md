@@ -1,26 +1,10 @@
 # Eco-Project
-Web Project Ceid 2019-2020
-
-#NODE_MODULES will never be uploaded on GITHUB (too heavy)
 
 
+Web Project in NodeJS - Express on the backend
 
-#NodeJS Modules(libraries) Used:
+No front-end Frameworks
 
-npm install express -g
-npm install ejs -g
-npm i formidable
+Analyze your Google Maps Takeout into Heatmaps filtered based on Dates and types of movement.
 
-Open Github Project in VS Code (Sync):
-
-Click on git icon -> Clone Repository -> Paste to user tou project: https://github.com/HomiG/Eco-Project
-
-
-
-
-
-
-
-
-
-v
+Supports sign-up, log-in, password enctryption.
