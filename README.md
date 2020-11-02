@@ -7,4 +7,4 @@ No front-end Frameworks
 
 Analyze your Google Maps Takeout into Heatmaps filtered based on Dates and types of movement.
 
-Supports sign-up, log-in, password enctryption.
+Supports sign-up, log-in
