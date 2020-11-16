@@ -41,3 +41,4 @@ USER
 4. File upload (feature to select "sensitive" areas)
 
 
+![alt text](https://i.imgur.com/YnBXTIV.jpg)
